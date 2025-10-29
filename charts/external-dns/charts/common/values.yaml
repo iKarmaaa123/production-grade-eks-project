@@ -1,7 +1,0 @@
-exampleValue: common-cha
-
-ingressShim:
-  defaultIssuerName: "dns01"
-  defaultIssuerKind: "route53"
-
-
