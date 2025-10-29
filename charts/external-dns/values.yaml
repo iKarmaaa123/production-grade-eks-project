@@ -1,0 +1,13 @@
+provider: aws
+
+env:
+  - name: AWS_DEFAULT_REGION
+    value: eu-west-2
+
+serviceAccount:
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::648767092427:role/ClusterStack-HelloEKSexternaldnsRole283B621B-Egs96DICmvRn
+
+domainFilters:
+- cdk-labs.com
+ 
