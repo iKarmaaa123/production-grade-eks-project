@@ -54,7 +54,7 @@ const cluster = new eks.Cluster(this, "HelloEKS", {
   vpcSubnets: [{ subnetType: ec2.SubnetType.PUBLIC },
                { subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS}],
   defaultCapacity: defaultCapacity,
-  kubectlLayer: new KubectlV32Layer(this, 'kubectl'),
+  kubectlLayer: new KubectlV32Layer(this, "kubectl"),
 });
 
 const certManagerNameSpace = cluster.addManifest("cert-manager", {
@@ -77,13 +77,29 @@ const certManagerServiceAccount = cluster.addServiceAccount("cert-manager", {
   name: "cert-manager",
   namespace: "cert-manager",
   identityType: eks.IdentityType.IRSA,
+  labels: {
+    "app.kubernetes.io/managed-by": "Helm"
+  },
+  annotations: {
+    "meta.helm.sh/release-name": "cert-manager",
+    "meta.helm.sh/release-namespace": "cert-manager"
+  }
 })
+certManagerServiceAccount.node.addDependency(certManagerNameSpace)
 
 const externalDNSManagerServiceAccount = cluster.addServiceAccount("external-dns", {
   name: "external-dns",
   namespace: "external-dns",
   identityType: eks.IdentityType.IRSA,
+  labels: {
+    "app.kubernetes.io/managed-by": "Helm"
+  },
+  annotations: {
+    "meta.helm.sh/release-name": "external-dns",
+    "meta.helm.sh/release-namespace": "external-dns"
+  }
 })
+externalDNSManagerServiceAccount.node.addDependency(externalDNSNameSpace)
 
 certManagerServiceAccount.role.addToPrincipalPolicy(new iam.PolicyStatement({
   actions: [
@@ -107,47 +123,59 @@ externalDNSManagerServiceAccount.role.addToPrincipalPolicy(new iam.PolicyStateme
   resources: [ zone.hostedZoneArn ],
 }));
 
-// cluster.addHelmChart('MyAppChart', {
-//   chart: 'nginx',
-//   repository: 'https://charts.bitnami.com/bitnami',
-//   release: "nginx",
-//   namespace: 'nginx',
-//   createNamespace: true,
-//   wait: true,
-//   values: {
-//     installCRDs: true
-//   },
-// })
+cluster.addHelmChart("nginx", {
+  chart: "ingress-nginx",
+  repository: "https://kubernetes.github.io/ingress-nginx",
+  release: "ingress-nginx",
+  namespace: "nginx",
+  version: "4.13.3",
+  createNamespace: true,
+  wait: true,
+  values: {
+    installCRDs: true
+  },
+})
 
-// cluster.addHelmChart("cert-manager", {
-//   chart: "cert-manager",
-//   repository: "https://charts.jetstack.io",
-//   release: "cert-manager",
-//   namespace: "cert-manager",
-//   createNamespace: false,
-//   wait: true,
-//   values: {
-//     installCRDs: true,
-//     "serviceAccount.annotations.eks.amazonaws.com/role-arn": certManagerServiceAccount.role.roleArn,
-//     "ingressShim.defaultIssuerKind": "dns01",
-//     "ingressShim.defaultIssuerProvider": "route53",
-//     "extraArgs": ["--dns01-recursive-nameservers=8.8.8.8:53","--dns01-recursive-nameservers-only"],
-//     "domainFilters": ["cdk-labs.com"]
-//   },
-// }).node.addDependency(certManagerNameSpace)
+cluster.addHelmChart("cert-manager", {
+  chart: "cert-manager",
+  repository: "https://charts.jetstack.io",
+  release: "cert-manager",
+  namespace: "cert-manager",
+  version: "1.13.2",
+  createNamespace: false,
+  wait: true,
+  values: {
+    installCRDs: true,
+    "serviceAccount.create": false,
+    "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn": certManagerServiceAccount.role.roleArn,
+    "serviceAccount.name": certManagerServiceAccount.serviceAccountName,
+    "ingressShim.defaultIssuerKind": "dns01",
+    "ingressShim.defaultIssuerProvider": "route53",
+    "extraArgs[0]": "--dns01-recursive-nameservers=8.8.8.8:53",
+    "extraArgs[1]": "--dns01-recursive-nameservers-only",
+    domainFilters: ["cdk-labs.com"],
+    region: "us-east-1"
+  }
+}).node.addDependency(certManagerNameSpace)
 
-// cluster.addHelmChart("external-dns", {
-//   repository: "https://charts.bitnami.com/bitnami",
-//   release: "external-dns",
-//   chart: "external-dns",
-//   namespace: "external-dns",
-//   createNamespace: false,
-//   wait: true,
-//   values: {
-//     installCRDs: true,
-//     "serviceAccount.annotations.eks.amazonaws.com/role-arn": externalDNSManagerServiceAccount.role.roleArn,
-//     "env": ["name": "AWS_DEFAULT_REGION", "value": "us-east-1"]
-//   }
-// }).node.addDependency(externalDNSNameSpace)
+cluster.addHelmChart("external-dns", {
+  chart: "external-dns",
+  repository: "https://kubernetes-sigs.github.io/external-dns/",
+  release: "external-dns",
+  namespace: "external-dns",
+  version: "1.19.0",
+  createNamespace: false,
+  wait: true,
+  values: {
+    installCRDs: true,
+    "serviceAccount.create": false,
+    "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn": externalDNSManagerServiceAccount.role.roleArn,
+    "serviceAccount.name": externalDNSManagerServiceAccount.serviceAccountName,
+    env: [{
+      name: "AWS_DEFAULT_REGION",
+      value: "us-east-1"
+    }]
+  }
+}).node.addDependency(externalDNSNameSpace)
  }
 }
