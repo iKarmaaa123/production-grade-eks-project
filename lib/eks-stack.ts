@@ -147,8 +147,14 @@ cluster.addHelmChart("cert-manager", {
   values: {
     installCRDs: true,
     "serviceAccount.create": false,
-    "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn": certManagerServiceAccount.role.roleArn,
-    "serviceAccount.name": certManagerServiceAccount.serviceAccountName,
+    "serviceAccount": {
+      "annotations": {
+        "eks.amazonaws.com/role-arn": certManagerServiceAccount.role.roleArn,
+      },
+    },
+    "podAnnotations": {
+      "eks.amazon.com/role-arn": certManagerServiceAccount.role.roleArn
+    },
     "ingressShim.defaultIssuerKind": "dns01",
     "ingressShim.defaultIssuerProvider": "route53",
     "extraArgs[0]": "--dns01-recursive-nameservers=8.8.8.8:53",
@@ -169,8 +175,14 @@ cluster.addHelmChart("external-dns", {
   values: {
     installCRDs: true,
     "serviceAccount.create": false,
-    "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn": externalDNSManagerServiceAccount.role.roleArn,
-    "serviceAccount.name": externalDNSManagerServiceAccount.serviceAccountName,
+    "serviceAccount": {
+      "annotations": {
+        "eks.amazonaws.com/role-arn": externalDNSManagerServiceAccount.role.roleArn
+      }
+    },
+    "podAnnotations": {
+      "eks.amazonaws.com/role-arn": externalDNSManagerServiceAccount.role.roleArn,
+    },
     env: [{
       name: "AWS_DEFAULT_REGION",
       value: "us-east-1"
