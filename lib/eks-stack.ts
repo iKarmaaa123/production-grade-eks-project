@@ -14,11 +14,6 @@ interface EKSClusterStackProps extends cdk.StackProps {
   privateSubnetId2: string;
 }
 
-const clusterName = "demo-cluster";
-const version = eks.KubernetesVersion.V1_32;
-const endpointAccess = eks.EndpointAccess.PUBLIC_AND_PRIVATE.onlyFrom("0.0.0.0/0");
-const defaultCapacity = 2;
-
 export class ClusterStack extends cdk.Stack {
 
   public readonly cluster: cdk.aws_eks.Cluster
@@ -52,15 +47,15 @@ export class ClusterStack extends cdk.Stack {
 
     this.cluster = new eks.Cluster(this, "HelloEKS", {
       vpc: props.vpc,
-      clusterName: clusterName,
+      clusterName: "demo-cluster",
       mastersRole: EKSClusterMasterRole,
-      version: version,
-      endpointAccess: endpointAccess,
+      version: eks.KubernetesVersion.V1_32,
+      endpointAccess: eks.EndpointAccess.PUBLIC_AND_PRIVATE.onlyFrom("0.0.0.0/0"),
       vpcSubnets: [
         { subnetType: ec2.SubnetType.PUBLIC },
         { subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS }
       ],
-      defaultCapacity: defaultCapacity,
+      defaultCapacity: 2,
       kubectlLayer: new KubectlV32Layer(this, "kubectl"),
     });
 
@@ -95,7 +90,7 @@ export class ClusterStack extends cdk.Stack {
     this.certManagerServiceAccount.node.addDependency(certManagerNamespace);
 
     this.externalDNSServiceAccount = this.cluster.addServiceAccount("external-dns", {
-      name: "external-dnstwo",
+      name: "external-dns",
       namespace: "external-dns",
       identityType: eks.IdentityType.IRSA,
       labels: {
@@ -130,33 +125,31 @@ export class ClusterStack extends cdk.Stack {
       resources: ["*"],
     }));
 
-     new eks.HelmChart(this, "cert-manager", {
-        cluster: this.cluster,
-        chart: "cert-manager",
-        repository: "https://charts.jetstack.io",
-        release: "cert-manager",
-        namespace: "cert-manager",
-        version: "1.13.2",
-        createNamespace: false,
-        wait: true,
-        values: {
-          installCRDs: true,
-          "serviceAccount.create": false,
-          "serviceAccount.name": this.certManagerServiceAccount.serviceAccountName,
-          "serviceAccount": {
-            "annotations": {
-              "eks.amazonaws.com/role-arn": this.certManagerServiceAccount.role.roleArn,
-            },
-          },
-          "ingressShim.defaultIssuerKind": "dns01",
-          "ingressShim.defaultIssuerProvider": "route53",
-          "extraArgs[0]": "--dns01-recursive-nameservers=8.8.8.8:53",
-          "extraArgs[1]": "--dns01-recursive-nameservers-only",
-          "domainFilters": ["cdk-labs.com"],
-          "region": "us-east-1"
-        }
-      }).node.addDependency(certManagerNamespace)
+    new eks.HelmChart(this, "cert-manager", {
+      cluster: this.cluster,
+      chart: "cert-manager",
+      repository: "https://charts.jetstack.io",
+      release: "cert-manager",
+      namespace: "cert-manager",
+      version: "1.19.2",
+      createNamespace: false,
+      wait: true,
+      values: {
+        installCRDs: true,
+        serviceAccount: {
+          create: false,
+          name: this.certManagerServiceAccount.serviceAccountName,
+          annotations: {
+            "eks.amazonaws.com/role-arn": this.certManagerServiceAccount.role.roleArn
+          }
+        },
+        ingressShim: {
+          defaultIssuerKind: "ClusterIssuer",
+          defaultIssuerName: "issuer"
+        },
+        dns01RecursiveNameservers: "8.8.8.8:53",
+        dns01RecursiveNameserversOnly: true
+      }
+    });
+    }
   }
-}
-
-

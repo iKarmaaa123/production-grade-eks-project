@@ -14,6 +14,7 @@ export class NetworkingStack extends cdk.Stack {
     super(scope, id, props);
 
     this.vpc = new ec2.Vpc(this, 'Vpc', {
+      vpcName: "demo-vpc",
       ipAddresses: ec2.IpAddresses.cidr('10.0.0.0/16'),
       createInternetGateway: true,
       natGateways: 1,
@@ -21,12 +22,12 @@ export class NetworkingStack extends cdk.Stack {
       subnetConfiguration: [
         {
           cidrMask: 24,
-          name: 'public',
+          name: "public",
           subnetType: ec2.SubnetType.PUBLIC,
         },
         {
           cidrMask: 24,
-          name: 'private',
+          name: "private",
           subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS,
         }
       ]
@@ -38,9 +39,14 @@ export class NetworkingStack extends cdk.Stack {
       allowAllOutbound: true,
     });
 
-    this.securityGroup.addIngressRule(
+    this.securityGroup.addIngressRule (
       ec2.Peer.anyIpv4(),
-      ec2.Port.tcp(80),
+      ec2.Port.tcp(8080),
+    );
+
+    this.securityGroup.addIngressRule (
+      ec2.Peer.anyIpv4(),
+      ec2.Port.tcp(443),
     );
   }
 }
