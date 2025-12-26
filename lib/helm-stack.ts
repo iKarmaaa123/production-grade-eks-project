@@ -24,6 +24,33 @@ export class HelmStack extends cdk.Stack {
       },
     });
 
+    new eks.HelmChart(this, "cert-manager", {
+      cluster: props.cluster,
+      chart: "cert-manager",
+      repository: "https://charts.jetstack.io",
+      release: "cert-manager",
+      namespace: "cert-manager",
+      version: "1.19.2",
+      createNamespace: false,
+      wait: true,
+      values: {
+        installCRDs: true,
+        serviceAccount: {
+          create: false,
+          name: props.certManagerServiceAccount.serviceAccountName,
+          annotations: {
+            "eks.amazonaws.com/role-arn": props.certManagerServiceAccount.role.roleArn
+          }
+        },
+        ingressShim: {
+          defaultIssuerKind: "ClusterIssuer",
+          defaultIssuerName: "issuer"
+        },
+        dns01RecursiveNameservers: "8.8.8.8:53",
+        dns01RecursiveNameserversOnly: true
+      }
+    });
+
     new eks.HelmChart(this, "external-dns", {
       cluster: props.cluster,
       chart: "external-dns",
@@ -35,6 +62,7 @@ export class HelmStack extends cdk.Stack {
       wait: true,
       values: {
         installCRDs: true,
+        domainFilters: ["cdk-labs.com"],
         provider: {
           name: "aws"
       },
@@ -65,7 +93,6 @@ export class HelmStack extends cdk.Stack {
       wait: true,
       values: {
         installCRDs: true,
-        // this is used to disable ssl redirection due to our ingress controller already doing this
         server: {
           extraArgs: ["--insecure"],
           service: {

@@ -124,32 +124,5 @@ export class ClusterStack extends cdk.Stack {
       ],
       resources: ["*"],
     }));
-
-    new eks.HelmChart(this, "cert-manager", {
-      cluster: this.cluster,
-      chart: "cert-manager",
-      repository: "https://charts.jetstack.io",
-      release: "cert-manager",
-      namespace: "cert-manager",
-      version: "1.19.2",
-      createNamespace: false,
-      wait: true,
-      values: {
-        installCRDs: true,
-        serviceAccount: {
-          create: false,
-          name: this.certManagerServiceAccount.serviceAccountName,
-          annotations: {
-            "eks.amazonaws.com/role-arn": this.certManagerServiceAccount.role.roleArn
-          }
-        },
-        ingressShim: {
-          defaultIssuerKind: "ClusterIssuer",
-          defaultIssuerName: "issuer"
-        },
-        dns01RecursiveNameservers: "8.8.8.8:53",
-        dns01RecursiveNameserversOnly: true
-      }
-    });
     }
   }
