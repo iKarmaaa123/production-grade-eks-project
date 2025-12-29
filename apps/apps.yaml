@@ -47,7 +47,8 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - http:
+  - host: apps.cdk-labs.com
+    http:
       paths:
       - path: /
         pathType: Prefix
