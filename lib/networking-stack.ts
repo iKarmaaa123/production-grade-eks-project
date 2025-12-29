@@ -41,7 +41,7 @@ export class NetworkingStack extends cdk.Stack {
 
     this.securityGroup.addIngressRule (
       ec2.Peer.anyIpv4(),
-      ec2.Port.tcp(8080),
+      ec2.Port.tcp(80),
     );
 
     this.securityGroup.addIngressRule (

@@ -1,6 +1,7 @@
 import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import * as eks from "aws-cdk-lib/aws-eks";
+import { Certificate } from 'crypto';
 
 interface HelmStackProps extends cdk.StackProps {
   cluster: cdk.aws_eks.Cluster;
@@ -25,31 +26,31 @@ export class HelmStack extends cdk.Stack {
     });
 
     new eks.HelmChart(this, "cert-manager", {
-      cluster: props.cluster,
-      chart: "cert-manager",
-      repository: "https://charts.jetstack.io",
-      release: "cert-manager",
-      namespace: "cert-manager",
-      version: "1.19.2",
-      createNamespace: false,
-      wait: true,
-      values: {
-        installCRDs: true,
-        serviceAccount: {
-          create: false,
-          name: props.certManagerServiceAccount.serviceAccountName,
-          annotations: {
-            "eks.amazonaws.com/role-arn": props.certManagerServiceAccount.role.roleArn
+          cluster: props.cluster,
+          chart: "cert-manager",
+          repository: "https://charts.jetstack.io",
+          release: "cert-manager",
+          namespace: "cert-manager",
+          version: "1.19.2",
+          createNamespace: false,
+          wait: true,
+          values: {
+            installCRDs: true,
+            serviceAccount: {
+              create: false,
+              name: props.certManagerServiceAccount.serviceAccountName,
+              annotations: {
+                "eks.amazonaws.com/role-arn": props.certManagerServiceAccount.role.roleArn
+              }
+            },
+            ingressShim: {
+              defaultIssuerKind: "ClusterIssuer",
+              defaultIssuerName: "issuer"
+            },
+            dns01RecursiveNameservers: "8.8.8.8:53",
+            dns01RecursiveNameserversOnly: true
           }
-        },
-        ingressShim: {
-          defaultIssuerKind: "ClusterIssuer",
-          defaultIssuerName: "issuer"
-        },
-        dns01RecursiveNameservers: "8.8.8.8:53",
-        dns01RecursiveNameserversOnly: true
-      }
-    });
+        });
 
     new eks.HelmChart(this, "external-dns", {
       cluster: props.cluster,
@@ -100,20 +101,12 @@ export class HelmStack extends cdk.Stack {
           },
           ingress: {
             enabled: true,
-            path: "/",
-            controller: "aws",
             ingressClassName: "nginx",
             annotations: {
-              "nginx.ingress.kubernetes.io/force-ssl-redirect": "false",
-              "nginx.ingress.kubernetes.io/ssl-passthrough": "true ",
-              "cert-manager.io/cluster-issuer": "issuer"
+              "cert-manager.io/cluster-issuer": "issuer",
             },
-            hostname: "argocd.cdk-labs.com",
+            hostname: "argocd1.cdk-labs.com",
             tls: true,
-            extraTls: [{
-                hosts: ["argocd.cdk-labs.com"],
-                secretName: "argocd-tls"
-              }]   
           }
         }
       }
