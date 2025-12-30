@@ -18,4 +18,4 @@ spec:
       - name: the-app-hub
         image: nginx
         ports:
-        - containerPort: 3000
+        - containerPort: 80

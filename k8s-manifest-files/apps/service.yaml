@@ -2,6 +2,8 @@ apiVersion: v1
 kind: Service
 metadata:
   name: apps-service
+  labels:
+    app: apps
 spec:
   selector:
     app: apps
@@ -9,9 +11,7 @@ spec:
   ports:
   - name: http
     protocol: TCP
-    port: 80
-    targetPort: 3000
-  - name: app-port
-    protocol: TCP
-    port: 8086
-  - targetPort: 3000
+    port: 8080
+    targetPort: 80
+  selector:
+    app: apps
