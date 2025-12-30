@@ -105,7 +105,7 @@ export class HelmStack extends cdk.Stack {
             annotations: {
               "cert-manager.io/cluster-issuer": "issuer",
             },
-            hostname: "argocd1.cdk-labs.com",
+            hostname: "argocd.cdk-labs.com",
             tls: true,
           }
         }
