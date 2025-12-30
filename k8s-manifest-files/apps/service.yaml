@@ -10,4 +10,8 @@ spec:
   - name: http
     protocol: TCP
     port: 80
-    targetPort: 80
+    targetPort: 3000
+  - name: app-port
+    protocol: TCP
+    port: 80
+    targetPort: 8086

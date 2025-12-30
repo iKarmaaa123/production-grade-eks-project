@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
       - name: the-app-hub
-        image: nginx
+        image: moabukar/the-app-hub22e0324
         ports:
-        - containerPort: 80
+        - containerPort: 3000
