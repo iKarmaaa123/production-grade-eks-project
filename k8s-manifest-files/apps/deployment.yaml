@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-deployment
+  labels:
+    app: apps
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: apps
+  template:
+    metadata:
+      labels:
+        app: apps
+    spec:
+      containers:
+      - name: the-app-hub
+        image: moabukar/the-app-hub22e0324
+        ports:
+        - containerPort: 3000
