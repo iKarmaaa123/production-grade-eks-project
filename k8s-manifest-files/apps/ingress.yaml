@@ -16,7 +16,7 @@ spec:
           service:
             name: apps-service
             port:
-              number: 8080
+              number: 80
   tls:
   - hosts: 
     - apps.cdk-labs.com
