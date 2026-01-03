@@ -8,6 +8,7 @@ spec:
   replicas: 2
   selector:
     matchLabels:
+    
       app: apps
   template:
     metadata:
@@ -15,7 +16,7 @@ spec:
         app: apps
     spec:
       containers:
-      - name: nginx-app-container
-        image: nginx
+      - name: game-app-container
+        image: 648767092427.dkr.ecr.us-east-1.amazonaws.com/game-image:latest
         ports:
-        - containerPort: 80
+        - containerPort: 3000

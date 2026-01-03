@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: https://github.com/iKarmaaa123/production-grade-eks-project.git
     targetRevision: HEAD
-    path: k8s-manifest-files/apps
+    path: manifest-files/apps
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
