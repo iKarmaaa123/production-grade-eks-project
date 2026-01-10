@@ -1,9 +1,8 @@
 import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import * as eks from "aws-cdk-lib/aws-eks";
-import { Certificate } from 'crypto';
 
-interface HelmStackProps extends cdk.StackProps {
+export interface HelmStackProps extends cdk.StackProps {
   cluster: cdk.aws_eks.Cluster;
   certManagerServiceAccount: cdk.aws_eks.ServiceAccount;
   externalDNSServiceAccount: cdk.aws_eks.ServiceAccount;
@@ -25,7 +24,7 @@ export class HelmStack extends cdk.Stack {
       },
     });
 
-    new eks.HelmChart(this, "cert-manager", {
+   const certManagerHelmChart = new eks.HelmChart(this, "cert-manager", {
           cluster: props.cluster,
           chart: "cert-manager",
           repository: "https://charts.jetstack.io",
@@ -111,5 +110,34 @@ export class HelmStack extends cdk.Stack {
         }
       }
     }).node.addDependency(ingressController)
+
+    new eks.HelmChart(this, "prometheus", {
+      cluster: props.cluster,
+      chart: "kube-prometheus-stack",
+      repository: "https://prometheus-community.github.io/helm-charts",
+      release: "prometheus",
+      version: "80.13.3",
+      createNamespace: true,
+      namespace: "prometheus",
+      wait: true,
+      values: {
+        installCRDs: true,
+        enabled: true,
+        grafana: {
+          ingress: {
+            enabled: true,
+            ingressClassName: "nginx",
+            annotations: {
+              "cert-manager.io/cluster-issuer": "issuer",
+            },
+            tls: [{
+              secretName: "prometheus-server-tls",
+              hosts: ["grafana.cdk-labs.com"]
+            }],
+          hosts: ["grafana.cdk-labs.com"]
+          },
+        }
+      }
+    })
   }
 }

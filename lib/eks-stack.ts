@@ -35,18 +35,6 @@ export class ClusterStack extends cdk.Stack {
       ]
     });
 
-    // const NodeInstanceRolePolicyStatement = new iam.PolicyStatement({
-    //   actions: [
-    //     "ecr:BatchCheckLayerAvailability",
-    //     "ecr:BatchGetImage",
-    //     "ecr:GetDownloadUrlForLayer",
-    //     "ecr:GetAuthorizationToken"
-    //   ],
-    //   resources: [
-    //     `arn:aws:eks:*:${accountId}:cluster/*`
-    //   ]
-    // })
-
     const EKSClusterMasterRole = new iam.Role(this, "ClusterMasterRole", {
       assumedBy: new iam.AccountPrincipal(accountId),
       roleName: "EksClusterMasterRole",
@@ -57,21 +45,10 @@ export class ClusterStack extends cdk.Stack {
       }
     });
 
-    // const NodeInstanceRole = new iam.Role(this, "NodeInstanceRole", {
-    //   assumedBy: new iam.ServicePrincipal("eks.amazonaws.com"),
-    //   roleName: "NodeInstanceRole",
-    //   inlinePolicies: {
-    //     "NodeInstanceRolePolicy": new iam.PolicyDocument({
-    //       statements: [NodeInstanceRolePolicyStatement]
-    //     })
-    //   }
-    // })
-
     this.cluster = new eks.Cluster(this, "HelloEKS", {
       vpc: props.vpc,
       clusterName: "demo-cluster",
       mastersRole: EKSClusterMasterRole,
-      // role: NodeInstanceRole,
       version: eks.KubernetesVersion.V1_32,
       endpointAccess: eks.EndpointAccess.PUBLIC_AND_PRIVATE.onlyFrom("0.0.0.0/0"),
       vpcSubnets: [
