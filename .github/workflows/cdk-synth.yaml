@@ -23,5 +23,8 @@ jobs:
         role-to-assume: arn:aws:iam::648767092427:role/IamRoleForGitHubActionsRunner
         aws-region: us-east-1
 
+    - name: Installed CDK
+      run: npm install -g aws-cdk
+
     - name: Running CDK Synth
       run: cdk synth --all
