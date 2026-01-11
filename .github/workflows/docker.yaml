@@ -18,6 +18,15 @@ jobs:
       run: docker build -t game-image:v1 .
       working-directory: ./app
 
+    - name: Run Trivy vulnerability scanner
+      uses: aquasecurity/trivy-action@0.33
+      with:
+        image-ref: game-image:v1
+        format: 'table'
+        exit-code: '1'
+        vuln-type: 'os,library'
+        severity: 'HIGH,CRITICAL'
+
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v4
       with:
