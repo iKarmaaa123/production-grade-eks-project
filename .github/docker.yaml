@@ -1,0 +1,40 @@
+name: Workflow for creating and pushing Docker image to AWS ECR
+on:
+  workflow_dispatch:
+
+permissions:
+      id-token: write
+      contents: read
+
+jobs:
+  docker_image:
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: checkout repository
+      uses: actions/checkout@v6
+
+    - name: building Docker image
+      run: docker build -t game-image:v1 .
+      working-directory: ./app
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        role-to-assume: arn:aws:iam::648767092427:role/pushing-docker-images-to-aws-ecr
+        aws-region: us-east-1
+
+    - name: Authenticating with AWS ECR
+      uses: aws-actions/amazon-ecr-login@v2
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v2
+      with:
+        mask-password: 'true'
+
+    - name: tagging image with AWS ECR repo
+      run: docker tag game-image:v1 ${{ secrets.ECR_REGISTRY_URI }}
+
+    - name: docker image to AWS ECR
+      run: docker push ${{ secrets.ECR_REGISTRY_URI }}

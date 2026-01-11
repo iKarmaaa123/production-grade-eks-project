@@ -10,7 +10,7 @@ spec:
   - host: apps.cdk-labs.com
     http:
       paths:
-      - path: /
+      - path: / 
         pathType: Prefix
         backend:
           service:
