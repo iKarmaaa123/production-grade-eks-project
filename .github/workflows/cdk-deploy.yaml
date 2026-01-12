@@ -1,0 +1,47 @@
+name: Workflow for running CDK Deploy
+on:
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  cdk_synth:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checking out repository
+      uses: actions/checkout@v6
+
+    - name: Running packages for cdk project
+      run: npm install
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        role-to-assume: arn:aws:iam::648767092427:role/IamRoleForGitHubActionsRunner
+        aws-region: us-east-1
+
+    - name: Installing CDK
+      run: npm install -g aws-cdk
+
+    - name: Running CDK Synth
+      run: cdk synth --all
+
+    - name: Running CDK deploy
+      run: cdk deploy --all --require-approval never
+
+    - name: Setting up kubectl for GitHub Actions runner
+      uses: alexellis/arkade-get@master
+      with:
+        kubectl: latest
+    
+    - name: Accessing EKS cluster
+      run: aws eks update-kubeconfig --name demo-cluster --region us-east-1 --role-arn arn:aws:iam::648767092427:role/EksClusterMasterRole
+
+    - name: Deploying ClusterIssuer
+      run: kubectl apply -f manifest-files/cert-manager/issuer.yaml
+
+    - name: Deploying application for argocd
+      run: kubectl apply -f manifest-files/argocd/argocd.yaml

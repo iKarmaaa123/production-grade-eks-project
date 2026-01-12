@@ -1,0 +1,30 @@
+name: Workflow for running CDK Destroy
+on:
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  cdk_synth:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checking out repository
+      uses: actions/checkout@v6
+
+    - name: Running packages for cdk project
+      run: npm install
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        role-to-assume: arn:aws:iam::648767092427:role/IamRoleForGitHubActionsRunner
+        aws-region: us-east-1
+
+    - name: Installing CDK
+      run: npm install -g aws-cdk
+
+    - name: Running CDK Synth
+      run: cdk destroy --all --require-approval never
