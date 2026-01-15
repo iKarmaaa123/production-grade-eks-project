@@ -1,4 +1,4 @@
-name: Workflow for creating and pushing Docker image to AWS ECR
+name: Workflow for creating Docker image and pushing it to AWS ECR
 on:
   workflow_dispatch:
 
@@ -37,7 +37,6 @@ jobs:
       uses: aws-actions/amazon-ecr-login@v2
 
     - name: Login to Amazon ECR
-      id: login-ecr
       uses: aws-actions/amazon-ecr-login@v2
       with:
         mask-password: 'true'

@@ -1,4 +1,4 @@
-name: Workflow for running CDK Deploy
+name: CDK Deploy Workflow
 on:
   workflow_dispatch:
 
@@ -25,9 +25,6 @@ jobs:
 
     - name: Installing CDK
       run: npm install -g aws-cdk
-
-    - name: Running CDK Synth
-      run: cdk synth --all
 
     - name: Running CDK deploy
       run: cdk deploy --all --require-approval never

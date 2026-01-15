@@ -36,5 +36,3 @@ const helmStack = new HelmStack(app, "HelmStack", {
 })
 
 clusterStack.addDependency(networkingStack);
-
-
