@@ -26,5 +26,5 @@ jobs:
     - name: Installing CDK
       run: npm install -g aws-cdk
 
-    - name: Running CDK Synth
-      run: cdk destroy --all --require-approval never
+    - name: Running CDK Destroy
+      run: cdk destroy --all --force
