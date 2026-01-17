@@ -2,7 +2,7 @@ import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import * as eks from "aws-cdk-lib/aws-eks";
 
-export interface HelmStackProps extends cdk.StackProps {
+interface HelmStackProps extends cdk.StackProps {
   cluster: cdk.aws_eks.Cluster;
   certManagerServiceAccount: cdk.aws_eks.ServiceAccount;
   externalDNSServiceAccount: cdk.aws_eks.ServiceAccount;

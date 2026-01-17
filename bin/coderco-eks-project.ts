@@ -19,10 +19,6 @@ const clusterStack = new ClusterStack(app, 'ClusterStack', {
     region: process.env.CDK_DEFAULT_REGION
   },
   vpc: networkingStack.vpc,
-  publicSubnetId: networkingStack.subnetPublicId,
-  publicSubnetId2: networkingStack.subnetPublicId2,
-  privateSubnetId: networkingStack.subnetPrivateId,
-  privateSubnetId2: networkingStack.subnetPrivateId2,
 });
 
 const helmStack = new HelmStack(app, "HelmStack", {

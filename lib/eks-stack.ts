@@ -4,40 +4,34 @@ import * as eks from 'aws-cdk-lib/aws-eks';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import { KubectlV32Layer } from '@aws-cdk/lambda-layer-kubectl-v32';
-import * as Route53 from 'aws-cdk-lib/aws-route53';
+import * as Route53 from 'aws-cdk-lib/aws-route53'
 
-interface EKSClusterStackProps extends cdk.StackProps {
+interface EKSStackProps extends cdk.StackProps {
   vpc: ec2.IVpc;
-  publicSubnetId: string;
-  publicSubnetId2: string;
-  privateSubnetId: string;
-  privateSubnetId2: string;
 }
 
 export class ClusterStack extends cdk.Stack {
+  public readonly cluster: eks.Cluster
+  public readonly certManagerServiceAccount: eks.ServiceAccount
+  public readonly externalDNSServiceAccount: eks.ServiceAccount
 
-  public readonly cluster: cdk.aws_eks.Cluster
-  public readonly certManagerServiceAccount: cdk.aws_eks.ServiceAccount
-  public readonly externalDNSServiceAccount: cdk.aws_eks.ServiceAccount
-
-  constructor(scope: Construct, id: string, props: EKSClusterStackProps) {
+  constructor(scope: Construct, id: string, props: EKSStackProps) {
     super(scope, id, props);
 
     const accountId = this.account;
 
     const kubernetesApiAccessPolicy = new iam.PolicyStatement({
       actions: [
-        "eks:AccessKubernetesApi",
         "eks:DescribeCluster",
+        "eks:AccessKubernetesApi",
       ],
       resources: [
         `arn:aws:eks:*:${accountId}:cluster/*`
       ]
     });
 
-    const EKSClusterMasterRole = new iam.Role(this, "ClusterMasterRole", {
-      assumedBy: new iam.AccountPrincipal(accountId),
-      roleName: "EksClusterMasterRole",
+    const mastersRole = new iam.Role(this, "ClusterMasterRole", {
+      assumedBy: new iam.ArnPrincipal(`arn:aws:iam::${accountId}:user/project`),
       inlinePolicies: {
         "KubernetesApiAccess": new iam.PolicyDocument({
           statements: [kubernetesApiAccessPolicy]
@@ -47,17 +41,22 @@ export class ClusterStack extends cdk.Stack {
 
     this.cluster = new eks.Cluster(this, "HelloEKS", {
       vpc: props.vpc,
-      clusterName: "demo-cluster",
-      mastersRole: EKSClusterMasterRole,
+      mastersRole: mastersRole,
       version: eks.KubernetesVersion.V1_32,
-      endpointAccess: eks.EndpointAccess.PUBLIC_AND_PRIVATE.onlyFrom("0.0.0.0/0"),
+      endpointAccess: eks.EndpointAccess.PUBLIC,
       vpcSubnets: [
         { subnetType: ec2.SubnetType.PUBLIC },
         { subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS }
       ],
-      defaultCapacity: 2,
+      defaultCapacity: 0,
       kubectlLayer: new KubectlV32Layer(this, "kubectl"),
     });
+
+    this.cluster.addNodegroupCapacity("ASG", {
+      desiredSize: 2,
+      minSize: 2,
+      maxSize: 4,
+    })
 
     const certManagerNamespace = this.cluster.addManifest("cert-manager", {
       apiVersion: "v1",
@@ -103,7 +102,7 @@ export class ClusterStack extends cdk.Stack {
     });
     this.externalDNSServiceAccount.node.addDependency(externalDNSNamespace);
 
-    this.certManagerServiceAccount.role.addToPrincipalPolicy(new iam.PolicyStatement({
+    const route53Policy = new iam.PolicyStatement({
       actions: [
         "route53:GetChange",
         "route53:ChangeResourceRecordSets",
@@ -111,18 +110,10 @@ export class ClusterStack extends cdk.Stack {
         "route53:ListHostedZonesByName",
         "route53:ListHostedZones"
       ],
-      resources: ["*"],
-    }));
+      resources: [zone.hostedZoneArn],
+    });
 
-    this.externalDNSServiceAccount.role.addToPrincipalPolicy(new iam.PolicyStatement({
-      actions: [
-        "route53:GetChange",
-        "route53:ChangeResourceRecordSets",
-        "route53:ListResourceRecordSets",
-        "route53:ListHostedZonesByName",
-        "route53:ListHostedZones"
-      ],
-      resources: ["*"],
-    }));
+    this.certManagerServiceAccount.role.addToPrincipalPolicy(route53Policy)
+    this.externalDNSServiceAccount.role.addToPrincipalPolicy(route53Policy)
   }
 }

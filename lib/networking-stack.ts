@@ -4,17 +4,11 @@ import { Construct } from 'constructs';
 
 export class NetworkingStack extends cdk.Stack {
   public readonly vpc: ec2.Vpc;
-  public readonly subnetPublicId: string;
-  public readonly subnetPublicId2: string;
-  public readonly subnetPrivateId: string;
-  public readonly subnetPrivateId2: string;
-  public readonly securityGroup: cdk.aws_ec2.SecurityGroup
 
-  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+  constructor(scope: Construct, id: string, props: cdk.StackProps) {
     super(scope, id, props);
 
-    this.vpc = new ec2.Vpc(this, 'Vpc', {
-      vpcName: "demo-vpc",
+    this.vpc = new ec2.Vpc(this, "vpc", {
       ipAddresses: ec2.IpAddresses.cidr('10.0.0.0/16'),
       createInternetGateway: true,
       natGateways: 1,
@@ -33,18 +27,18 @@ export class NetworkingStack extends cdk.Stack {
       ]
     });
 
-    this.securityGroup = new ec2.SecurityGroup(this, "mySecurityGroup", {
+    const securityGroup = new ec2.SecurityGroup(this, "mySecurityGroup", {
       vpc: this.vpc,
       securityGroupName: "security-group-demo",
       allowAllOutbound: true,
     });
 
-    this.securityGroup.addIngressRule (
+    securityGroup.addIngressRule (
       ec2.Peer.anyIpv4(),
       ec2.Port.tcp(80),
     );
 
-    this.securityGroup.addIngressRule (
+    securityGroup.addIngressRule (
       ec2.Peer.anyIpv4(),
       ec2.Port.tcp(443),
     );
