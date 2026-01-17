@@ -75,7 +75,6 @@ export class ClusterStack extends cdk.Stack {
     });
 
     this.certManagerServiceAccount = this.cluster.addServiceAccount("cert-manager", {
-      name: "cert-manager",
       namespace: "cert-manager",
       identityType: eks.IdentityType.IRSA,
       labels: {
@@ -89,7 +88,6 @@ export class ClusterStack extends cdk.Stack {
     this.certManagerServiceAccount.node.addDependency(certManagerNamespace);
 
     this.externalDNSServiceAccount = this.cluster.addServiceAccount("external-dns", {
-      name: "external-dns",
       namespace: "external-dns",
       identityType: eks.IdentityType.IRSA,
       labels: {
