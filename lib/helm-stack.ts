@@ -1,30 +1,33 @@
 import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import * as eks from "aws-cdk-lib/aws-eks";
+import { hostname } from 'os';
 
 interface HelmStackProps extends cdk.StackProps {
-  cluster: cdk.aws_eks.Cluster;
-  certManagerServiceAccount: cdk.aws_eks.ServiceAccount;
-  externalDNSServiceAccount: cdk.aws_eks.ServiceAccount;
+  cluster: eks.Cluster;
+  certManagerServiceAccount: eks.ServiceAccount;
+  externalDNSServiceAccount: eks.ServiceAccount;
 }
 
 export class HelmStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props: HelmStackProps) {
-    super(scope, id, props);
+    super(scope, id);
  
-   const ingressController = new eks.HelmChart(this, "nginx", {
+   const ingressControllerHelmChart = new eks.HelmChart(this, "nginx", {
       cluster: props.cluster,
       chart: "nginx-ingress",
-      repository: "https://helm.nginx.com/stable",
+      repository: "https://kubernetes.github.io/ingress-nginx",
       release: "nginx-ingress",
       namespace: "nginx",
+      version: "v1.14.1",
+      createNamespace: true,
       wait: true,
       values: {
         installCRDs: true
       },
     });
 
-   const certManagerHelmChart = new eks.HelmChart(this, "cert-manager", {
+   new eks.HelmChart(this, "cert-manager", {
           cluster: props.cluster,
           chart: "cert-manager",
           repository: "https://charts.jetstack.io",
@@ -38,9 +41,6 @@ export class HelmStack extends cdk.Stack {
             serviceAccount: {
               create: false,
               name: props.certManagerServiceAccount.serviceAccountName,
-              annotations: {
-                "eks.amazonaws.com/role-arn": props.certManagerServiceAccount.role.roleArn
-              }
             },
             ingressShim: {
               defaultIssuerKind: "ClusterIssuer",
@@ -61,7 +61,6 @@ export class HelmStack extends cdk.Stack {
       createNamespace: false,
       wait: true,
       values: {
-        installCRDs: true,
         domainFilters: ["cdk-labs.com"],
         provider: {
           name: "aws"
@@ -69,14 +68,11 @@ export class HelmStack extends cdk.Stack {
         serviceAccount: {
           create: false,
           name: props.externalDNSServiceAccount.serviceAccountName,
-          annotations: {
-            "eks.amazonaws.com/role-arn": props.externalDNSServiceAccount.role.roleArn
-          }
         },
         env: [
           {
             name: "AWS_DEFAULT_REGION",
-            value: "us-east-1"
+            value: cdk.Stack.of(this).region
           }
         ]
       }
@@ -92,7 +88,6 @@ export class HelmStack extends cdk.Stack {
       namespace: "argocd",
       wait: true,
       values: {
-        installCRDs: true,
         server: {
           extraArgs: ["--insecure"],
           service: {
@@ -104,12 +99,12 @@ export class HelmStack extends cdk.Stack {
             annotations: {
               "cert-manager.io/cluster-issuer": "issuer",
             },
-            hostname: "argocd.cdk-labs.com",
+            hostname: `argocd.${this.node.tryGetContext("domainName")}`,
             tls: true,
           }
         }
       }
-    }).node.addDependency(ingressController)
+    }).node.addDependency(ingressControllerHelmChart)
 
     new eks.HelmChart(this, "prometheus", {
       cluster: props.cluster,
@@ -121,7 +116,6 @@ export class HelmStack extends cdk.Stack {
       namespace: "prometheus",
       wait: true,
       values: {
-        installCRDs: true,
         enabled: true,
         grafana: {
           ingress: {
@@ -132,9 +126,9 @@ export class HelmStack extends cdk.Stack {
             },
             tls: [{
               secretName: "prometheus-server-tls",
-              hosts: ["grafana.cdk-labs.com"]
+              hosts: [`grafana.${this.node.tryGetContext("Name")}`]
             }],
-          hosts: ["grafana.cdk-labs.com"]
+          hosts: [`grafana.${this.node.tryGetContext("Name")}`]
           },
         }
       }

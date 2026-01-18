@@ -8,7 +8,7 @@
     "us-east-1f"
   ],
   "hosted-zone:account=648767092427:domainName=cdk-labs.com:region=us-east-1": {
-    "Id": "/hostedzone/Z0080164COY9BX1JUJ4L",
-    "Name": "cdk-labs.com."
+    "hostedzoneId": "/hostedzone/Z0080164COY9BX1JUJ4L",
+    "domainName": "cdk-labs.com"
   }
 }

@@ -1,0 +1,21 @@
+{
+  "version": "48.0.0",
+  "files": {
+    "1a255a2a2bb24de28abf942c20fcac9f17c4062a7f348141b3e54d0c2e1f2d53": {
+      "displayName": "HelmStack Template",
+      "source": {
+        "path": "HelmStack.template.json",
+        "packaging": "file"
+      },
+      "destinations": {
+        "648767092427-us-east-1-6356d91c": {
+          "bucketName": "cdk-hnb659fds-assets-648767092427-us-east-1",
+          "objectKey": "1a255a2a2bb24de28abf942c20fcac9f17c4062a7f348141b3e54d0c2e1f2d53.json",
+          "region": "us-east-1",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::648767092427:role/cdk-hnb659fds-file-publishing-role-648767092427-us-east-1"
+        }
+      }
+    }
+  },
+  "dockerImages": {}
+}

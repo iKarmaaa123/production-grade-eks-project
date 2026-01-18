@@ -19,6 +19,7 @@ const clusterStack = new ClusterStack(app, 'ClusterStack', {
     region: process.env.CDK_DEFAULT_REGION
   },
   vpc: networkingStack.vpc,
+  domainName: this.node.tryGetContext("Name")
 });
 
 const helmStack = new HelmStack(app, "HelmStack", {
@@ -32,3 +33,4 @@ const helmStack = new HelmStack(app, "HelmStack", {
 })
 
 clusterStack.addDependency(networkingStack);
+helmStack.addDependency(clusterStack)

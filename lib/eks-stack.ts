@@ -6,8 +6,9 @@ import * as iam from 'aws-cdk-lib/aws-iam';
 import { KubectlV32Layer } from '@aws-cdk/lambda-layer-kubectl-v32';
 import * as Route53 from 'aws-cdk-lib/aws-route53'
 
-interface EKSStackProps extends cdk.StackProps {
+interface eksStackProps extends cdk.StackProps {
   vpc: ec2.IVpc;
+  domainName: string;
 }
 
 export class ClusterStack extends cdk.Stack {
@@ -15,28 +16,11 @@ export class ClusterStack extends cdk.Stack {
   public readonly certManagerServiceAccount: eks.ServiceAccount
   public readonly externalDNSServiceAccount: eks.ServiceAccount
 
-  constructor(scope: Construct, id: string, props: EKSStackProps) {
-    super(scope, id, props);
-
-    const accountId = this.account;
-
-    const kubernetesApiAccessPolicy = new iam.PolicyStatement({
-      actions: [
-        "eks:DescribeCluster",
-        "eks:AccessKubernetesApi",
-      ],
-      resources: [
-        `arn:aws:eks:*:${accountId}:cluster/*`
-      ]
-    });
+  constructor(scope: Construct, id: string, props: eksStackProps) {
+    super(scope, id);
 
     const mastersRole = new iam.Role(this, "ClusterMasterRole", {
-      assumedBy: new iam.ArnPrincipal(`arn:aws:iam::${accountId}:user/project`),
-      inlinePolicies: {
-        "KubernetesApiAccess": new iam.PolicyDocument({
-          statements: [kubernetesApiAccessPolicy]
-        })
-      }
+      assumedBy: new iam.AccountPrincipal(cdk.Stack.of(this).account),
     });
 
     this.cluster = new eks.Cluster(this, "HelloEKS", {
@@ -70,8 +54,10 @@ export class ClusterStack extends cdk.Stack {
       metadata: { name: "external-dns" }
     });
 
+    const domainName = this.node.tryGetContext("Name")
+
     const zone = Route53.HostedZone.fromLookup(this, "HostedZone", {
-      domainName: "cdk-labs.com"
+      domainName: domainName
     });
 
     this.certManagerServiceAccount = this.cluster.addServiceAccount("cert-manager", {

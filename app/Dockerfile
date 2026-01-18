@@ -1,14 +1,20 @@
+FROM python:3.11-slim as Build
+
+WORKDIR /app
+
+COPY . .
+
+RUN apt-get update && apt-get install -y curl
+
 FROM python:3.11-slim
 
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y curl
+COPY --from=Build /app /app
 
 RUN useradd -m non-root
 
 USER non-root
-
-COPY . .
 
 EXPOSE 3000
 
