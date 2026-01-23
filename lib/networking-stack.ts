@@ -9,7 +9,7 @@ export class NetworkingStack extends cdk.Stack {
     super(scope, id, props);
 
     this.vpc = new ec2.Vpc(this, "vpc", {
-      ipAddresses: ec2.IpAddresses.cidr('10.0.0.0/16'),
+      ipAddresses: ec2.IpAddresses.cidr("10.0.0.0/16"),
       createInternetGateway: true,
       natGateways: 1,
       availabilityZones: ["us-east-1a", "us-east-1b"],
@@ -29,7 +29,7 @@ export class NetworkingStack extends cdk.Stack {
 
     const securityGroup = new ec2.SecurityGroup(this, "mySecurityGroup", {
       vpc: this.vpc,
-      securityGroupName: "security-group-demo",
+      securityGroupName: this.node.getContext("securityGroupName"),
       allowAllOutbound: true,
     });
 

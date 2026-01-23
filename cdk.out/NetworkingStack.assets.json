@@ -16,16 +16,16 @@
         }
       }
     },
-    "6419dfa73e305ca10019a4f5dbae91f00fb47a0981975e9a9e047d219ff44fab": {
+    "6cb4eae15642d5733c2bd80b471aa1ef3c1069d3b8b107e948ebf52a327ce38f": {
       "displayName": "NetworkingStack Template",
       "source": {
         "path": "NetworkingStack.template.json",
         "packaging": "file"
       },
       "destinations": {
-        "648767092427-us-east-1-b8bac9ca": {
+        "648767092427-us-east-1-58e4e6b4": {
           "bucketName": "cdk-hnb659fds-assets-648767092427-us-east-1",
-          "objectKey": "6419dfa73e305ca10019a4f5dbae91f00fb47a0981975e9a9e047d219ff44fab.json",
+          "objectKey": "6cb4eae15642d5733c2bd80b471aa1ef3c1069d3b8b107e948ebf52a327ce38f.json",
           "region": "us-east-1",
           "assumeRoleArn": "arn:${AWS::Partition}:iam::648767092427:role/cdk-hnb659fds-file-publishing-role-648767092427-us-east-1"
         }

@@ -8,7 +8,6 @@ import * as Route53 from 'aws-cdk-lib/aws-route53'
 
 interface eksStackProps extends cdk.StackProps {
   vpc: ec2.IVpc;
-  domainName: string;
 }
 
 export class ClusterStack extends cdk.Stack {
@@ -17,13 +16,14 @@ export class ClusterStack extends cdk.Stack {
   public readonly externalDNSServiceAccount: eks.ServiceAccount
 
   constructor(scope: Construct, id: string, props: eksStackProps) {
-    super(scope, id);
+    super(scope, id, props);
 
     const mastersRole = new iam.Role(this, "ClusterMasterRole", {
       assumedBy: new iam.AccountPrincipal(cdk.Stack.of(this).account),
     });
 
     this.cluster = new eks.Cluster(this, "HelloEKS", {
+      clusterName: this.node.getContext("clusterName"),
       vpc: props.vpc,
       mastersRole: mastersRole,
       version: eks.KubernetesVersion.V1_32,
@@ -38,8 +38,8 @@ export class ClusterStack extends cdk.Stack {
 
     this.cluster.addNodegroupCapacity("ASG", {
       desiredSize: 2,
-      minSize: 2,
-      maxSize: 4,
+      minSize: 1,
+      maxSize: 4
     })
 
     const certManagerNamespace = this.cluster.addManifest("cert-manager", {
@@ -54,10 +54,8 @@ export class ClusterStack extends cdk.Stack {
       metadata: { name: "external-dns" }
     });
 
-    const domainName = this.node.tryGetContext("Name")
-
     const zone = Route53.HostedZone.fromLookup(this, "HostedZone", {
-      domainName: domainName
+      domainName: "cdk-labs.com"
     });
 
     this.certManagerServiceAccount = this.cluster.addServiceAccount("cert-manager", {

@@ -14,26 +14,7 @@
       }
      ],
      "Version": "2012-10-17"
-    },
-    "Policies": [
-     {
-      "PolicyDocument": {
-       "Statement": [
-        {
-         "Action": [
-          "eks:AccessKubernetesApi",
-          "eks:DescribeCluster"
-         ],
-         "Effect": "Allow",
-         "Resource": "arn:aws:eks:*:648767092427:cluster/*"
-        }
-       ],
-       "Version": "2012-10-17"
-      },
-      "PolicyName": "KubernetesApiAccess"
-     }
-    ],
-    "RoleName": "EksClusterMasterRole"
+    }
    },
    "Metadata": {
     "aws:cdk:path": "ClusterStack/ClusterMasterRole/Resource"
@@ -81,18 +62,6 @@
          "Ref": "AWS::Partition"
         },
         ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-       ]
-      ]
-     },
-     {
-      "Fn::Join": [
-       "",
-       [
-        "arn:",
-        {
-         "Ref": "AWS::Partition"
-        },
-        ":iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
        ]
       ]
      },
@@ -219,7 +188,7 @@
      }
     ],
     "VpcId": {
-     "Fn::ImportValue": "NetworkingStack:ExportsOutputRefVpc8378EB38272D6E3A"
+     "Fn::ImportValue": "NetworkingStack:ExportsOutputRefvpcA2121C384D1B3CDE"
     }
    },
    "Metadata": {
@@ -294,8 +263,8 @@
        ],
        "Effect": "Allow",
        "Resource": [
-        "arn:aws:eks:us-east-1:648767092427:cluster/demo-cluster",
-        "arn:aws:eks:us-east-1:648767092427:cluster/demo-cluster/*"
+        "arn:aws:eks:us-east-1:648767092427:cluster/eks-project-cluster",
+        "arn:aws:eks:us-east-1:648767092427:cluster/eks-project-cluster/*"
        ]
       },
       {
@@ -304,7 +273,7 @@
         "eks:DescribeFargateProfile"
        ],
        "Effect": "Allow",
-       "Resource": "arn:aws:eks:us-east-1:648767092427:fargateprofile/demo-cluster/*"
+       "Resource": "arn:aws:eks:us-east-1:648767092427:fargateprofile/eks-project-cluster/*"
       },
       {
        "Action": [
@@ -346,7 +315,7 @@
      ]
     },
     "Config": {
-     "name": "demo-cluster",
+     "name": "eks-project-cluster",
      "version": "1.32",
      "roleArn": {
       "Fn::GetAtt": [
@@ -360,16 +329,16 @@
      "resourcesVpcConfig": {
       "subnetIds": [
        {
-        "Fn::ImportValue": "NetworkingStack:ExportsOutputRefVpcpublicSubnet1Subnet2BB74ED74EB42ADC"
+        "Fn::ImportValue": "NetworkingStack:ExportsOutputRefvpcpublicSubnet1SubnetA635257E65D7FF9B"
        },
        {
-        "Fn::ImportValue": "NetworkingStack:ExportsOutputRefVpcpublicSubnet2SubnetE34B022AC8BB6627"
+        "Fn::ImportValue": "NetworkingStack:ExportsOutputRefvpcpublicSubnet2Subnet027D165BDCD2F5D4"
        },
        {
-        "Fn::ImportValue": "NetworkingStack:ExportsOutputRefVpcprivateSubnet1SubnetCEAD37168693D373"
+        "Fn::ImportValue": "NetworkingStack:ExportsOutputRefvpcprivateSubnet1SubnetAE1393DC18E7B349"
        },
        {
-        "Fn::ImportValue": "NetworkingStack:ExportsOutputRefVpcprivateSubnet2Subnet2DE7549CDF5ACE3D"
+        "Fn::ImportValue": "NetworkingStack:ExportsOutputRefvpcprivateSubnet2Subnet1C8B0CEE5A404381"
        }
       ],
       "securityGroupIds": [
@@ -381,10 +350,7 @@
        }
       ],
       "endpointPublicAccess": true,
-      "endpointPrivateAccess": true,
-      "publicAccessCidrs": [
-       "0.0.0.0/0"
-      ]
+      "endpointPrivateAccess": false
      },
      "accessConfig": {}
     },
@@ -451,7 +417,7 @@
        "\\\",\\\"groups\\\":[\\\"system:masters\\\"]},{\\\"rolearn\\\":\\\"",
        {
         "Fn::GetAtt": [
-         "HelloEKSNodegroupDefaultCapacityNodeGroupRoleCB785378",
+         "HelloEKSNodegroupASGNodeGroupRoleF8DC4B2F",
          "Arn"
         ]
        },
@@ -480,7 +446,7 @@
     "aws:cdk:path": "ClusterStack/HelloEKS/AwsAuth/manifest/Resource/Default"
    }
   },
-  "HelloEKSNodegroupDefaultCapacityNodeGroupRoleCB785378": {
+  "HelloEKSNodegroupASGNodeGroupRoleF8DC4B2F": {
    "Type": "AWS::IAM::Role",
    "Properties": {
     "AssumeRolePolicyDocument": {
@@ -535,42 +501,38 @@
     ]
    },
    "Metadata": {
-    "aws:cdk:path": "ClusterStack/HelloEKS/NodegroupDefaultCapacity/NodeGroupRole/Resource"
+    "aws:cdk:path": "ClusterStack/HelloEKS/NodegroupASG/NodeGroupRole/Resource"
    }
   },
-  "HelloEKSNodegroupDefaultCapacity9EA40D1D": {
+  "HelloEKSNodegroupASGE1E41CE0": {
    "Type": "AWS::EKS::Nodegroup",
    "Properties": {
-    "AmiType": "AL2_x86_64",
     "ClusterName": {
      "Ref": "HelloEKS39C624A1"
     },
     "ForceUpdateEnabled": true,
-    "InstanceTypes": [
-     "m5.large"
-    ],
     "NodeRole": {
      "Fn::GetAtt": [
-      "HelloEKSNodegroupDefaultCapacityNodeGroupRoleCB785378",
+      "HelloEKSNodegroupASGNodeGroupRoleF8DC4B2F",
       "Arn"
      ]
     },
     "ScalingConfig": {
      "DesiredSize": 2,
-     "MaxSize": 2,
-     "MinSize": 2
+     "MaxSize": 4,
+     "MinSize": 1
     },
     "Subnets": [
      {
-      "Fn::ImportValue": "NetworkingStack:ExportsOutputRefVpcprivateSubnet1SubnetCEAD37168693D373"
+      "Fn::ImportValue": "NetworkingStack:ExportsOutputRefvpcprivateSubnet1SubnetAE1393DC18E7B349"
      },
      {
-      "Fn::ImportValue": "NetworkingStack:ExportsOutputRefVpcprivateSubnet2Subnet2DE7549CDF5ACE3D"
+      "Fn::ImportValue": "NetworkingStack:ExportsOutputRefvpcprivateSubnet2Subnet1C8B0CEE5A404381"
      }
     ]
    },
    "Metadata": {
-    "aws:cdk:path": "ClusterStack/HelloEKS/NodegroupDefaultCapacity/Resource"
+    "aws:cdk:path": "ClusterStack/HelloEKS/NodegroupASG/Resource"
    }
   },
   "HelloEKSmanifestcertmanager43656D62": {
@@ -674,7 +636,7 @@
          }
         ]
        },
-       ":sub\":\"system:serviceaccount:cert-manager:cert-manager\"}"
+       ":sub\":\"system:serviceaccount:cert-manager:clusterstackhelloekscertmanagerda9b79cc\"}"
       ]
      ]
     }
@@ -735,7 +697,7 @@
         "route53:ListResourceRecordSets"
        ],
        "Effect": "Allow",
-       "Resource": "*"
+       "Resource": "arn:aws:route53:::hostedzone/Z0080164COY9BX1JUJ4L"
       }
      ],
      "Version": "2012-10-17"
@@ -767,7 +729,7 @@
      "Fn::Join": [
       "",
       [
-       "[{\"apiVersion\":\"v1\",\"kind\":\"ServiceAccount\",\"metadata\":{\"name\":\"cert-manager\",\"namespace\":\"cert-manager\",\"labels\":{\"aws.cdk.eks/prune-c8554ac56998bb240b10f1052cddaaf56c4b850f79\":\"\",\"app.kubernetes.io/name\":\"cert-manager\",\"app.kubernetes.io/managed-by\":\"Helm\"},\"annotations\":{\"eks.amazonaws.com/role-arn\":\"",
+       "[{\"apiVersion\":\"v1\",\"kind\":\"ServiceAccount\",\"metadata\":{\"name\":\"clusterstackhelloekscertmanagerda9b79cc\",\"namespace\":\"cert-manager\",\"labels\":{\"aws.cdk.eks/prune-c8554ac56998bb240b10f1052cddaaf56c4b850f79\":\"\",\"app.kubernetes.io/name\":\"clusterstackhelloekscertmanagerda9b79cc\",\"app.kubernetes.io/managed-by\":\"Helm\"},\"annotations\":{\"eks.amazonaws.com/role-arn\":\"",
        {
         "Fn::GetAtt": [
          "HelloEKScertmanagerRoleDFDC789B",
@@ -867,7 +829,7 @@
          }
         ]
        },
-       ":sub\":\"system:serviceaccount:external-dns:external-dns\"}"
+       ":sub\":\"system:serviceaccount:external-dns:clusterstackhelloeksexternaldnsf66a2cea\"}"
       ]
      ]
     }
@@ -928,7 +890,7 @@
         "route53:ListResourceRecordSets"
        ],
        "Effect": "Allow",
-       "Resource": "*"
+       "Resource": "arn:aws:route53:::hostedzone/Z0080164COY9BX1JUJ4L"
       }
      ],
      "Version": "2012-10-17"
@@ -960,7 +922,7 @@
      "Fn::Join": [
       "",
       [
-       "[{\"apiVersion\":\"v1\",\"kind\":\"ServiceAccount\",\"metadata\":{\"name\":\"external-dns\",\"namespace\":\"external-dns\",\"labels\":{\"aws.cdk.eks/prune-c8d4114e3da9e431b4c4b102547b6e83aa0a45b32d\":\"\",\"app.kubernetes.io/name\":\"external-dns\",\"app.kubernetes.io/managed-by\":\"Helm\"},\"annotations\":{\"eks.amazonaws.com/role-arn\":\"",
+       "[{\"apiVersion\":\"v1\",\"kind\":\"ServiceAccount\",\"metadata\":{\"name\":\"clusterstackhelloeksexternaldnsf66a2cea\",\"namespace\":\"external-dns\",\"labels\":{\"aws.cdk.eks/prune-c8d4114e3da9e431b4c4b102547b6e83aa0a45b32d\":\"\",\"app.kubernetes.io/name\":\"clusterstackhelloeksexternaldnsf66a2cea\",\"app.kubernetes.io/managed-by\":\"Helm\"},\"annotations\":{\"eks.amazonaws.com/role-arn\":\"",
        {
         "Fn::GetAtt": [
          "HelloEKSexternaldnsRole283B621B",
@@ -1028,12 +990,6 @@
        "HelloEKSKubectlHandlerRole367432C2",
        "Arn"
       ]
-     },
-     "referencetoClusterStackHelloEKSD0EC738BClusterSecurityGroupId": {
-      "Fn::GetAtt": [
-       "HelloEKS39C624A1",
-       "ClusterSecurityGroupId"
-      ]
      }
     },
     "TemplateURL": {
@@ -1044,7 +1000,7 @@
        {
         "Ref": "AWS::URLSuffix"
        },
-       "/cdk-hnb659fds-assets-648767092427-us-east-1/ac2d7fd0e15811ff52c9262ccaa39042db0c706762a468fd5d759638a6c54602.json"
+       "/cdk-hnb659fds-assets-648767092427-us-east-1/369a05d2021bb5e39d151945b86b06c809879559f8db5063bff923fac30ab1d5.json"
       ]
      ]
     }
@@ -1189,7 +1145,7 @@
   "CDKMetadata": {
    "Type": "AWS::CDK::Metadata",
    "Properties": {
-    "Analytics": "v2:deflate64:H4sIAAAAAAAA/91Wz0/bMBT+W8gRuWak2oXTQg4TY0BFEJcqQq79WkwTO/Kzg7oo//vkxGnomCYYFE07RHE+v9/vs/Ni2sTHx/TTAXvECRfrSSEXtMks42vCHvGukaykzbUuYN5EDNGVIE430UkTVUYqLitWJJxrp2x0Eh1GJMh4hYRbqVUHtyQyuoBLVkIQk6qQCma6kFwCBqG3eSiZYisQo815s4NtEhNk886VEDd6NrjoJbxO2LWW8fuzMUq/Fx1GL9gU4uKp1xfE8Vb5J67/lNIH1vavXY1p/Br9/tr1amf/kcrKMN+RedeSoSRv7d5H83/vXNwD7f69qHKSLpX3Rnq848SgcKP9zjM7z2EhMssslKAs7pDwObxv+/uE3y329zLUda9vXEtwescQwSJN/IvglJ46vgZ7yhDmOSlYuRCMpkv1nW3A3IJBqRWBNdImLRxaMPMmqisemMh77Mn/u2QewD6wDql7I+ELlKi0VDbhHBAHkYpnbqGgDzrCbn2zqbyJmVsUkndDwC5uZM0sRG1OIgFL5gqbsopxaTfB6totgNuiy2QcJIS41AJWRrtqlA+ULqXK5A8YLomcJI+YOHtPzt0CjAILeMGUXAJasrUyb4YybEcYtExx8IEOGe5a9i3Z6pMMTC05hDNOripQZyLVSgG3M6NrKbqqO1Nss9iu85YAj2mTAXdG2s3XENHYIgHIjazGe6LzviPftuQaUDvDYbjvf/fkpCNNZtlKqhVJHVpdvkTxtU9/4QTDfp1qJaTPwH9cOVs561ffsEf6qXQ3nqFwntgt8YPslzDJHvUknxSeF5NAkkk9jel5v76dxh1nwrFSWgB9wKM6/kxjenzwgFJOjFNWlkCv+/dP+rdTki4LAAA="
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/91WW0/bMBT+LfgRuWak2gtPK3mYGAMqgnipKuTap8U0sSMfu6yL8t8nO25LYZpAbadpD1GOz/3y+ZKxJjs9ZZ+O+DP2hJz3SjVhTeG4mFP+jA+N4hVrbk0Jo4ZwRF+BPF+Ss4bUVmmhal4OhDBeO3JGjglNOsFgIJwyOrLblu5iTUnFNZ+BHJpSCQVIzkbNFm85sEl3HENJeWeGqxCdRrBJUue4eLzQpdKwlpFj8g6hlFcvo74jj9f6L1z9KcW/2KvdhhrLeJ394dr/4WD/kcnM8jCRURzJqiW7Tm9XPO9Xfw9YPADs/r2sxjSf6hCNdvyIiZXBnQmSN37esqUsHHdQgXa4BcK37EP7PyR7b7nvy1GcXje4lmL/gSOCQzYIP4p9du7FHNw5RxiNacmrieQsn+rvfAn2HiwqoynMkTV56dGBHTVEdNQ1ryAhclGLRFU8iLBLrJN1TtIKtKyN0m4gBCBuzAs/0dAlTTDSd8s6uBj6SakECeVt861acAekHVMiYcp96XJec6HcMnmd+wkIV8ZK0n0VW3RtJMys8fVGP0FaAioLslA/V8lXSr9c8R/rVWzt4BkH3j3SSz8Bq8EBXnGtpoCOrqNsGpa8fCxKGN/aFy3ALpSAdB7Qmxr0hcyN1iDc0JqFknFC3pbritf0uKUgMtYUILxVbvk1ZbcZngQUVtWbMyVG39JvW3oLaLwVsLobfveNaQRY4fhM6RnNPTpTvcfwo193OCXHgc6NlipUEBY33tXeBeobdpzutbmdz6pxYRO0NDxQv6QX6km3IXplwFAvAaq36GfssqPv+1nEV9qC2khgT3iyyD6zjJ0ePaFSPeu1UxWw2+7/C/MvmXQGCwAA"
    },
    "Metadata": {
     "aws:cdk:path": "ClusterStack/CDKMetadata/Default"
@@ -1275,28 +1231,6 @@
    },
    "Export": {
     "Name": "ClusterStack:ExportsOutputFnGetAttHelloEKSCreationRole089CC848Arn4F037A30"
-   }
-  },
-  "ExportsOutputFnGetAttHelloEKScertmanagerRoleDFDC789BArnD715619F": {
-   "Value": {
-    "Fn::GetAtt": [
-     "HelloEKScertmanagerRoleDFDC789B",
-     "Arn"
-    ]
-   },
-   "Export": {
-    "Name": "ClusterStack:ExportsOutputFnGetAttHelloEKScertmanagerRoleDFDC789BArnD715619F"
-   }
-  },
-  "ExportsOutputFnGetAttHelloEKSexternaldnsRole283B621BArn711022CB": {
-   "Value": {
-    "Fn::GetAtt": [
-     "HelloEKSexternaldnsRole283B621B",
-     "Arn"
-    ]
-   },
-   "Export": {
-    "Name": "ClusterStack:ExportsOutputFnGetAttHelloEKSexternaldnsRole283B621BArn711022CB"
    }
   }
  },

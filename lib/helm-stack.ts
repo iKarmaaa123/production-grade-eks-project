@@ -1,7 +1,6 @@
 import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import * as eks from "aws-cdk-lib/aws-eks";
-import { hostname } from 'os';
 
 interface HelmStackProps extends cdk.StackProps {
   cluster: eks.Cluster;
@@ -10,46 +9,46 @@ interface HelmStackProps extends cdk.StackProps {
 }
 
 export class HelmStack extends cdk.Stack {
-  constructor(scope: Construct, id: string, props: HelmStackProps) {
-    super(scope, id);
+  constructor(scope: Construct, id: string, props: cdk.StackProps & HelmStackProps) {
+    super(scope, id, props);
  
    const ingressControllerHelmChart = new eks.HelmChart(this, "nginx", {
-      cluster: props.cluster,
-      chart: "nginx-ingress",
-      repository: "https://kubernetes.github.io/ingress-nginx",
-      release: "nginx-ingress",
-      namespace: "nginx",
-      version: "v1.14.1",
-      createNamespace: true,
-      wait: true,
-      values: {
-        installCRDs: true
-      },
-    });
+     cluster: props.cluster,
+     chart: "nginx-ingress",
+     repository: "https://kubernetes.github.io/ingress-nginx",
+     release: "nginx-ingress",
+     namespace: "nginx",
+     version: "v1.14.1",
+     createNamespace: true,
+     wait: true,
+     values: {
+       installCRDs: true
+     },
+   });
 
    new eks.HelmChart(this, "cert-manager", {
-          cluster: props.cluster,
-          chart: "cert-manager",
-          repository: "https://charts.jetstack.io",
-          release: "cert-manager",
-          namespace: "cert-manager",
-          version: "1.19.2",
-          createNamespace: false,
-          wait: true,
-          values: {
-            installCRDs: true,
-            serviceAccount: {
-              create: false,
-              name: props.certManagerServiceAccount.serviceAccountName,
-            },
-            ingressShim: {
-              defaultIssuerKind: "ClusterIssuer",
-              defaultIssuerName: "issuer"
-            },
-            dns01RecursiveNameservers: "8.8.8.8:53",
-            dns01RecursiveNameserversOnly: true
-          }
-        });
+     cluster: props.cluster,
+     chart: "cert-manager",
+     repository: "https://charts.jetstack.io",
+     release: "cert-manager",
+     namespace: "cert-manager",
+     version: "1.19.2",
+     createNamespace: false,
+     wait: true,
+     values: {
+       installCRDs: true,
+       serviceAccount: {
+         create: false,
+         name: props.certManagerServiceAccount.serviceAccountName,
+       },
+       ingressShim: {
+         defaultIssuerKind: "ClusterIssuer",
+         defaultIssuerName: "issuer"
+       },
+       dns01RecursiveNameservers: "8.8.8.8:53",
+       dns01RecursiveNameserversOnly: true
+     }
+   });
 
     new eks.HelmChart(this, "external-dns", {
       cluster: props.cluster,
@@ -61,7 +60,7 @@ export class HelmStack extends cdk.Stack {
       createNamespace: false,
       wait: true,
       values: {
-        domainFilters: ["cdk-labs.com"],
+        domainFilters: [this.node.getContext("domainName")],
         provider: {
           name: "aws"
       },
@@ -76,7 +75,7 @@ export class HelmStack extends cdk.Stack {
           }
         ]
       }
-    });
+   });
 
     new eks.HelmChart(this, "argocd", {
       cluster: props.cluster,
@@ -99,7 +98,7 @@ export class HelmStack extends cdk.Stack {
             annotations: {
               "cert-manager.io/cluster-issuer": "issuer",
             },
-            hostname: `argocd.${this.node.tryGetContext("domainName")}`,
+            hostname: `argocd.${this.node.getContext("domainName")}`,
             tls: true,
           }
         }
@@ -125,10 +124,10 @@ export class HelmStack extends cdk.Stack {
               "cert-manager.io/cluster-issuer": "issuer",
             },
             tls: [{
-              secretName: "prometheus-server-tls",
-              hosts: [`grafana.${this.node.tryGetContext("Name")}`]
+              secretName: this.node.getContext("prometheusSecretName"),
+              hosts: [`grafana.${this.node.getContext("domainName")}`]
             }],
-          hosts: [`grafana.${this.node.tryGetContext("Name")}`]
+          hosts: [`grafana.${this.node.getContext("domainName")}`]
           },
         }
       }

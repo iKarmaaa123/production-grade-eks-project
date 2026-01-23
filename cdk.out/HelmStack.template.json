@@ -14,10 +14,11 @@
     },
     "Release": "nginx-ingress",
     "Chart": "nginx-ingress",
+    "Version": "v1.14.1",
     "Wait": true,
     "Values": "{\"installCRDs\":true}",
     "Namespace": "nginx",
-    "Repository": "https://helm.nginx.com/stable",
+    "Repository": "https://kubernetes.github.io/ingress-nginx",
     "CreateNamespace": true
    },
    "UpdateReplacePolicy": "Delete",
@@ -42,18 +43,7 @@
     "Chart": "cert-manager",
     "Version": "1.19.2",
     "Wait": true,
-    "Values": {
-     "Fn::Join": [
-      "",
-      [
-       "{\"installCRDs\":true,\"serviceAccount\":{\"create\":false,\"name\":\"cert-manager\",\"annotations\":{\"eks.amazonaws.com/role-arn\":\"",
-       {
-        "Fn::ImportValue": "ClusterStack:ExportsOutputFnGetAttHelloEKScertmanagerRoleDFDC789BArnD715619F"
-       },
-       "\"}},\"ingressShim\":{\"defaultIssuerKind\":\"ClusterIssuer\",\"defaultIssuerName\":\"issuer\"},\"dns01RecursiveNameservers\":\"8.8.8.8:53\",\"dns01RecursiveNameserversOnly\":true}"
-      ]
-     ]
-    },
+    "Values": "{\"installCRDs\":true,\"serviceAccount\":{\"create\":false,\"name\":\"clusterstackhelloekscertmanagerda9b79cc\"},\"ingressShim\":{\"defaultIssuerKind\":\"ClusterIssuer\",\"defaultIssuerName\":\"issuer\"},\"dns01RecursiveNameservers\":\"8.8.8.8:53\",\"dns01RecursiveNameserversOnly\":true}",
     "Namespace": "cert-manager",
     "Repository": "https://charts.jetstack.io"
    },
@@ -79,18 +69,7 @@
     "Chart": "external-dns",
     "Version": "1.19.0",
     "Wait": true,
-    "Values": {
-     "Fn::Join": [
-      "",
-      [
-       "{\"installCRDs\":true,\"domainFilters\":[\"cdk-labs.com\"],\"provider\":{\"name\":\"aws\"},\"serviceAccount\":{\"create\":false,\"name\":\"external-dns\",\"annotations\":{\"eks.amazonaws.com/role-arn\":\"",
-       {
-        "Fn::ImportValue": "ClusterStack:ExportsOutputFnGetAttHelloEKSexternaldnsRole283B621BArn711022CB"
-       },
-       "\"}},\"env\":[{\"name\":\"AWS_DEFAULT_REGION\",\"value\":\"us-east-1\"}]}"
-      ]
-     ]
-    },
+    "Values": "{\"domainFilters\":[\"cdk-labs.com\"],\"provider\":{\"name\":\"aws\"},\"serviceAccount\":{\"create\":false,\"name\":\"clusterstackhelloeksexternaldnsf66a2cea\"},\"env\":[{\"name\":\"AWS_DEFAULT_REGION\",\"value\":\"us-east-1\"}]}",
     "Namespace": "external-dns",
     "Repository": "https://kubernetes-sigs.github.io/external-dns/"
    },
@@ -116,7 +95,7 @@
     "Chart": "argo-cd",
     "Version": "9.1.7",
     "Wait": true,
-    "Values": "{\"installCRDs\":true,\"server\":{\"extraArgs\":[\"--insecure\"],\"service\":{\"type\":\"ClusterIP\"},\"ingress\":{\"enabled\":true,\"ingressClassName\":\"nginx\",\"annotations\":{\"cert-manager.io/cluster-issuer\":\"issuer\"},\"hostname\":\"argocd.cdk-labs.com\",\"tls\":true}}}",
+    "Values": "{\"server\":{\"extraArgs\":[\"--insecure\"],\"service\":{\"type\":\"ClusterIP\"},\"ingress\":{\"enabled\":true,\"ingressClassName\":\"nginx\",\"annotations\":{\"cert-manager.io/cluster-issuer\":\"issuer\"},\"hostname\":\"argocd.cdk-labs.com\",\"tls\":true}}}",
     "Namespace": "argocd",
     "Repository": "https://argoproj.github.io/argo-helm",
     "CreateNamespace": true
@@ -146,7 +125,7 @@
     "Chart": "kube-prometheus-stack",
     "Version": "80.13.3",
     "Wait": true,
-    "Values": "{\"installCRDs\":true,\"enabled\":true,\"grafana\":{\"ingress\":{\"enabled\":true,\"ingressClassName\":\"nginx\",\"annotations\":{\"cert-manager.io/cluster-issuer\":\"issuer\"},\"tls\":[{\"secretName\":\"prometheus-server-tls\",\"hosts\":[\"grafana.cdk-labs.com\"]}],\"hosts\":[\"grafana.cdk-labs.com\"]}}}",
+    "Values": "{\"enabled\":true,\"grafana\":{\"ingress\":{\"enabled\":true,\"ingressClassName\":\"nginx\",\"annotations\":{\"cert-manager.io/cluster-issuer\":\"issuer\"},\"tls\":[{\"secretName\":\"prometheus-server-tls\",\"hosts\":[\"grafana.cdk-labs.com\"]}],\"hosts\":[\"grafana.cdk-labs.com\"]}}}",
     "Namespace": "prometheus",
     "Repository": "https://prometheus-community.github.io/helm-charts",
     "CreateNamespace": true

@@ -27,22 +27,7 @@
      "Ref": "referencetoClusterStackHelloEKSKubectlHandlerRoleEF5E747BArn"
     },
     "Runtime": "python3.11",
-    "Timeout": 900,
-    "VpcConfig": {
-     "SecurityGroupIds": [
-      {
-       "Ref": "referencetoClusterStackHelloEKSD0EC738BClusterSecurityGroupId"
-      }
-     ],
-     "SubnetIds": [
-      {
-       "Fn::ImportValue": "NetworkingStack:ExportsOutputRefVpcprivateSubnet1SubnetCEAD37168693D373"
-      },
-      {
-       "Fn::ImportValue": "NetworkingStack:ExportsOutputRefVpcprivateSubnet2Subnet2DE7549CDF5ACE3D"
-      }
-     ]
-    }
+    "Timeout": 900
    },
    "Metadata": {
     "aws:cdk:path": "ClusterStack/@aws-cdk--aws-eks.KubectlProvider/Handler/Resource",
@@ -114,18 +99,6 @@
          "Ref": "AWS::Partition"
         },
         ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-       ]
-      ]
-     },
-     {
-      "Fn::Join": [
-       "",
-       [
-        "arn:",
-        {
-         "Ref": "AWS::Partition"
-        },
-        ":iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
        ]
       ]
      }
@@ -220,22 +193,7 @@
      ]
     },
     "Runtime": "nodejs22.x",
-    "Timeout": 900,
-    "VpcConfig": {
-     "SecurityGroupIds": [
-      {
-       "Ref": "referencetoClusterStackHelloEKSD0EC738BClusterSecurityGroupId"
-      }
-     ],
-     "SubnetIds": [
-      {
-       "Fn::ImportValue": "NetworkingStack:ExportsOutputRefVpcprivateSubnet1SubnetCEAD37168693D373"
-      },
-      {
-       "Fn::ImportValue": "NetworkingStack:ExportsOutputRefVpcprivateSubnet2Subnet2DE7549CDF5ACE3D"
-      }
-     ]
-    }
+    "Timeout": 900
    },
    "DependsOn": [
     "ProviderframeworkonEventServiceRoleDefaultPolicy48CD2133",
@@ -273,7 +231,7 @@
   "CDKMetadata": {
    "Type": "AWS::CDK::Metadata",
    "Properties": {
-    "Analytics": "v2:deflate64:H4sIAAAAAAAA/41UwW7iMBD9lvpYGW+h2gu3UJXV7qIuAtQLQsjY09TFsSOPA8pG+feVnYSmBao9xXnjmTfz5iUjNhoO2d0NP+JAyP1Aqx2r+BG3FeyR/S52ILyeO3tQEhzVPNtJzqppYYRX1qwr4lUGtvBkTG4JJRJQOJWHWItkkFlXLtVfaAEwB+WsycB0Sc7qLnjIRXtCEIVTvvzhbJEjGa/JLdnEC8tiZ8AjGVcEu+M65tySTU2JsLIr98qN1OA6nsKEbuNbTSvCpXzsN9MrEoMzXoLrqK9hPbbz4fuMn7v5KJy2aapMOrUu4wH7tfzzRCjhea6V4KHkzKYzOIB+HpExmSarZNakRYHO5PsPna4o3NvGS7vmJ55d2N6jEa58n/ZrRTf04cV0tgnnKOQzOFTW1BTvtxwRPLIkPCjes0kh9uAnHGG9odqmyKpZO+26Og1+ai3Qn4ORtkurqeIZqxZWw7oiHLHIQE7KIFDulBEq5zoRwhYnZzZ3QkIieoOSjBuegpxbrYSCoF31ASsT9y7K5UBnqJWdd9zNjVCsjXrPxetPo5WBU+zkxS+D1+tGRcJEtIHjirpyK7uI2//Ecg5LufTcQ9gy9hq+AEe+hqquadzu0vPg9fZvstXBCVt+RKEVS474oFU0R0inC0BbOAGNOUWB3mZb14LIuj9TTY2VwN7w22H0nY3Y8OYNlRq03x9bNM9/d4sCaO0EAAA="
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/31UTW/iMBD9LfWxMt6Fai/cQlVWu4u6CFAvCCFjT1MXx448Nigb5b+v7CSUFtqTnTcfb2bexCM2Gg7Z9xt+xIGQ+4FWO1bzI25r2CP7E3YgvJ47e1ASHNW82EnO6mkwwitr1jXxqgAbPBmTW0KJBBROldHWIQUU1lVL9Q86AMxBOWsKMH2Qs7o3HkrR3RBEcMpXP50NJb6Zl2FnwPeAsLIPfeFGanB9zmBiZemroTXhUj6cE6+T1y3ZdMYZr8Bhi3+KnbFdNnrO+LGa90PSNs+VyafWFTxiv5d/HwklvCy1EjymnNl8BgfQTyMyJtNslc3asDSMi1FdTOXq7M6m/NzJ98iLK6o8GOGqt86+nt6G3j+bfh3iPQ3tCRwqaxqKd1uOCB5ZFg+Kd2wSxB78hCOsN1TbHFk96zpb16cmT6VF+ksw0fZhDVW8YPXCaljXhCOGAuSkIuOalE4ZoUquMyFsOG1c6xMDMnHWKCm44TnIudVKKIjS1++wKnOdb78jKzvvKVqPGNNZvefi5ZfRysDJdlqvL42f502Nx8JpCycl+nQru0gif2C5hKVceu4hiolnBV+BE19L1TQ0ibj0PK5v9xhsdRR8y48otGLZEe+1SjsQw+kC0AYnIFFTEdDbYus6EFn/sDTUWAnsFb8dRj/YiA1vXlGpQfdLsUV7/gcQpwUfrAQAAA=="
    },
    "Metadata": {
     "aws:cdk:path": "ClusterStack/@aws-cdk--aws-eks.KubectlProvider/CDKMetadata/Default"
@@ -295,9 +253,6 @@
    "Type": "String"
   },
   "referencetoClusterStackHelloEKSKubectlHandlerRoleEF5E747BArn": {
-   "Type": "String"
-  },
-  "referencetoClusterStackHelloEKSD0EC738BClusterSecurityGroupId": {
    "Type": "String"
   }
  }
