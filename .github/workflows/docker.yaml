@@ -1,6 +1,8 @@
 name: Workflow for creating Docker image and pushing it to AWS ECR
 on:
-  workflow_dispatch:
+  push:
+    paths:
+      - "./app/*"
 
 permissions:
   id-token: write

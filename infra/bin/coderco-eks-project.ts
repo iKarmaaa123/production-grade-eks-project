@@ -1,7 +1,8 @@
 import * as cdk from 'aws-cdk-lib';
-import { ClusterStack } from '../lib/eks-stack';
-import { NetworkingStack } from '../lib/networking-stack';
-import { HelmStack } from '../lib/helm-stack';
+import * as ssm from 'aws-cdk-lib/aws-ssm';
+import { ClusterStack } from '../../lib/eks-stack';
+import { NetworkingStack } from '../../lib/networking-stack';
+import { HelmStack } from '../../lib/helm-stack';
 
 const app = new cdk.App();
 

@@ -55,7 +55,7 @@ export class ClusterStack extends cdk.Stack {
     });
 
     const zone = Route53.HostedZone.fromLookup(this, "HostedZone", {
-      domainName: "cdk-labs.com"
+      domainName: this.node.getContext("domainName")
     });
 
     this.certManagerServiceAccount = this.cluster.addServiceAccount("cert-manager", {
