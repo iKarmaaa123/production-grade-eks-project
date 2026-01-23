@@ -9,7 +9,7 @@ import * as Route53 from 'aws-cdk-lib/aws-route53'
 interface eksStackProps extends cdk.StackProps {
   vpc: ec2.IVpc;
 }
-//hello
+
 export class ClusterStack extends cdk.Stack {
   public readonly cluster: eks.Cluster
   public readonly certManagerServiceAccount: eks.ServiceAccount
