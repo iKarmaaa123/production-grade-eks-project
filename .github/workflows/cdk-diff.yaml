@@ -31,11 +31,11 @@ jobs:
 
     - name: Running CDK Synth
       run: cdk synth --all
-      workking-directory: ./infra/lib
+      working-directory: ./infra/lib
 
     - name: Running CDK Synth
       run: cdk diff --all
-      workking-directory: ./infra/lib
+      working-directory: ./infra/lib
 
     - name: Running Checkov scan
       uses: bridgecrewio/checkov-action@v12
