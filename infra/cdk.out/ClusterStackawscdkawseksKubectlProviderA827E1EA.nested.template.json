@@ -1,0 +1,259 @@
+{
+ "Resources": {
+  "Handler886CB40B": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-648767092427-us-east-1",
+     "S3Key": "d671460286b61f85906debbcec5341ea4edad148fbc432b0663593611866728e.zip"
+    },
+    "Description": "onEvent handler for EKS kubectl resource provider",
+    "Environment": {
+     "Variables": {
+      "AWS_STS_REGIONAL_ENDPOINTS": "regional"
+     }
+    },
+    "Handler": "index.handler",
+    "Layers": [
+     {
+      "Ref": "AwsCliLayerF44AAF94"
+     },
+     {
+      "Ref": "referencetoClusterStackkubectlFEA903F1Ref"
+     }
+    ],
+    "MemorySize": 1024,
+    "Role": {
+     "Ref": "referencetoClusterStackHelloEKSKubectlHandlerRoleEF5E747BArn"
+    },
+    "Runtime": "python3.11",
+    "Timeout": 900
+   },
+   "Metadata": {
+    "aws:cdk:path": "ClusterStack/@aws-cdk--aws-eks.KubectlProvider/Handler/Resource",
+    "aws:asset:path": "asset.d671460286b61f85906debbcec5341ea4edad148fbc432b0663593611866728e",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "HandlerLogGroup50A7B41D": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "LogGroupName": {
+     "Fn::Join": [
+      "",
+      [
+       "/aws/lambda/",
+       {
+        "Ref": "Handler886CB40B"
+       }
+      ]
+     ]
+    },
+    "RetentionInDays": 731
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "ClusterStack/@aws-cdk--aws-eks.KubectlProvider/Handler/LogGroup/Resource"
+   }
+  },
+  "AwsCliLayerF44AAF94": {
+   "Type": "AWS::Lambda::LayerVersion",
+   "Properties": {
+    "Content": {
+     "S3Bucket": "cdk-hnb659fds-assets-648767092427-us-east-1",
+     "S3Key": "c49d356cac773d491c5f7ac148995a1181498a8e289429f8612a7f7e3814f535.zip"
+    },
+    "Description": "/opt/awscli/aws"
+   },
+   "Metadata": {
+    "aws:cdk:path": "ClusterStack/@aws-cdk--aws-eks.KubectlProvider/AwsCliLayer/Resource",
+    "aws:asset:path": "asset.c49d356cac773d491c5f7ac148995a1181498a8e289429f8612a7f7e3814f535.zip",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Content"
+   }
+  },
+  "ProviderframeworkonEventServiceRole9FF04296": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "ClusterStack/@aws-cdk--aws-eks.KubectlProvider/Provider/framework-onEvent/ServiceRole/Resource"
+   }
+  },
+  "ProviderframeworkonEventServiceRoleDefaultPolicy48CD2133": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "lambda:InvokeFunction",
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "Handler886CB40B",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "Handler886CB40B",
+             "Arn"
+            ]
+           },
+           ":*"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": "lambda:GetFunction",
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "Handler886CB40B",
+         "Arn"
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "ProviderframeworkonEventServiceRoleDefaultPolicy48CD2133",
+    "Roles": [
+     {
+      "Ref": "ProviderframeworkonEventServiceRole9FF04296"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "ClusterStack/@aws-cdk--aws-eks.KubectlProvider/Provider/framework-onEvent/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "ProviderframeworkonEvent83C1D0A7": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-648767092427-us-east-1",
+     "S3Key": "bdc104ed9cab1b5b6421713c8155f0b753380595356f710400609664d3635eca.zip"
+    },
+    "Description": "AWS CDK resource provider framework - onEvent (ClusterStack/@aws-cdk--aws-eks.KubectlProvider/Provider)",
+    "Environment": {
+     "Variables": {
+      "USER_ON_EVENT_FUNCTION_ARN": {
+       "Fn::GetAtt": [
+        "Handler886CB40B",
+        "Arn"
+       ]
+      }
+     }
+    },
+    "Handler": "framework.onEvent",
+    "LoggingConfig": {
+     "ApplicationLogLevel": "FATAL",
+     "LogFormat": "JSON"
+    },
+    "Role": {
+     "Fn::GetAtt": [
+      "ProviderframeworkonEventServiceRole9FF04296",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs22.x",
+    "Timeout": 900
+   },
+   "DependsOn": [
+    "ProviderframeworkonEventServiceRoleDefaultPolicy48CD2133",
+    "ProviderframeworkonEventServiceRole9FF04296"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ClusterStack/@aws-cdk--aws-eks.KubectlProvider/Provider/framework-onEvent/Resource",
+    "aws:asset:path": "asset.bdc104ed9cab1b5b6421713c8155f0b753380595356f710400609664d3635eca",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "ProviderframeworkonEventLogGroup683073A3": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "LogGroupName": {
+     "Fn::Join": [
+      "",
+      [
+       "/aws/lambda/",
+       {
+        "Ref": "ProviderframeworkonEvent83C1D0A7"
+       }
+      ]
+     ]
+    },
+    "RetentionInDays": 731
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "ClusterStack/@aws-cdk--aws-eks.KubectlProvider/Provider/framework-onEvent/LogGroup/Resource"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/31UTW/iMBD9LfWxMt6Fai/cQlVWu4u6CFAvCCFjT1MXx448Nigb5b+v7CSUFtqTnTcfb2bexCM2Gg7Z9xt+xIGQ+4FWO1bzI25r2CP7E3YgvJ47e1ASHNW82EnO6mkwwitr1jXxqgAbPBmTW0KJBBROldHWIQUU1lVL9Q86AMxBOWsKMH2Qs7o3HkrR3RBEcMpXP50NJb6Zl2FnwPeAsLIPfeFGanB9zmBiZemroTXhUj6cE6+T1y3ZdMYZr8Bhi3+KnbFdNnrO+LGa90PSNs+VyafWFTxiv5d/HwklvCy1EjymnNl8BgfQTyMyJtNslc3asDSMi1FdTOXq7M6m/NzJ98iLK6o8GOGqt86+nt6G3j+bfh3iPQ3tCRwqaxqKd1uOCB5ZFg+Kd2wSxB78hCOsN1TbHFk96zpb16cmT6VF+ksw0fZhDVW8YPXCaljXhCOGAuSkIuOalE4ZoUquMyFsOG1c6xMDMnHWKCm44TnIudVKKIjS1++wKnOdb78jKzvvKVqPGNNZvefi5ZfRysDJdlqvL42f502Nx8JpCycl+nQru0gif2C5hKVceu4hiolnBV+BE19L1TQ0ibj0PK5v9xhsdRR8y48otGLZEe+1SjsQw+kC0AYnIFFTEdDbYus6EFn/sDTUWAnsFb8dRj/YiA1vXlGpQfdLsUV7/gcQpwUfrAQAAA=="
+   },
+   "Metadata": {
+    "aws:cdk:path": "ClusterStack/@aws-cdk--aws-eks.KubectlProvider/CDKMetadata/Default"
+   }
+  }
+ },
+ "Outputs": {
+  "ClusterStackawscdkawseksKubectlProviderframeworkonEvent8D73200DArn": {
+   "Value": {
+    "Fn::GetAtt": [
+     "ProviderframeworkonEvent83C1D0A7",
+     "Arn"
+    ]
+   }
+  }
+ },
+ "Parameters": {
+  "referencetoClusterStackkubectlFEA903F1Ref": {
+   "Type": "String"
+  },
+  "referencetoClusterStackHelloEKSKubectlHandlerRoleEF5E747BArn": {
+   "Type": "String"
+  }
+ }
+}

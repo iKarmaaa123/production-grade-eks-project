@@ -9,11 +9,8 @@ permissions:
   contents: read
 
 jobs:
-  cdk_synth:
+  cdk_diff:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./infra
 
     steps:
     - name: Checking out repository
@@ -30,12 +27,15 @@ jobs:
 
     - name: Installing CDK
       run: npm install -g aws-cdk
+      working-directory: ./infra
 
     - name: Running CDK Synth
       run: cdk synth --all
+      workking-directory: ./infra/lib
 
     - name: Running CDK Synth
       run: cdk diff --all
+      workking-directory: ./infra/lib
 
     - name: Running Checkov scan
       uses: bridgecrewio/checkov-action@v12
