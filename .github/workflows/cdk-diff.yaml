@@ -2,7 +2,7 @@ name: CDK Diff Workflow
 on:
   push:
     paths:
-      - 'infra/**'
+      - "infra/**"
 
 permissions:
   id-token: write
@@ -18,7 +18,6 @@ jobs:
 
     - name: Running packages for cdk project
       run: npm install
-      working-directory: ./infra
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v4
@@ -28,14 +27,13 @@ jobs:
 
     - name: Installing CDK
       run: npm install -g aws-cdk
-      working-directory: ./infra
 
     - name: Running CDK Synth
       run: cdk synth --all
       working-directory: ./infra/lib
 
     - name: Running CDK Synth
-      run: cdk diff --all
+      run: cdk diff --all --app
       working-directory: ./infra/lib
 
     - name: Running Checkov scan

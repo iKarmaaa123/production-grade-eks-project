@@ -17,6 +17,10 @@
     ]
   },
   "context": {
+    "domainName": "cdk-labs.com",
+    "prometheusSecretName": "prometheus-server-tls",
+    "securityGroupName": "eks-project-security-group",
+    "clusterName": "eks-project-cluster",
     "@aws-cdk/aws-lambda:recognizeLayerVersion": true,
     "@aws-cdk/core:checkSecretUsage": true,
     "@aws-cdk/core:target-partitions": [
@@ -94,10 +98,6 @@
     "@aws-cdk/s3-notifications:addS3TrustKeyPolicyForSnsSubscriptions": true,
     "@aws-cdk/aws-ec2:requirePrivateSubnetsForEgressOnlyInternetGateway": true,
     "@aws-cdk/aws-s3:publicAccessBlockedByDefault": true,
-    "@aws-cdk/aws-lambda:useCdkManagedLogGroup": true,
-    "domainName": "cdk-labs.com",
-    "prometheusSecretName": "prometheus-server-tls",
-    "securityGroupName": "eks-project-security-group",
-    "clusterName": "eks-project-cluster"
+    "@aws-cdk/aws-lambda:useCdkManagedLogGroup": true
   }
 }
