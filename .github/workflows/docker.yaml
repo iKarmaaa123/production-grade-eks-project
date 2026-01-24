@@ -1,4 +1,4 @@
-name: Workflow for creating Docker image and pushing it to AWS ECR
+name: Docker Workflow
 on:
   push:
     paths:

@@ -34,8 +34,8 @@ jobs:
     - name: Running CDK Synth
       run: cdk synth --all
 
-    - name: Running CDK Synth
-      run: cdk diff --all --app
+    - name: Running CDK Diff
+      run: cdk diff --all
 
     - name: Running Checkov scan
       uses: bridgecrewio/checkov-action@v12
