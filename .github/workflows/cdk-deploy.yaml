@@ -27,7 +27,7 @@ jobs:
       run: npm install -g aws-cdk
 
     - name: Running CDK deploy
-      run: cdk deploy --all --require-approval never
+      run: npx cdk deploy --all --require-approval never
 
     - name: Setting up kubectl for GitHub Actions runner
       uses: alexellis/arkade-get@master

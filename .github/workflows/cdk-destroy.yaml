@@ -9,7 +9,7 @@ permissions:
 jobs:
   cdk_destroy:
     runs-on: ubuntu-latest
-    
+
     steps:
     - name: Checking out repository
       uses: actions/checkout@v6
@@ -27,4 +27,4 @@ jobs:
       run: npm install -g aws-cdk
 
     - name: Running CDK Destroy
-      run: cdk destroy --all --force
+      run: npx cdk destroy --all --force
