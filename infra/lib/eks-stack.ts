@@ -10,7 +10,7 @@ interface eksStackProps extends cdk.StackProps {
   vpc: ec2.IVpc;
 }
 
-//hello worldfsdnfsn
+//hello worldfsn
 export class ClusterStack extends cdk.Stack {
   public readonly cluster: eks.Cluster
   public readonly certManagerServiceAccount: eks.ServiceAccount
