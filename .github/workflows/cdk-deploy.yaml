@@ -9,9 +9,6 @@ permissions:
 jobs:
   cdk_deploy:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./infra
 
     steps:
     - name: Checking out repository
