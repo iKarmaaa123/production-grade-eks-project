@@ -11,6 +11,9 @@ permissions:
 jobs:
   cdk_synth:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./infra
 
     steps:
     - name: Checking out repository
