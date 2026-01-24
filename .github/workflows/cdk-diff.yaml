@@ -2,7 +2,7 @@ name: CDK Diff Workflow
 on:
   push:
     paths:
-      - "./infra/**"
+      - 'infra/**'
 
 permissions:
   id-token: write
