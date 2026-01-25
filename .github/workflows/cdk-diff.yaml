@@ -7,6 +7,9 @@ on:
       - "k8s-manifest-files/**"
       - "!k8s-manifest-files/apps/**"
 
+env:
+  AWS_REGION: us-east-1
+
 permissions:
   id-token: write
   contents: read
@@ -30,8 +33,8 @@ jobs:
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v4
       with:
-        role-to-assume: arn:aws:iam::648767092427:role/IamRoleForGitHubActionsRunner
-        aws-region: us-east-1
+        role-to-assume: ${{ secrets.IAM_ROLE_ARN_GHA_RUNNER }}
+        aws-region: ${{ env.AWS_REGION }}
 
     - name: Installing CDK
       run: npm install -g aws-cdk
