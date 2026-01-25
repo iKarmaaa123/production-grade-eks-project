@@ -14,9 +14,9 @@ export class HelmStack extends cdk.Stack {
  
    const ingressControllerHelmChart = new eks.HelmChart(this, "nginx", {
      cluster: props.cluster,
-     chart: "nginx-ingress",
+     chart: "ingress-nginx",
      repository: "https://kubernetes.github.io/ingress-nginx",
-     release: "nginx-ingress",
+     release: "ingress-nginx",
      namespace: "nginx",
      version: "4.14.1",
      createNamespace: true,
@@ -120,13 +120,16 @@ export class HelmStack extends cdk.Stack {
           ingress: {
             enabled: true,
             ingressClassName: "nginx",
+            annotations: {
+              "cert-manager.io/cluster-issuer": "issuer",
+            },
             hosts: [`prometheus.${this.node.getContext("domainName")}`],
             tls: [{
               secretName: this.node.getContext("prometheusSecretName"),
               hosts: [`prometheus.${this.node.getContext("domainName")}`]
             }]
           }
-        },
+        }, 
         grafana: {
           ingress: {
             enabled: true,
