@@ -47,5 +47,5 @@ jobs:
       with:
         directory: ./cdk.out
         framework: cloudformation
-        output_format: table
+        output_format: cli
         soft_fail: true 
