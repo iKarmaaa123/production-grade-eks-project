@@ -1,6 +1,4 @@
 *.js
-jest.config.js
-tsconfig.json
 !jest.config.js
 *.d.ts
 node_modules
