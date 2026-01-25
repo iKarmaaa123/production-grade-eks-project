@@ -43,7 +43,7 @@ jobs:
         kubectl: latest
     
     - name: Accessing EKS cluster
-      run: aws eks update-kubeconfig --name eks-project-cluster --region us-east-1 --role-arn ${{ secrets.IAM_ROLE_ARN_GHA_RUNNER }}
+      run: aws eks update-kubeconfig --name eks-project-cluster --region us-east-1 --role-arn ${{ secrets.EKS_MASTER_ROLE_ARN }}
 
     - name: Deploying ClusterIssuer
       run: kubectl apply -f k8s-manifest-files/cert-manager/issuer.yaml
