@@ -1,8 +1,8 @@
 {
-  "name": "coderco-eks-project",
+  "name": "eks-project",
   "version": "0.1.0",
   "bin": {
-    "coderco-eks-project": "bin/coderco-eks-project.js"
+    "coderco-eks-project": "bin/eks-project.js"
   },
   "scripts": {
     "build": "tsc",

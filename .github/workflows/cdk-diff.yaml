@@ -1,11 +1,12 @@
 name: CDK Diff Workflow
 on:
-  push:
-    paths:
-      - "bin/**"
-      - "lib/**"
-      - "k8s-manifest-files/**"
-      - "!k8s-manifest-files/apps/**"
+  workflow_dispatch:
+  # push:
+    # paths:
+    #   - "bin/**"
+    #   - "lib/**"
+    #   - "k8s-manifest-files/**"
+    #   - "!k8s-manifest-files/apps/**"
 
 permissions:
   id-token: write
