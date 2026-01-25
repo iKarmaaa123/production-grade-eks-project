@@ -37,10 +37,10 @@ jobs:
       run: npm install -g aws-cdk
 
     - name: Running CDK Synth
-      run: cdk synth --all
+      run: npx cdk synth --all
 
     - name: Running CDK Diff
-      run: cdk diff --all
+      run: npx cdk diff --all
 
     - name: Running Checkov scan
       uses: bridgecrewio/checkov-action@v12

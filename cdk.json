@@ -1,5 +1,5 @@
 {
-  "app": "npx ts-node --prefer-ts-exts bin/coderco-eks-project.ts",
+  "app": "npx ts-node --prefer-ts-exts bin/eks-project.ts",
   "watch": {
     "include": [
       "**"
