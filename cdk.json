@@ -96,6 +96,7 @@
     "@aws-cdk/aws-s3:publicAccessBlockedByDefault": true,
     "@aws-cdk/aws-lambda:useCdkManagedLogGroup": true,
     "domainName": "cdk-labs.com",
+    "grafanaSecretName": "grafana-server-tls",
     "prometheusSecretName": "prometheus-server-tls",
     "securityGroupName": "eks-project-security-group",
     "clusterName": "eks-project-cluster"

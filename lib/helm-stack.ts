@@ -18,7 +18,7 @@ export class HelmStack extends cdk.Stack {
      repository: "https://kubernetes.github.io/ingress-nginx",
      release: "nginx-ingress",
      namespace: "nginx",
-     version: "v1.14.1",
+     version: "4.14.1",
      createNamespace: true,
      wait: true,
      values: {
@@ -116,6 +116,17 @@ export class HelmStack extends cdk.Stack {
       wait: true,
       values: {
         enabled: true,
+        prometheus: {
+          ingress: {
+            enabled: true,
+            ingressClassName: "nginx",
+            hosts: [`prometheus.${this.node.getContext("domainName")}`],
+            tls: [{
+              secretName: this.node.getContext("prometheusSecretName"),
+              hosts: [`prometheus.${this.node.getContext("domainName")}`]
+            }]
+          }
+        },
         grafana: {
           ingress: {
             enabled: true,
@@ -124,7 +135,7 @@ export class HelmStack extends cdk.Stack {
               "cert-manager.io/cluster-issuer": "issuer",
             },
             tls: [{
-              secretName: this.node.getContext("prometheusSecretName"),
+              secretName: this.node.getContext("grafanaSecretName"),
               hosts: [`grafana.${this.node.getContext("domainName")}`]
             }],
           hosts: [`grafana.${this.node.getContext("domainName")}`]
