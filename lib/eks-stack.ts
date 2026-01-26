@@ -22,6 +22,16 @@ export class ClusterStack extends cdk.Stack {
       assumedBy: new iam.AccountPrincipal(cdk.Stack.of(this).account),
     });
 
+    const eksClusterNodeGroupRole = new iam.Role(this, "eksClusterNodeGroupRole", {
+      roleName: "eksClusterNodeGroupRole",
+      assumedBy: new iam.ServicePrincipal("ec2.amazonaws.com"),
+      managedPolicies: [
+        iam.ManagedPolicy.fromAwsManagedPolicyName("AmazonEKSWorkerNodePolicy"),
+        iam.ManagedPolicy.fromAwsManagedPolicyName("AmazonEC2ContainerRegistryReadOnly"),
+        iam.ManagedPolicy.fromAwsManagedPolicyName("AmazonEKS_CNI_Policy")
+      ]
+    })
+
     this.cluster = new eks.Cluster(this, "HelloEKS", {
       clusterName: this.node.getContext("clusterName"),
       vpc: props.vpc,
@@ -39,7 +49,8 @@ export class ClusterStack extends cdk.Stack {
     this.cluster.addNodegroupCapacity("ASG", {
       desiredSize: 2,
       minSize: 1,
-      maxSize: 4
+      maxSize: 4,
+      nodeRole: eksClusterNodeGroupRole
     })
 
     const certManagerNamespace = this.cluster.addManifest("cert-manager", {
