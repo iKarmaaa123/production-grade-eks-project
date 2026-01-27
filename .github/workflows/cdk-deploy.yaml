@@ -36,7 +36,7 @@ jobs:
       run: npm install -g aws-cdk
 
     - name: Running CDK Deploy
-      run: npx cdk deploy NetworkingStack ClusterStack --require-approval never
+      run: npx cdk deploy --all --require-approval never
 
     - name: Setting up kubectl for GitHub Actions runner
       uses: alexellis/arkade-get@master
@@ -50,6 +50,3 @@ jobs:
 
     - name: Deploying application for argocd
       run: kubectl apply -f k8s-manifest-files/argocd/argocd.yaml
-
-    - name: Deploying Helm Charts
-      run: npx cdk deploy HelmStack --require-approval never
