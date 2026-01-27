@@ -44,7 +44,7 @@ jobs:
         kubectl: latest
     
     - name: Accessing EKS cluster
-      run: aws eks update-kubeconfig --name eks-project-cluster --region us-east-1 --role-arn $EKS_MASTER_ROLE_ARN
+      run: aws eks update-kubeconfig --name eks-project-cluster --region us-east-1 --role-arn arn:aws:iam::648767092427:role/ClusterStack-ClusterMasterRole23CC5A5F-8I5Q4mM5fF4n
     - name: Deploying ClusterIssuer
       run: kubectl apply -f k8s-manifest-files/cert-manager/issuer.yaml
 
