@@ -4,7 +4,7 @@ on:
 
 env:
   AWS_REGION: us-east-1
-  EKS_MASTER_ROLE_ARN: ${ secrets.EKS_MASTER_ROLE_ARN }
+  EKS_MASTER_ROLE_ARN: ${{ secrets.EKS_MASTER_ROLE_ARN }}
 
 permissions:
   id-token: write
