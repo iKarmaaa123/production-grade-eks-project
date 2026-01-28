@@ -116,20 +116,20 @@ export class HelmStack extends cdk.Stack {
       wait: true,
       values: {
         enabled: true,
-        prometheus: {
-          ingress: {
-            enabled: true,
-            ingressClassName: "nginx",
-            annotations: {
-              "cert-manager.io/cluster-issuer": "issuer",
-            },
-            hosts: [`prometheus.${this.node.getContext("domainName")}`],
-            tls: [{
-              secretName: this.node.getContext("prometheusSecretName"),
-              hosts: [`prometheus.${this.node.getContext("domainName")}`]
-            }]
-          }
-        }, 
+        // prometheus: {
+        //   ingress: {
+        //     enabled: true,
+        //     ingressClassName: "nginx",
+        //     annotations: {
+        //       "cert-manager.io/cluster-issuer": "issuer",
+        //     },
+        //     hosts: [`prometheus.${this.node.getContext("domainName")}`],
+        //     tls: [{
+        //       secretName: this.node.getContext("prometheusSecretName"),
+        //       hosts: [`prometheus.${this.node.getContext("domainName")}`]
+        //     }]
+        //   }
+        // }, 
         grafana: {
           ingress: {
             enabled: true,
@@ -137,11 +137,11 @@ export class HelmStack extends cdk.Stack {
             annotations: {
               "cert-manager.io/cluster-issuer": "issuer",
             },
+            hosts: [`grafana.${this.node.getContext("domainName")}`],
             tls: [{
               secretName: this.node.getContext("grafanaSecretName"),
               hosts: [`grafana.${this.node.getContext("domainName")}`]
             }],
-          hosts: [`grafana.${this.node.getContext("domainName")}`]
           },
         }
       }

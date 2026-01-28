@@ -4,7 +4,6 @@ on:
 
 env:
   AWS_REGION: us-east-1
-  EKS_MASTER_ROLE_ARN: ${{ secrets.EKS_MASTER_ROLE_ARN }}
 
 permissions:
   id-token: write
@@ -37,16 +36,3 @@ jobs:
 
     - name: Running CDK Deploy
       run: npx cdk deploy --all --require-approval never
-
-    - name: Setting up kubectl for GitHub Actions runner
-      uses: alexellis/arkade-get@master
-      with:
-        kubectl: latest
-    
-    - name: Accessing EKS cluster
-      run: aws eks update-kubeconfig --name eks-project-cluster --region us-east-1 --role-arn arn:aws:iam::648767092427:role/ClusterStack-ClusterMasterRole23CC5A5F-8I5Q4mM5fF4n
-    - name: Deploying ClusterIssuer
-      run: kubectl apply -f k8s-manifest-files/cert-manager/issuer.yaml
-
-    - name: Deploying application for argocd
-      run: kubectl apply -f k8s-manifest-files/argocd/argocd.yaml
