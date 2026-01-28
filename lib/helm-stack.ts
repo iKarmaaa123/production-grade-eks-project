@@ -140,7 +140,7 @@ export class HelmStack extends cdk.Stack {
             hosts: [`grafana.${this.node.getContext("domainName")}`],
             tls: [{
               secretName: this.node.getContext("grafanaSecretName"),
-              hosts: [`grafana.${this.node.getContext("domainName")}`]
+              hosts: [`grafana1.${this.node.getContext("domainName")}`]
             }],
           },
         }
