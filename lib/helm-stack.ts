@@ -18,7 +18,6 @@ export class HelmStack extends cdk.Stack {
      repository: "https://kubernetes.github.io/ingress-nginx",
      release: "ingress-nginx",
      namespace: "nginx",
-     version: "4.14.1",
      createNamespace: true,
      wait: true,
      values: {
