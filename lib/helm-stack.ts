@@ -136,7 +136,7 @@ export class HelmStack extends cdk.Stack {
             annotations: {
               "cert-manager.io/cluster-issuer": "issuer",
             },
-            hosts: [`grafana.${this.node.getContext("domainName")}`],
+            hosts: [`grafana1.${this.node.getContext("domainName")}`],
             tls: [{
               secretName: this.node.getContext("grafanaSecretName"),
               hosts: [`grafana1.${this.node.getContext("domainName")}`]
