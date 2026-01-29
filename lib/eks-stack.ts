@@ -18,7 +18,7 @@ export class ClusterStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props: eksStackProps) {
     super(scope, id, props);
 
-    const mastersRole = new iam.Role(this, "ClusterMasterRole", {
+    const clusterIamRole = new iam.Role(this, "ClusterIamRole", {
       assumedBy: new iam.AccountPrincipal(cdk.Stack.of(this).account),
     });
 
@@ -35,7 +35,8 @@ export class ClusterStack extends cdk.Stack {
     this.cluster = new eks.Cluster(this, "HelloEKS", {
       clusterName: this.node.getContext("clusterName"),
       vpc: props.vpc,
-      mastersRole: mastersRole,
+      mastersRole: clusterIamRole,
+      outputConfigCommand: false,
       version: eks.KubernetesVersion.V1_32,
       endpointAccess: eks.EndpointAccess.PUBLIC,
       vpcSubnets: [
