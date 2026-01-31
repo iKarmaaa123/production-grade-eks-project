@@ -22,7 +22,7 @@ export class ClusterStack extends cdk.Stack {
       assumedBy: new iam.AccountPrincipal(cdk.Stack.of(this).account),
     });
 
-    const iamUserArn = "arn:aws:iam::648767092427:user/project"
+    const iamUserArn = `arn:aws:iam::${cdk.Stack.of(this).account}:user/project`
 
     const eksClusterNodeGroupRole = new iam.Role(this, "eksClusterNodeGroupRole", {
       roleName: "eksClusterNodeGroupRole",
@@ -57,10 +57,9 @@ export class ClusterStack extends cdk.Stack {
       nodeRole: eksClusterNodeGroupRole
     })
 
-    this.cluster.grantAccess("editAccess", iamUserArn, [
-      eks.AccessPolicy.fromAccessPolicyName("AmazonEKSEditPolicy", {
-        accessScopeType: cdk.aws_eks.AccessScopeType.NAMESPACE,
-        namespaces: ["*"]
+    this.cluster.grantAccess("adminClusterAccess", iamUserArn, [
+      eks.AccessPolicy.fromAccessPolicyName("AmazonEKSClusterAdminPolicy", {
+        accessScopeType: cdk.aws_eks.AccessScopeType.CLUSTER,
       })
     ])
 
