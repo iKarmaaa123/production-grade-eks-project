@@ -58,7 +58,7 @@ export class ClusterStack extends cdk.Stack {
     })
 
     this.cluster.grantAccess("editAccess", iamUserArn, [
-      eks.AccessPolicy.fromAccessPolicyName("AmazonEKSClusterEditPolicy", {
+      eks.AccessPolicy.fromAccessPolicyName("AmazonEKSEditPolicy", {
         accessScopeType: eks.AccessScopeType.CLUSTER
       })
     ])
