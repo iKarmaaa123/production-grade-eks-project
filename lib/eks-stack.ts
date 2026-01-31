@@ -18,7 +18,7 @@ export class ClusterStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props: eksStackProps) {
     super(scope, id, props);
 
-    const mastersRole = new iam.Role(this, "ClusterIamRole", {
+    const mastersRole = new iam.Role(this, "masterRole", {
       assumedBy: new iam.AccountPrincipal(cdk.Stack.of(this).account),
     });
 
@@ -59,7 +59,8 @@ export class ClusterStack extends cdk.Stack {
 
     this.cluster.grantAccess("editAccess", iamUserArn, [
       eks.AccessPolicy.fromAccessPolicyName("AmazonEKSEditPolicy", {
-        accessScopeType: eks.AccessScopeType.CLUSTER
+        accessScopeType: cdk.aws_eks.AccessScopeType.NAMESPACE,
+        namespaces: ["*"]
       })
     ])
 
