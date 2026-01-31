@@ -12,9 +12,8 @@
     "RoleArn": {
      "Fn::ImportValue": "ClusterStack:ExportsOutputFnGetAttHelloEKSCreationRole089CC848Arn4F037A30"
     },
-    "Release": "nginx-ingress",
-    "Chart": "nginx-ingress",
-    "Version": "v1.14.1",
+    "Release": "ingress-nginx",
+    "Chart": "ingress-nginx",
     "Wait": true,
     "Values": "{\"installCRDs\":true}",
     "Namespace": "nginx",
@@ -125,7 +124,7 @@
     "Chart": "kube-prometheus-stack",
     "Version": "80.13.3",
     "Wait": true,
-    "Values": "{\"enabled\":true,\"grafana\":{\"ingress\":{\"enabled\":true,\"ingressClassName\":\"nginx\",\"annotations\":{\"cert-manager.io/cluster-issuer\":\"issuer\"},\"tls\":[{\"secretName\":\"prometheus-server-tls\",\"hosts\":[\"grafana.cdk-labs.com\"]}],\"hosts\":[\"grafana.cdk-labs.com\"]}}}",
+    "Values": "{\"enabled\":true,\"prometheus\":{\"ingress\":{\"enabled\":true,\"ingressClassName\":\"nginx\",\"annotations\":{\"cert-manager.io/cluster-issuer\":\"issuer\"},\"hosts\":[\"prometheus.cdk-labs.com\"],\"tls\":[{\"secretName\":\"prometheus-server-tls\",\"hosts\":[\"prometheus.cdk-labs.com\"]}]}},\"grafana\":{\"ingress\":{\"enabled\":true,\"ingressClassName\":\"nginx\",\"annotations\":{\"cert-manager.io/cluster-issuer\":\"issuer\"},\"hosts\":[\"grafana.cdk-labs.com\"],\"tls\":[{\"secretName\":\"grafana-server-tls\",\"hosts\":[\"grafana.cdk-labs.com\"]}]}}}",
     "Namespace": "prometheus",
     "Repository": "https://prometheus-community.github.io/helm-charts",
     "CreateNamespace": true

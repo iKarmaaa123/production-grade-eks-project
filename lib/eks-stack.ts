@@ -61,7 +61,7 @@ export class ClusterStack extends cdk.Stack {
     const accessEntry = new eks.AccessEntry(this, 'MyAccessEntry', {
       accessPolicies: [accessPolicy],
       cluster: this.cluster,
-      principal: this.node.getContext("iamUserRole"),
+      principal: `arn:aws:iam::${cdk.Stack.of(this).account}:root`
     });
 
     const certManagerNamespace = this.cluster.addManifest("cert-manager", {

@@ -443,7 +443,7 @@
         "validateOnSynth": false,
         "assumeRoleArn": "arn:${AWS::Partition}:iam::648767092427:role/cdk-hnb659fds-deploy-role-648767092427-us-east-1",
         "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::648767092427:role/cdk-hnb659fds-cfn-exec-role-648767092427-us-east-1",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-648767092427-us-east-1/b7177de84e5b856c2998ce413c81a303826d0e8f88214b18879aaf6846beb8af.json",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-648767092427-us-east-1/3f9326c27df716564f02f58ddb4ac7270133fb657dd971136ded66dbb5930b1c.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
@@ -460,7 +460,7 @@
         "ClusterStack.assets"
       ],
       "metadata": {
-        "/ClusterStack/ClusterMasterRole": [
+        "/ClusterStack/ClusterIamRole": [
           {
             "type": "aws:cdk:analytics:construct",
             "data": {
@@ -471,16 +471,51 @@
             }
           }
         ],
-        "/ClusterStack/ClusterMasterRole/ImportClusterMasterRole": [
+        "/ClusterStack/ClusterIamRole/ImportClusterIamRole": [
           {
             "type": "aws:cdk:analytics:construct",
             "data": "*"
           }
         ],
-        "/ClusterStack/ClusterMasterRole/Resource": [
+        "/ClusterStack/ClusterIamRole/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "ClusterMasterRole23CC5A5F"
+            "data": "ClusterIamRole34E22D17"
+          }
+        ],
+        "/ClusterStack/eksClusterNodeGroupRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "roleName": "*",
+              "assumedBy": {
+                "principalAccount": "*",
+                "assumeRoleAction": "*"
+              },
+              "managedPolicies": [
+                {
+                  "managedPolicyArn": "*"
+                },
+                {
+                  "managedPolicyArn": "*"
+                },
+                {
+                  "managedPolicyArn": "*"
+                }
+              ]
+            }
+          }
+        ],
+        "/ClusterStack/eksClusterNodeGroupRole/ImporteksClusterNodeGroupRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/ClusterStack/eksClusterNodeGroupRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "eksClusterNodeGroupRoleC74BEC17"
           }
         ],
         "/ClusterStack/kubectl": [
@@ -502,6 +537,7 @@
               "clusterName": "*",
               "vpc": "*",
               "mastersRole": "*",
+              "outputConfigCommand": false,
               "version": "*",
               "endpointAccess": "*",
               "vpcSubnets": [
@@ -524,7 +560,8 @@
                 {
                   "desiredSize": "*",
                   "minSize": "*",
-                  "maxSize": "*"
+                  "maxSize": "*",
+                  "nodeRole": "*"
                 }
               ]
             }
@@ -979,18 +1016,6 @@
             "data": "HelloEKSAwsAuthmanifest96361071"
           }
         ],
-        "/ClusterStack/HelloEKS/ConfigCommand": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "HelloEKSConfigCommand861347FC"
-          }
-        ],
-        "/ClusterStack/HelloEKS/GetTokenCommand": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "HelloEKSGetTokenCommandF486E67D"
-          }
-        ],
         "/ClusterStack/HelloEKS/NodegroupASG": [
           {
             "type": "aws:cdk:analytics:construct",
@@ -998,61 +1023,9 @@
               "cluster": "*",
               "desiredSize": "*",
               "minSize": "*",
-              "maxSize": "*"
+              "maxSize": "*",
+              "nodeRole": "*"
             }
-          }
-        ],
-        "/ClusterStack/HelloEKS/NodegroupASG/NodeGroupRole": [
-          {
-            "type": "aws:cdk:analytics:construct",
-            "data": {
-              "assumedBy": {
-                "principalAccount": "*",
-                "assumeRoleAction": "*"
-              }
-            }
-          },
-          {
-            "type": "aws:cdk:analytics:method",
-            "data": {
-              "addManagedPolicy": [
-                {
-                  "managedPolicyArn": "*"
-                }
-              ]
-            }
-          },
-          {
-            "type": "aws:cdk:analytics:method",
-            "data": {
-              "addManagedPolicy": [
-                {
-                  "managedPolicyArn": "*"
-                }
-              ]
-            }
-          },
-          {
-            "type": "aws:cdk:analytics:method",
-            "data": {
-              "addManagedPolicy": [
-                {
-                  "managedPolicyArn": "*"
-                }
-              ]
-            }
-          }
-        ],
-        "/ClusterStack/HelloEKS/NodegroupASG/NodeGroupRole/ImportNodeGroupRole": [
-          {
-            "type": "aws:cdk:analytics:construct",
-            "data": "*"
-          }
-        ],
-        "/ClusterStack/HelloEKS/NodegroupASG/NodeGroupRole/Resource": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "HelloEKSNodegroupASGNodeGroupRoleF8DC4B2F"
           }
         ],
         "/ClusterStack/HelloEKS/NodegroupASG/Resource": [
@@ -2533,6 +2506,30 @@
             "data": "awscdkawseksKubectlProviderNestedStackawscdkawseksKubectlProviderNestedStackResourceA7AEBA6B"
           }
         ],
+        "/ClusterStack/MyAccessEntry": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "accessPolicies": [
+                {
+                  "policy": "*",
+                  "accessScope": {
+                    "type": "cluster",
+                    "namespaces": "*"
+                  }
+                }
+              ],
+              "cluster": "*",
+              "principal": "*"
+            }
+          }
+        ],
+        "/ClusterStack/MyAccessEntry/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MyAccessEntry45BFD61A"
+          }
+        ],
         "/ClusterStack/Custom::AWSCDKOpenIdConnectProviderCustomResourceProvider": [
           {
             "type": "aws:cdk:is-custom-resource-handler-customResourceProvider",
@@ -2625,7 +2622,7 @@
         "validateOnSynth": false,
         "assumeRoleArn": "arn:${AWS::Partition}:iam::648767092427:role/cdk-hnb659fds-deploy-role-648767092427-us-east-1",
         "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::648767092427:role/cdk-hnb659fds-cfn-exec-role-648767092427-us-east-1",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-648767092427-us-east-1/c1660ca864a38d6c646ce1fd320a1b1d6c0c26a4a7b8103123974c1db5b0e134.json",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-648767092427-us-east-1/ef13d97f3cc66b3f8c14abf833180be9fef5daae45e396c92cc64a58ecf2a4b4.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [

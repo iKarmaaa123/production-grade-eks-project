@@ -1,6 +1,6 @@
 {
  "Resources": {
-  "ClusterMasterRole23CC5A5F": {
+  "ClusterIamRole34E22D17": {
    "Type": "AWS::IAM::Role",
    "Properties": {
     "AssumeRolePolicyDocument": {
@@ -17,7 +17,66 @@
     }
    },
    "Metadata": {
-    "aws:cdk:path": "ClusterStack/ClusterMasterRole/Resource"
+    "aws:cdk:path": "ClusterStack/ClusterIamRole/Resource"
+   }
+  },
+  "eksClusterNodeGroupRoleC74BEC17": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "ec2.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/AmazonEKSWorkerNodePolicy"
+       ]
+      ]
+     },
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+       ]
+      ]
+     },
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/AmazonEKS_CNI_Policy"
+       ]
+      ]
+     }
+    ],
+    "RoleName": "eksClusterNodeGroupRole"
+   },
+   "Metadata": {
+    "aws:cdk:path": "ClusterStack/eksClusterNodeGroupRole/Resource"
    }
   },
   "kubectl290BBFC9": {
@@ -403,21 +462,21 @@
        "[{\"apiVersion\":\"v1\",\"kind\":\"ConfigMap\",\"metadata\":{\"name\":\"aws-auth\",\"namespace\":\"kube-system\",\"labels\":{\"aws.cdk.eks/prune-c8d4ee47475f469383416c344b27f901395825b04e\":\"\"}},\"data\":{\"mapRoles\":\"[{\\\"rolearn\\\":\\\"",
        {
         "Fn::GetAtt": [
-         "ClusterMasterRole23CC5A5F",
+         "ClusterIamRole34E22D17",
          "Arn"
         ]
        },
        "\\\",\\\"username\\\":\\\"",
        {
         "Fn::GetAtt": [
-         "ClusterMasterRole23CC5A5F",
+         "ClusterIamRole34E22D17",
          "Arn"
         ]
        },
        "\\\",\\\"groups\\\":[\\\"system:masters\\\"]},{\\\"rolearn\\\":\\\"",
        {
         "Fn::GetAtt": [
-         "HelloEKSNodegroupASGNodeGroupRoleF8DC4B2F",
+         "eksClusterNodeGroupRoleC74BEC17",
          "Arn"
         ]
        },
@@ -446,64 +505,6 @@
     "aws:cdk:path": "ClusterStack/HelloEKS/AwsAuth/manifest/Resource/Default"
    }
   },
-  "HelloEKSNodegroupASGNodeGroupRoleF8DC4B2F": {
-   "Type": "AWS::IAM::Role",
-   "Properties": {
-    "AssumeRolePolicyDocument": {
-     "Statement": [
-      {
-       "Action": "sts:AssumeRole",
-       "Effect": "Allow",
-       "Principal": {
-        "Service": "ec2.amazonaws.com"
-       }
-      }
-     ],
-     "Version": "2012-10-17"
-    },
-    "ManagedPolicyArns": [
-     {
-      "Fn::Join": [
-       "",
-       [
-        "arn:",
-        {
-         "Ref": "AWS::Partition"
-        },
-        ":iam::aws:policy/AmazonEKSWorkerNodePolicy"
-       ]
-      ]
-     },
-     {
-      "Fn::Join": [
-       "",
-       [
-        "arn:",
-        {
-         "Ref": "AWS::Partition"
-        },
-        ":iam::aws:policy/AmazonEKS_CNI_Policy"
-       ]
-      ]
-     },
-     {
-      "Fn::Join": [
-       "",
-       [
-        "arn:",
-        {
-         "Ref": "AWS::Partition"
-        },
-        ":iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
-       ]
-      ]
-     }
-    ]
-   },
-   "Metadata": {
-    "aws:cdk:path": "ClusterStack/HelloEKS/NodegroupASG/NodeGroupRole/Resource"
-   }
-  },
   "HelloEKSNodegroupASGE1E41CE0": {
    "Type": "AWS::EKS::Nodegroup",
    "Properties": {
@@ -513,7 +514,7 @@
     "ForceUpdateEnabled": true,
     "NodeRole": {
      "Fn::GetAtt": [
-      "HelloEKSNodegroupASGNodeGroupRoleF8DC4B2F",
+      "eksClusterNodeGroupRoleC74BEC17",
       "Arn"
      ]
     },
@@ -697,7 +698,7 @@
         "route53:ListResourceRecordSets"
        ],
        "Effect": "Allow",
-       "Resource": "arn:aws:route53:::hostedzone/Z0080164COY9BX1JUJ4L"
+       "Resource": "arn:aws:route53:::hostedzone/Z0080164COY9BX1JUJ4L/*"
       }
      ],
      "Version": "2012-10-17"
@@ -890,7 +891,7 @@
         "route53:ListResourceRecordSets"
        ],
        "Effect": "Allow",
-       "Resource": "arn:aws:route53:::hostedzone/Z0080164COY9BX1JUJ4L"
+       "Resource": "arn:aws:route53:::hostedzone/Z0080164COY9BX1JUJ4L/*"
       }
      ],
      "Version": "2012-10-17"
@@ -1015,6 +1016,37 @@
     "aws:cdk:path": "ClusterStack/@aws-cdk--aws-eks.KubectlProvider.NestedStack/@aws-cdk--aws-eks.KubectlProvider.NestedStackResource",
     "aws:asset:path": "ClusterStackawscdkawseksKubectlProviderA827E1EA.nested.template.json",
     "aws:asset:property": "TemplateURL"
+   }
+  },
+  "MyAccessEntry45BFD61A": {
+   "Type": "AWS::EKS::AccessEntry",
+   "Properties": {
+    "AccessPolicies": [
+     {
+      "AccessScope": {
+       "Type": "cluster"
+      },
+      "PolicyArn": {
+       "Fn::Join": [
+        "",
+        [
+         "arn:",
+         {
+          "Ref": "AWS::Partition"
+         },
+         ":eks::aws:cluster-access-policy/AmazonEKSClusterEditPolicy"
+        ]
+       ]
+      }
+     }
+    ],
+    "ClusterName": {
+     "Ref": "HelloEKS39C624A1"
+    },
+    "PrincipalArn": "arn:aws:iam::648767092427:user/project"
+   },
+   "Metadata": {
+    "aws:cdk:path": "ClusterStack/MyAccessEntry/Resource"
    }
   },
   "CustomAWSCDKOpenIdConnectProviderCustomResourceProviderRole517FED65": {
@@ -1145,7 +1177,7 @@
   "CDKMetadata": {
    "Type": "AWS::CDK::Metadata",
    "Properties": {
-    "Analytics": "v2:deflate64:H4sIAAAAAAAA/91WW0/bMBT+LfgRuWak2gtPK3mYGAMqgnipKuTap8U0sSMfu6yL8t8nO25LYZpAbadpD1GOz/3y+ZKxJjs9ZZ+O+DP2hJz3SjVhTeG4mFP+jA+N4hVrbk0Jo4ZwRF+BPF+Ss4bUVmmhal4OhDBeO3JGjglNOsFgIJwyOrLblu5iTUnFNZ+BHJpSCQVIzkbNFm85sEl3HENJeWeGqxCdRrBJUue4eLzQpdKwlpFj8g6hlFcvo74jj9f6L1z9KcW/2KvdhhrLeJ394dr/4WD/kcnM8jCRURzJqiW7Tm9XPO9Xfw9YPADs/r2sxjSf6hCNdvyIiZXBnQmSN37esqUsHHdQgXa4BcK37EP7PyR7b7nvy1GcXje4lmL/gSOCQzYIP4p9du7FHNw5RxiNacmrieQsn+rvfAn2HiwqoynMkTV56dGBHTVEdNQ1ryAhclGLRFU8iLBLrJN1TtIKtKyN0m4gBCBuzAs/0dAlTTDSd8s6uBj6SakECeVt861acAekHVMiYcp96XJec6HcMnmd+wkIV8ZK0n0VW3RtJMys8fVGP0FaAioLslA/V8lXSr9c8R/rVWzt4BkH3j3SSz8Bq8EBXnGtpoCOrqNsGpa8fCxKGN/aFy3ALpSAdB7Qmxr0hcyN1iDc0JqFknFC3pbritf0uKUgMtYUILxVbvk1ZbcZngQUVtWbMyVG39JvW3oLaLwVsLobfveNaQRY4fhM6RnNPTpTvcfwo193OCXHgc6NlipUEBY33tXeBeobdpzutbmdz6pxYRO0NDxQv6QX6km3IXplwFAvAaq36GfssqPv+1nEV9qC2khgT3iyyD6zjJ0ePaFSPeu1UxWw2+7/C/MvmXQGCwAA"
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/91WX0/bMBD/LPgRuWG02kuf1kbTxBisIoiXqkKufS2miR357LIuynefHDtpC9MEg6JpD1HOd+f79zuf3U+q/ulp8uGIPWCPi1Uvl/OkyizjK8oe8LaSrEiqK53DtCIM0RUgxhsyrEhppOKyZPmIc+2UJUNyTGjU8RtG3EqtGnZd04oYncMlK2BP8W+MUVIwxZYgJjqXXAKS4bTa421GptV9sWDmRe8TXHAlxLWetC6Cht8TpdYyfnemcqmgk5Fj8gyhEBe7Xp8Rx2P9HVN/CvEda/WqBgxpPI7+cOV/sbP/aMvSMI/ItIGkLckboHcAoP69qGY0XSjvjQZ+U8V2w7X2kid2nrKFyCyzUICyuAfbU/ah7R+S/Waxv5WhBr0AXE1xcMsQwWIy8j+Kg2Ts+ArsmCFMZzRnxVywJF2ob2wD5gYMSq0orDCp0tyhBTOtCA/Uzu25LnmkCuZFGAJrONrZ0tlUq4VcproomBJkuGA5AiXr4CBqghKllsqOOAfErenMzRWEhAg29PWm9OYnbp5L3tye+3wj18wCqWeUCFgwl9uUlYxLu4lWV24O3OZNlt0NzIS41AKWRrtyqx/bXQBKAyKTP9vECql2V+zHzkppAV0NGhRGDzhy9o6euzkYBRbwgim5ALS0c7qtbTTzKqce+M40zcCsJYc4Sej3EtSZSLVSwO3E6LUUDbbO5F09OnpGAySflTUb//JqVnvXZBlHRhhQjTzj2qNRERtQaVOjRLECsGQcMI6uGX2UeDf5dnLZiaGmwPtJlQF3RtrNl1i8bRsKQG5kuZ2OjYU9/bqmV4DaGQ7tvfC7b0abo5JZtpRqSVOHVhfP2fjSL4zZaNjTqVZC+gz84iuGf3gL70fRwucPcU398/lTfD+fhAPdy32f92LT99aDfnIe6JtBvzkDcYT4Dkru8WTd/5j0k9Oje5SyZ5yysoDkKvx/Afg6T+2kCwAA"
    },
    "Metadata": {
     "aws:cdk:path": "ClusterStack/CDKMetadata/Default"
@@ -1163,46 +1195,6 @@
   }
  },
  "Outputs": {
-  "HelloEKSConfigCommand861347FC": {
-   "Value": {
-    "Fn::Join": [
-     "",
-     [
-      "aws eks update-kubeconfig --name ",
-      {
-       "Ref": "HelloEKS39C624A1"
-      },
-      " --region us-east-1 --role-arn ",
-      {
-       "Fn::GetAtt": [
-        "ClusterMasterRole23CC5A5F",
-        "Arn"
-       ]
-      }
-     ]
-    ]
-   }
-  },
-  "HelloEKSGetTokenCommandF486E67D": {
-   "Value": {
-    "Fn::Join": [
-     "",
-     [
-      "aws eks get-token --cluster-name ",
-      {
-       "Ref": "HelloEKS39C624A1"
-      },
-      " --region us-east-1 --role-arn ",
-      {
-       "Fn::GetAtt": [
-        "ClusterMasterRole23CC5A5F",
-        "Arn"
-       ]
-      }
-     ]
-    ]
-   }
-  },
   "ExportsOutputFnGetAttawscdkawseksKubectlProviderNestedStackawscdkawseksKubectlProviderNestedStackResourceA7AEBA6BOutputsClusterStackawscdkawseksKubectlProviderframeworkonEvent8D73200DArnCD481BEE": {
    "Value": {
     "Fn::GetAtt": [
