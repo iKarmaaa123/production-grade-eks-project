@@ -113,7 +113,7 @@ export class ClusterStack extends cdk.Stack {
         "route53:ListHostedZonesByName",
         "route53:ListHostedZones"
       ],
-      resources: [`${zone.hostedZoneArn}/*`],
+      resources: ["*"],
     });
 
     this.certManagerServiceAccount.role.addToPrincipalPolicy(route53Policy)
