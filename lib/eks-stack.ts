@@ -18,9 +18,11 @@ export class ClusterStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props: eksStackProps) {
     super(scope, id, props);
 
-    const clusterIamRole = new iam.Role(this, "ClusterIamRole", {
+    const mastersRole = new iam.Role(this, "ClusterIamRole", {
       assumedBy: new iam.AccountPrincipal(cdk.Stack.of(this).account),
     });
+
+    const iamUserArn = `arn:aws:iam::${cdk.Stack.of(this).account}:user/project`
 
     const eksClusterNodeGroupRole = new iam.Role(this, "eksClusterNodeGroupRole", {
       roleName: "eksClusterNodeGroupRole",
@@ -35,7 +37,7 @@ export class ClusterStack extends cdk.Stack {
     this.cluster = new eks.Cluster(this, "HelloEKS", {
       clusterName: this.node.getContext("clusterName"),
       vpc: props.vpc,
-      mastersRole: clusterIamRole,
+      mastersRole: mastersRole,
       outputConfigCommand: false,
       version: eks.KubernetesVersion.V1_32,
       endpointAccess: eks.EndpointAccess.PUBLIC,
@@ -55,15 +57,11 @@ export class ClusterStack extends cdk.Stack {
       nodeRole: eksClusterNodeGroupRole
     })
 
-    const accessPolicy = eks.AccessPolicy.fromAccessPolicyName("AmazonEKSClusterEditPolicy", {
-      accessScopeType: eks.AccessScopeType.CLUSTER,
-    });
-
-    const accessEntry = new eks.AccessEntry(this, "MyAccessEntry", {
-      accessPolicies: [accessPolicy],
-      cluster: this.cluster,
-      principal: "arn:aws:iam::648767092427:user/project"
-    });
+    this.cluster.grantAccess("editAccess", iamUserArn, [
+      eks.AccessPolicy.fromAccessPolicyName("AmazonEKSClusterEditPolicy", {
+        accessScopeType: eks.AccessScopeType.CLUSTER
+      })
+    ])
 
     const certManagerNamespace = this.cluster.addManifest("cert-manager", {
       apiVersion: "v1",
