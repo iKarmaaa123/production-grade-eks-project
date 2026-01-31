@@ -22,7 +22,7 @@ export class ClusterStack extends cdk.Stack {
       assumedBy: new iam.AccountPrincipal(cdk.Stack.of(this).account),
     });
 
-    const iamUserArn = `arn:aws:iam::${cdk.Stack.of(this).account}:user/project`
+    const iamUserArn = "arn:aws:iam::648767092427:user/project"
 
     const eksClusterNodeGroupRole = new iam.Role(this, "eksClusterNodeGroupRole", {
       roleName: "eksClusterNodeGroupRole",
