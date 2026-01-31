@@ -45,7 +45,8 @@ export class ClusterStack extends cdk.Stack {
       ],
       defaultCapacity: 0,
       kubectlLayer: new KubectlV32Layer(this, "kubectl"),
-    });
+      authenticationMode: eks.AuthenticationMode.API_AND_CONFIG_MAP
+    })
 
     this.cluster.addNodegroupCapacity("ASG", {
       desiredSize: 2,
@@ -54,14 +55,14 @@ export class ClusterStack extends cdk.Stack {
       nodeRole: eksClusterNodeGroupRole
     })
 
-    const accessPolicy = eks.AccessPolicy.fromAccessPolicyName('AmazonEKSClusterEditPolicy', {
+    const accessPolicy = eks.AccessPolicy.fromAccessPolicyName("AmazonEKSClusterEditPolicy", {
       accessScopeType: eks.AccessScopeType.CLUSTER,
     });
 
-    const accessEntry = new eks.AccessEntry(this, 'MyAccessEntry', {
+    const accessEntry = new eks.AccessEntry(this, "MyAccessEntry", {
       accessPolicies: [accessPolicy],
       cluster: this.cluster,
-      principal: `arn:aws:iam::${cdk.Stack.of(this).account}:root`
+      principal: "arn:aws:iam::648767092427:user/project"
     });
 
     const certManagerNamespace = this.cluster.addManifest("cert-manager", {
