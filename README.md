@@ -83,7 +83,7 @@ Below is an overview of that this directory structure will look like for this pr
 
 <h2> Prerequisites </h2>
 
-In order to follow this project you will need to have the following installed:
+🛠 In order to follow this project you will need to have the following installed:
 
 - ✅ An AWS Account with an IAM user(do not use the root account) - [Create An Account Here](https://aws.amazon.com/free/?trk=ce1f55b8-6da8-4aa2-af36-3f11e9a449ae&sc_channel=ps&ef_id=Cj0KCQjw782_BhDjARIsABTv_JCWZitQyH0tU_lYElDDQ9HdBabDxB-tKSgYDsRiU0N_XqiVVpjvBTUaAmR7EALw_wcB:G:s&s_kwcid=AL!4422!3!433803621002!e!!g!!aws%20sign%20up!9762827897!98496538743&gclid=Cj0KCQjw782_BhDjARIsABTv_JCWZitQyH0tU_lYElDDQ9HdBabDxB-tKSgYDsRiU0N_XqiVVpjvBTUaAmR7EALw_wcB&all-free-tier.sort-by=item.additionalFields.SortRank&all-free-tier.sort-order=asc&awsf.Free%20Tier%20Types=*all&awsf.Free%20Tier%20Categories=*all)
 
@@ -161,7 +161,7 @@ Now that we have ran the app locally, and have ran it locally within a Docker co
 
 <h2> Step 2: Pushing up Docker image to AWS ECR </h2>
 
-- Create an ECR repository - [Click here to know how to do this](https://docs.aws.amazon.com/AmazonECR/latest/userguide/repository-create.html)
+- Create an ECR repository - [click here to know how to do this](https://docs.aws.amazon.com/AmazonECR/latest/userguide/repository-create.html)
 
 - After you created the ECR repository, click into the ECR repository and press `View push commands`. This will provide you with a list of commands to run to get your Docker image pushed to your ECR repository.
 
@@ -177,20 +177,20 @@ Now that we have our Docker image in AWS ECR, it is time to spin up the infrastr
 
   - `CDK_DEFAULT_REGION=<the region you will be deploying your infrastructure to>`
 
-- To install all the required dependencies and packages for your CDK code run the following command:
-
+- After you have done that commit your changes and push them up to your main branch:
 ```hcl
-  npm install
+  git add -A
+  git commit -m <your commit message>
+  git push
 ```
-- Run ```hcl cdk diff --all ``` command to see the output of what resources will be deployed.
 
-- Now run ```hcl cdk deploy --all ```
+- Once you have deployed your changes, you will see the `cdk-diff` GitHub actions workflow running. This workflow inform you on what is being deployed to AWS.
 
-- After all CDK stacks have been deployed, you will now need to access the EKS cluster via kubectl to set up few things.
+- After that workflow has successfully ran, manually run the cdk-deploy workflow: this workflow will deploy the whole infrastructure to AWS.
 
 <h2> Step 4: Setting up few things within the EKS cluster </h2>
 
-After all stacks have successfully deployed, you will need to access the cluster to set up a few things:
+After your workflow has successfully ran, you will need to access the cluster to set up a few things:
 
 - Run this command to access the EKS cluster:
 ```hcl
@@ -219,7 +219,46 @@ After having set up these 2 things you will now have:
 
 <h2> Step 5: Accessing Argo-cd ui </h2>
 
-- In order to access the Argo-cd ui to see our app deployment, you will need to
+In order to access the Argo-cd ui to see our app deployment, you will need to first get both the username and password. This will also be the same for the Grafana Ui.
+
+- Firstly, run the following command:
+
+  ```hcl
+  kubectl get pods -n argo-cd
+  ```
+
+- Locate the pod <name of pod>, and then run this command:
+
+  ```hcl
+  kubectl get secret -n argo-cd <name of argocd secret> -o yaml
+  ```
+
+- After you run that command, you will a bunch of output in yaml format. Go to the where is says password and copy it.
+
+- Then run this command with your password still copied:
+
+  ```hcl
+  echo <the password you copied> | base64 -d
+  ```
+
+- This will give you your password for accessing the argo ui. Access the argo ui through typing argo-cd.cdk-labs.com. You should be presented with the following screen:
+
+<image>
+
+<h2> Step 6: Viewing your deployment in argo-cd </h2>
+
+Now it is time to access your app that is running within the EKS cluster, being managed by argo-cd:
+
+- Enter yout username and password:
+
+  - The username to enter is admin (it will always be admin)
+
+  - Then enter the password that you de-encoded.
+
+- After that you should have successfully accessed argo-cd. You should see your various k8s resources for your app:
+
+- If the pods are green, then it means the pods are now running your 2042 game app container image. You can access the app by typing in the following domain name: apps.cdk-labs.com. If everything went well, and you did exactly what is here, you should be presented with 2048 game app.
+
 
 
 
