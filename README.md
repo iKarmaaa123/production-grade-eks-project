@@ -127,7 +127,7 @@ If this has worked successfully, you should see the following app be displayed:
 
 ![Images of 2048 app running locally](images/image.png)
 
-<h2> Step 1: Running app locally in Docker container </h2>
+<h2> Step 2: Running app locally in Docker container </h2>
 
 Let us now get this 2048 game app running within a Docker container. Before we do this, we need to ensure we have a docker image built for the app:
 
@@ -159,7 +159,7 @@ You should now be presented with the 2048 game app.
 
 Now that we have ran the app locally, and have ran it locally within a Docker container, it is time to get this app running within AWS EKS.
 
-<h2> Step 2: Pushing up Docker image to AWS ECR </h2>
+<h2> Step 3: Pushing up Docker image to AWS ECR </h2>
 
 - Create an ECR repository - [click here to know how to do this](https://docs.aws.amazon.com/AmazonECR/latest/userguide/repository-create.html)
 
@@ -259,17 +259,29 @@ Now it is time to access your app that is running within the EKS cluster, being 
 
 - If the pods are green, then it means the pods are now running your 2042 game app container image. You can access the app by typing in the following domain name: apps.cdk-labs.com. If everything went well, and you did exactly what is here, you should be presented with 2048 game app.
 
+<h2> Step 7: Accessing the Grafana ui </h2>
+
+You would have noticed that we deployed a Prometheus Helm Chart that comes with Grafana. This Helm chart sets up our whole Prometheus Stack for us, in terms of setting up all the components needs to scrape and collect metric data from your pods and nodes within the EKS cluster. We can use grafana to visualise our application metric data with regards to the cpu and memory usage of our deployment pods.
+
+To view this data:
+
+- Go ahead and access grafana via `grafana.cdk-labs.com`
+
+- Similar to argo-cd, you will need a username (which is admin) and password.
+
+- To get the password it is exact same process for how we got the password for the argo-cd ui. Run these two commands:
+
+  ```hcl
+  kubectl get secret -n prometheus grafana-secret -o yaml
+  ```
+
+  ```hcl
+  echo <the password you copied> | base64 -d
+  ```
+
+<h2> Step 8: View your app metrics using Grafana </h2>
 
 
+<h2> Step 9: Destroying everything </h2>
 
-
-
-
-
-
-
-
-
-
-
-
+Now that you were able to successfully access the app running within AWS EKS, it is time to destroy the whole infrastructure. Go to the GitHub Actions parts of the repo, and you will see a workflow called `CDK Destroy Workflow`. Run the workflow to destroy the whole infrastructure.
