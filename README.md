@@ -167,7 +167,7 @@ Now that we have ran the app locally, and have ran it locally within a Docker co
 
 After following the steps on how to push your Docker image to your ECR repo, you should now see your Docker image in ECR.
 
-<h2> Step 3: Deploying infrastructure </h2>
+<h2> Step 4: Deploying infrastructure </h2>
 
 Now that we have our Docker image in AWS ECR, it is time to spin up the infrastrcuture. There are few things you will need to do first before we deploy the infrastructure.
  
@@ -188,7 +188,7 @@ Now that we have our Docker image in AWS ECR, it is time to spin up the infrastr
 
 - After that workflow has successfully ran, manually run the cdk-deploy workflow: this workflow will deploy the whole infrastructure to AWS.
 
-<h2> Step 4: Setting up few things within the EKS cluster </h2>
+<h2> Step 5: Setting up few things within the EKS cluster </h2>
 
 After your workflow has successfully ran, you will need to access the cluster to set up a few things:
 
@@ -217,7 +217,7 @@ After having set up these 2 things you will now have:
 
 - A cluster issuer for cert-manager to get ssl certificates from.
 
-<h2> Step 5: Accessing Argo-cd ui </h2>
+<h2> Step 6: Accessing Argo-cd ui </h2>
 
 In order to access the Argo-cd ui to see our app deployment, you will need to first get both the username and password. This will also be the same for the Grafana Ui.
 
@@ -245,7 +245,7 @@ In order to access the Argo-cd ui to see our app deployment, you will need to fi
 
 <image>
 
-<h2> Step 6: Viewing your deployment in argo-cd </h2>
+<h2> Step 7: Viewing your deployment in argo-cd </h2>
 
 Now it is time to access your app that is running within the EKS cluster, being managed by argo-cd:
 
@@ -259,7 +259,7 @@ Now it is time to access your app that is running within the EKS cluster, being 
 
 - If the pods are green, then it means the pods are now running your 2042 game app container image. You can access the app by typing in the following domain name: apps.cdk-labs.com. If everything went well, and you did exactly what is here, you should be presented with 2048 game app.
 
-<h2> Step 7: Accessing the Grafana ui </h2>
+<h2> Step 8: Accessing the Grafana ui </h2>
 
 You would have noticed that we deployed a Prometheus Helm Chart that comes with Grafana. This Helm chart sets up our whole Prometheus Stack for us, in terms of setting up all the components needs to scrape and collect metric data from your pods and nodes within the EKS cluster. We can use grafana to visualise our application metric data with regards to the cpu and memory usage of our deployment pods.
 
@@ -279,9 +279,9 @@ To view this data:
   echo <the password you copied> | base64 -d
   ```
 
-<h2> Step 8: View your app metrics using Grafana </h2>
+<h2> Step 9: View your app metrics using Grafana </h2>
 
 
-<h2> Step 9: Destroying everything </h2>
+<h2> Step 10: Destroying everything </h2>
 
 Now that you were able to successfully access the app running within AWS EKS, it is time to destroy the whole infrastructure. Go to the GitHub Actions parts of the repo, and you will see a workflow called `CDK Destroy Workflow`. Run the workflow to destroy the whole infrastructure.
