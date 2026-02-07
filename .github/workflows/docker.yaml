@@ -31,7 +31,7 @@ jobs:
         format: 'table'
         exit-code: '0'
         vuln-type: 'os,library'
-        severity: 'HIGH'
+        severity: 'HIGH,CRITICAL'
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v4
