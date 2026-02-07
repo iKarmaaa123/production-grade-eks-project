@@ -257,7 +257,7 @@ Now it is time to access your app that is running within the EKS cluster, being 
 
 - After that, you should have successfully accessed Argo-CD. You should see your various Kubernetes resources for your app:
 
-![argo-cd deployments](./argocd-deployments.png)
+![argo-cd deployments](images/argocd-deployments.png)
 
 - If the pods are green, it means the pods are now running your 2048 game app container image. You can access the app by typing in the following domain name: apps.cdk-labs.com. If everything went well and you did exactly what is here, you should be able to securely connect to the 2048 game app:
 
