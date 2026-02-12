@@ -10,7 +10,7 @@ This README outlines step-by-step instructions for running the 2048 game app loc
 
 Below is the architectural diagram of the infrastructure that we are going to be setting up in this project:
 
-<Insert Architectural diagram>
+![image of architectural diagram](./images/EKS-project-diagram.drawio.png)
 
 <h2> Directory Structure </h2>
 
