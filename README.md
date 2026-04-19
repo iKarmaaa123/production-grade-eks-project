@@ -171,13 +171,15 @@ After you follow the steps on how to push your Docker image to your ECR repo, yo
 
 Now that we have our Docker image in AWS ECR, it is time to spin up the infrastructure. There are a few things you will need to do first before we deploy the infrastructure.
  
-- Within the `lib` directory, create a `.env` file. Inside this file, create these two environment variables:
+- If you wish to deploy the infrastructure locally, export these three environment variables:
 
-  - `CDK_DEFAULT_ACCOUNT=<your AWS account id>`
+```hcl
+export AWS_ACCESS_KEY_ID="<INSERT YOUR KEY HERE>"
+export AWS_SECRET_ACCESS_KEY="<INSERT YOUR KEY HERE>"
+export AWS_DEFAULT_REGION="<INSERT AWS REGION HERE>"
+```
 
-  - `CDK_DEFAULT_REGION=<the region you will be deploying your infrastructure to>`
-
-- After you have done that, commit your changes and push them up to your main branch:
+- Commit any changes you made and push them up to your main branch:
 ```hcl
   git add -A
   git commit -m <your commit message>
