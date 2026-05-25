@@ -38,8 +38,8 @@ jobs:
     - name: Installing CDK
       run: npm install -g aws-cdk
 
-    - name: Deploying EKS Cluster
-      run: npx cdk deploy ClusterStack --require-approval never
+    - name: Deploying EKS cluster and Helm charts
+      run: npx cdk deploy --all --require-approval never
 
     - name: Setup kubectl
       uses: azure/setup-kubectl@v4
@@ -48,12 +48,9 @@ jobs:
       run: aws eks update-kubeconfig --name eks-project-cluster --region ${{ env.AWS_REGION }}
 
     - name: Creating cluster issuer
-      run: kubectl apply -f k8s-manifest-file/cert-manager/issuer.yaml
-      working-directory: ./k8s-manifest
+      run: kubectl apply -f cert-manager/issuer.yaml
+      working-directory: ../k8s-manifest
 
     - name: Deploying ArgoCD config
-      run: kubectl apply -f k8s-manifest-file/argocd/argocd.yaml
-      working-directory: ./k8s-manifest
-
-    - name: Deploying Helm charts
-      run: npx cdk deploy HelmStack --require-approval never
+      run: kubectl apply -f argocd/argocd.yaml
+      working-directory: ../k8s-manifest

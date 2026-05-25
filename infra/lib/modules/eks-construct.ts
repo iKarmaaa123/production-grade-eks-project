@@ -2,7 +2,7 @@ import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import * as eks from 'aws-cdk-lib/aws-eks';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
-import { Role, PolicyStatement } from "aws-cdk-lib/aws-iam";
+import { Role, PolicyStatement, IRole } from "aws-cdk-lib/aws-iam";
 import * as Route53 from 'aws-cdk-lib/aws-route53';
 import { AppConstants } from '../config/app-constants';
 
@@ -58,6 +58,12 @@ export class ClusterConstruct extends Construct {
     this.cluster.grantAccess("adminClusterAccess", iamUserArn, [
       eks.AccessPolicy.fromAccessPolicyName("AmazonEKSClusterAdminPolicy", {
         accessScopeType: cdk.aws_eks.AccessScopeType.CLUSTER,
+      })
+    ])
+
+    this.cluster.grantAccess("adminClusterAccessForGitHubActionsRunner", AppConstants.GITHUB_ACTIONS_OIDC_ROLE_ARN, [
+    eks.AccessPolicy.fromAccessPolicyName("AmazonEKSClusterAdminPolicy", {
+      accessScopeType: cdk.aws_eks.AccessScopeType.CLUSTER,
       })
     ])
 

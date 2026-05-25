@@ -50,7 +50,7 @@ export class ClusterStack extends Stack {
       minSize: AppSettings.MIN_SIZE,
       maxSize: AppSettings.MAX_SIZE,
       nodeGroupRole: iam.eksClusterNodeGroupRole,
-      route53Policy: iam.route53Policy
+      route53Policy: iam.route53Policy,
     });
 
     this.cluster = eksCluster.cluster;

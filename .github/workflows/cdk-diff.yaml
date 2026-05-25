@@ -2,8 +2,8 @@ name: CDK Diff Workflow
 on:
   push:
     paths:
-      - "bin/**"
-      - "lib/**"
+      - "infra/bin/**"
+      - "infra/lib/**"
 
 env:
   AWS_REGION: us-east-1

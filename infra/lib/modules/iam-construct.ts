@@ -1,7 +1,7 @@
 import { Construct } from "constructs";
 import * as cdk from "aws-cdk-lib";
 import { AppConstants } from "../config/app-constants";
-import { ManagedPolicy, ServicePrincipal, PolicyStatement, Role } from "aws-cdk-lib/aws-iam";
+import { ManagedPolicy, ServicePrincipal, PolicyStatement, Role, IRole } from "aws-cdk-lib/aws-iam";
 
 export interface IamConstructProps {
   nodeGroupRoleName?: string;
@@ -11,6 +11,7 @@ export class IamConstruct extends Construct {
   public readonly route53Policy: PolicyStatement;
   public readonly eksClusterNodeGroupRole: Role;
   public readonly iamUserArn: string;
+  public readonly githubOIDCRole: IRole;
 
   constructor(scope: Construct, id: string, props: IamConstructProps) {
     super(scope, id)
