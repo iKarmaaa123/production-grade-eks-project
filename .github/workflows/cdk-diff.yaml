@@ -4,8 +4,6 @@ on:
     paths:
       - "bin/**"
       - "lib/**"
-      - "k8s-manifest-files/**"
-      - "!k8s-manifest-files/apps/**"
 
 env:
   AWS_REGION: us-east-1
@@ -17,6 +15,10 @@ permissions:
 jobs:
   cdk_diff:
     runs-on: ubuntu-latest
+    
+    defaults:
+      run:
+        working-directory: ./infra
 
     steps:
     - name: Checking out repository

@@ -13,6 +13,10 @@ jobs:
   cdk_destroy:
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        working-directory: ./infra
+
     steps:
     - name: Checking out repository
       uses: actions/checkout@v6

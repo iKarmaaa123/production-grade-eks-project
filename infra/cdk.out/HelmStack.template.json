@@ -1,0 +1,182 @@
+{
+ "Resources": {
+  "HelmStacknginx126CB0E9": {
+   "Type": "Custom::AWSCDK-EKS-HelmChart",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::ImportValue": "ClusterStack:ExportsOutputFnGetAttawscdkawseksKubectlProviderNestedStackawscdkawseksKubectlProviderNestedStackResourceA7AEBA6BOutputsClusterStackawscdkawseksKubectlProviderframeworkonEvent8D73200DArnCD481BEE"
+    },
+    "ClusterName": {
+     "Fn::ImportValue": "ClusterStack:ExportsOutputRefClusterConstructHelloEKS1905E085400CEA05"
+    },
+    "RoleArn": {
+     "Fn::ImportValue": "ClusterStack:ExportsOutputFnGetAttClusterConstructHelloEKSCreationRole1EAD51DAArn30BCAF76"
+    },
+    "Release": "ingress-nginx",
+    "Chart": "ingress-nginx",
+    "Wait": true,
+    "Values": "{\"installCRDs\":true}",
+    "Namespace": "nginx",
+    "Repository": "https://kubernetes.github.io/ingress-nginx",
+    "CreateNamespace": true
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "HelmStack/HelmStack/nginx/Resource/Default"
+   }
+  },
+  "HelmStackcertmanager68457BEB": {
+   "Type": "Custom::AWSCDK-EKS-HelmChart",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::ImportValue": "ClusterStack:ExportsOutputFnGetAttawscdkawseksKubectlProviderNestedStackawscdkawseksKubectlProviderNestedStackResourceA7AEBA6BOutputsClusterStackawscdkawseksKubectlProviderframeworkonEvent8D73200DArnCD481BEE"
+    },
+    "ClusterName": {
+     "Fn::ImportValue": "ClusterStack:ExportsOutputRefClusterConstructHelloEKS1905E085400CEA05"
+    },
+    "RoleArn": {
+     "Fn::ImportValue": "ClusterStack:ExportsOutputFnGetAttClusterConstructHelloEKSCreationRole1EAD51DAArn30BCAF76"
+    },
+    "Release": "cert-manager",
+    "Chart": "cert-manager",
+    "Version": "1.19.2",
+    "Wait": true,
+    "Values": "{\"installCRDs\":true,\"serviceAccount\":{\"create\":false,\"name\":\"clusterstackclusterconstructhelloekscertmanager30f5d81f\"},\"ingressShim\":{\"defaultIssuerKind\":\"ClusterIssuer\",\"defaultIssuerName\":\"issuer\"},\"dns01RecursiveNameservers\":\"8.8.8.8:53\",\"dns01RecursiveNameserversOnly\":true}",
+    "Namespace": "cert-manager",
+    "Repository": "https://charts.jetstack.io"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "HelmStack/HelmStack/cert-manager/Resource/Default"
+   }
+  },
+  "HelmStackexternaldns723AF0F4": {
+   "Type": "Custom::AWSCDK-EKS-HelmChart",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::ImportValue": "ClusterStack:ExportsOutputFnGetAttawscdkawseksKubectlProviderNestedStackawscdkawseksKubectlProviderNestedStackResourceA7AEBA6BOutputsClusterStackawscdkawseksKubectlProviderframeworkonEvent8D73200DArnCD481BEE"
+    },
+    "ClusterName": {
+     "Fn::ImportValue": "ClusterStack:ExportsOutputRefClusterConstructHelloEKS1905E085400CEA05"
+    },
+    "RoleArn": {
+     "Fn::ImportValue": "ClusterStack:ExportsOutputFnGetAttClusterConstructHelloEKSCreationRole1EAD51DAArn30BCAF76"
+    },
+    "Release": "external-dns",
+    "Chart": "external-dns",
+    "Version": "1.19.0",
+    "Wait": true,
+    "Values": "{\"domainFilters\":[\"cdk-labs.com\"],\"provider\":{\"name\":\"aws\"},\"serviceAccount\":{\"create\":false,\"name\":\"clusterstackclusterconstructhelloeksexternaldnse7a69a20\"},\"env\":[{\"name\":\"AWS_DEFAULT_REGION\",\"value\":\"us-east-1\"}]}",
+    "Namespace": "external-dns",
+    "Repository": "https://kubernetes-sigs.github.io/external-dns/"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "HelmStack/HelmStack/external-dns/Resource/Default"
+   }
+  },
+  "HelmStackargocd109D9512": {
+   "Type": "Custom::AWSCDK-EKS-HelmChart",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::ImportValue": "ClusterStack:ExportsOutputFnGetAttawscdkawseksKubectlProviderNestedStackawscdkawseksKubectlProviderNestedStackResourceA7AEBA6BOutputsClusterStackawscdkawseksKubectlProviderframeworkonEvent8D73200DArnCD481BEE"
+    },
+    "ClusterName": {
+     "Fn::ImportValue": "ClusterStack:ExportsOutputRefClusterConstructHelloEKS1905E085400CEA05"
+    },
+    "RoleArn": {
+     "Fn::ImportValue": "ClusterStack:ExportsOutputFnGetAttClusterConstructHelloEKSCreationRole1EAD51DAArn30BCAF76"
+    },
+    "Release": "argocd",
+    "Chart": "argo-cd",
+    "Version": "9.1.7",
+    "Wait": true,
+    "Values": "{\"server\":{\"extraArgs\":[\"--insecure\"],\"service\":{\"type\":\"ClusterIP\"},\"ingress\":{\"enabled\":true,\"ingressClassName\":\"nginx\",\"annotations\":{\"cert-manager.io/cluster-issuer\":\"issuer\"},\"hostname\":\"argocd.cdk-labs.com\",\"tls\":true}}}",
+    "Namespace": "argocd",
+    "Repository": "https://argoproj.github.io/argo-helm",
+    "CreateNamespace": true
+   },
+   "DependsOn": [
+    "HelmStacknginx126CB0E9"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "HelmStack/HelmStack/argocd/Resource/Default"
+   }
+  },
+  "HelmStackprometheus4E49F611": {
+   "Type": "Custom::AWSCDK-EKS-HelmChart",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::ImportValue": "ClusterStack:ExportsOutputFnGetAttawscdkawseksKubectlProviderNestedStackawscdkawseksKubectlProviderNestedStackResourceA7AEBA6BOutputsClusterStackawscdkawseksKubectlProviderframeworkonEvent8D73200DArnCD481BEE"
+    },
+    "ClusterName": {
+     "Fn::ImportValue": "ClusterStack:ExportsOutputRefClusterConstructHelloEKS1905E085400CEA05"
+    },
+    "RoleArn": {
+     "Fn::ImportValue": "ClusterStack:ExportsOutputFnGetAttClusterConstructHelloEKSCreationRole1EAD51DAArn30BCAF76"
+    },
+    "Release": "prometheus",
+    "Chart": "kube-prometheus-stack",
+    "Version": "80.13.3",
+    "Wait": true,
+    "Values": "{\"enabled\":true,\"prometheus\":{\"ingress\":{\"enabled\":true,\"ingressClassName\":\"nginx\",\"annotations\":{\"cert-manager.io/cluster-issuer\":\"issuer\"},\"hosts\":[\"prometheus.cdk-labs.com\"],\"tls\":[{\"secretName\":\"prometheus-server-tls\",\"hosts\":[\"prometheus.cdk-labs.com\"]}]}},\"grafana\":{\"ingress\":{\"enabled\":true,\"ingressClassName\":\"nginx\",\"annotations\":{\"cert-manager.io/cluster-issuer\":\"issuer\"},\"hosts\":[\"grafana.cdk-labs.com\"],\"tls\":[{\"secretName\":\"grafana-server-tls\",\"hosts\":[\"grafana.cdk-labs.com\"]}]}}}",
+    "Namespace": "prometheus",
+    "Repository": "https://prometheus-community.github.io/helm-charts",
+    "CreateNamespace": true
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "HelmStack/HelmStack/prometheus/Resource/Default"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/zPSMzI01DNQTCwv1k1OydbNyUzSqw4uSUzO1kksL45PzS7W80jNyXXOSCwq0XEuLS7Jzw1KLc4vLUpOjVbSUtJBw7E6zml5MAW1Onn5Kal6WcX6ZUamekZ6hopZxZmZukWleSWZual6QRAaABz3H46CAAAA"
+   },
+   "Metadata": {
+    "aws:cdk:path": "HelmStack/CDKMetadata/Default"
+   }
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}
