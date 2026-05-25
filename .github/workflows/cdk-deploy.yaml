@@ -13,10 +13,6 @@ jobs:
   cdk_deploy:
     runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        working-directory: ./infra
-
     steps:
     - name: Checking out repository
       uses: actions/checkout@v6
@@ -28,6 +24,7 @@ jobs:
 
     - name: Installing dependencies for cdk project
       run: npm install
+      working-directory: ./infra
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v4
@@ -40,6 +37,7 @@ jobs:
 
     - name: Deploying EKS cluster and Helm charts
       run: npx cdk deploy --all --require-approval never
+      working-directory: ./infra
 
     - name: Setup kubectl
       uses: azure/setup-kubectl@v4
@@ -49,8 +47,8 @@ jobs:
 
     - name: Creating cluster issuer
       run: kubectl apply -f cert-manager/issuer.yaml
-      working-directory: ../k8s-manifest-files
+      working-directory: ./k8s-manifest-files
 
     - name: Deploying ArgoCD config
       run: kubectl apply -f argocd/argocd.yaml
-      working-directory: ../k8s-manifest-files
+      working-directory: ./k8s-manifest-files
