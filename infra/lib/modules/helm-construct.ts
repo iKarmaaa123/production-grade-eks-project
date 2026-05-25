@@ -28,7 +28,7 @@ export class HelmConstruct extends Construct {
      },
    });
 
-   new HelmChart(this, "cert-manager", {
+  const certManagerHelmChart = new HelmChart(this, "cert-manager", {
      cluster: props.cluster,
      chart: "cert-manager",
      repository: "https://charts.jetstack.io",
@@ -52,7 +52,7 @@ export class HelmConstruct extends Construct {
      }
    });
 
-    new HelmChart(this, "external-dns", {
+    const externalDNSHelmChart = new HelmChart(this, "external-dns", {
       cluster: props.cluster,
       chart: "external-dns",
       repository: "https://kubernetes-sigs.github.io/external-dns/",
@@ -79,7 +79,7 @@ export class HelmConstruct extends Construct {
       }
    });
 
-    new HelmChart(this, "argocd", {
+    const argocdHelmChart = new HelmChart(this, "argocd", {
       cluster: props.cluster,
       chart: "argo-cd",
       repository: "https://argoproj.github.io/argo-helm",
@@ -107,7 +107,7 @@ export class HelmConstruct extends Construct {
       }
     }).node.addDependency(ingressControllerHelmChart)
 
-    new HelmChart(this, "prometheus", {
+    const prometheusHelmChart = new HelmChart(this, "prometheus", {
       cluster: props.cluster,
       chart: "kube-prometheus-stack",
       repository: "https://prometheus-community.github.io/helm-charts",
