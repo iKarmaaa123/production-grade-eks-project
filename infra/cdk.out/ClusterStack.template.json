@@ -1,0 +1,1802 @@
+{
+ "Resources": {
+  "VpcConstructvpc8E1947B4": {
+   "Type": "AWS::EC2::VPC",
+   "Properties": {
+    "CidrBlock": "10.0.0.0/16",
+    "EnableDnsHostnames": true,
+    "EnableDnsSupport": true,
+    "InstanceTenancy": "default",
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "ClusterStack/VpcConstruct/vpc"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "ClusterStack/VpcConstruct/vpc/Resource"
+   }
+  },
+  "VpcConstructvpcpublicSubnet1Subnet79214DE2": {
+   "Type": "AWS::EC2::Subnet",
+   "Properties": {
+    "AvailabilityZone": "us-east-1a",
+    "CidrBlock": "10.0.0.0/24",
+    "MapPublicIpOnLaunch": true,
+    "Tags": [
+     {
+      "Key": "aws-cdk:subnet-name",
+      "Value": "public"
+     },
+     {
+      "Key": "aws-cdk:subnet-type",
+      "Value": "Public"
+     },
+     {
+      "Key": "kubernetes.io/role/elb",
+      "Value": "1"
+     },
+     {
+      "Key": "Name",
+      "Value": "ClusterStack/VpcConstruct/vpc/publicSubnet1"
+     }
+    ],
+    "VpcId": {
+     "Ref": "VpcConstructvpc8E1947B4"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ClusterStack/VpcConstruct/vpc/publicSubnet1/Subnet"
+   }
+  },
+  "VpcConstructvpcpublicSubnet1RouteTable7172B600": {
+   "Type": "AWS::EC2::RouteTable",
+   "Properties": {
+    "Tags": [
+     {
+      "Key": "kubernetes.io/role/elb",
+      "Value": "1"
+     },
+     {
+      "Key": "Name",
+      "Value": "ClusterStack/VpcConstruct/vpc/publicSubnet1"
+     }
+    ],
+    "VpcId": {
+     "Ref": "VpcConstructvpc8E1947B4"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ClusterStack/VpcConstruct/vpc/publicSubnet1/RouteTable"
+   }
+  },
+  "VpcConstructvpcpublicSubnet1RouteTableAssociation4743F842": {
+   "Type": "AWS::EC2::SubnetRouteTableAssociation",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "VpcConstructvpcpublicSubnet1RouteTable7172B600"
+    },
+    "SubnetId": {
+     "Ref": "VpcConstructvpcpublicSubnet1Subnet79214DE2"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ClusterStack/VpcConstruct/vpc/publicSubnet1/RouteTableAssociation"
+   }
+  },
+  "VpcConstructvpcpublicSubnet1DefaultRoute6C0DF14D": {
+   "Type": "AWS::EC2::Route",
+   "Properties": {
+    "DestinationCidrBlock": "0.0.0.0/0",
+    "GatewayId": {
+     "Ref": "VpcConstructvpcIGWA4FC0B4A"
+    },
+    "RouteTableId": {
+     "Ref": "VpcConstructvpcpublicSubnet1RouteTable7172B600"
+    }
+   },
+   "DependsOn": [
+    "VpcConstructvpcVPCGW6E4BADA6"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ClusterStack/VpcConstruct/vpc/publicSubnet1/DefaultRoute"
+   }
+  },
+  "VpcConstructvpcpublicSubnet1EIP4F56065D": {
+   "Type": "AWS::EC2::EIP",
+   "Properties": {
+    "Domain": "vpc",
+    "Tags": [
+     {
+      "Key": "kubernetes.io/role/elb",
+      "Value": "1"
+     },
+     {
+      "Key": "Name",
+      "Value": "ClusterStack/VpcConstruct/vpc/publicSubnet1"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "ClusterStack/VpcConstruct/vpc/publicSubnet1/EIP"
+   }
+  },
+  "VpcConstructvpcpublicSubnet1NATGateway866D3EDF": {
+   "Type": "AWS::EC2::NatGateway",
+   "Properties": {
+    "AllocationId": {
+     "Fn::GetAtt": [
+      "VpcConstructvpcpublicSubnet1EIP4F56065D",
+      "AllocationId"
+     ]
+    },
+    "SubnetId": {
+     "Ref": "VpcConstructvpcpublicSubnet1Subnet79214DE2"
+    },
+    "Tags": [
+     {
+      "Key": "kubernetes.io/role/elb",
+      "Value": "1"
+     },
+     {
+      "Key": "Name",
+      "Value": "ClusterStack/VpcConstruct/vpc/publicSubnet1"
+     }
+    ]
+   },
+   "DependsOn": [
+    "VpcConstructvpcpublicSubnet1DefaultRoute6C0DF14D",
+    "VpcConstructvpcpublicSubnet1RouteTableAssociation4743F842"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ClusterStack/VpcConstruct/vpc/publicSubnet1/NATGateway"
+   }
+  },
+  "VpcConstructvpcpublicSubnet2SubnetE0AE71C6": {
+   "Type": "AWS::EC2::Subnet",
+   "Properties": {
+    "AvailabilityZone": "us-east-1b",
+    "CidrBlock": "10.0.1.0/24",
+    "MapPublicIpOnLaunch": true,
+    "Tags": [
+     {
+      "Key": "aws-cdk:subnet-name",
+      "Value": "public"
+     },
+     {
+      "Key": "aws-cdk:subnet-type",
+      "Value": "Public"
+     },
+     {
+      "Key": "kubernetes.io/role/elb",
+      "Value": "1"
+     },
+     {
+      "Key": "Name",
+      "Value": "ClusterStack/VpcConstruct/vpc/publicSubnet2"
+     }
+    ],
+    "VpcId": {
+     "Ref": "VpcConstructvpc8E1947B4"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ClusterStack/VpcConstruct/vpc/publicSubnet2/Subnet"
+   }
+  },
+  "VpcConstructvpcpublicSubnet2RouteTableA2ED0A66": {
+   "Type": "AWS::EC2::RouteTable",
+   "Properties": {
+    "Tags": [
+     {
+      "Key": "kubernetes.io/role/elb",
+      "Value": "1"
+     },
+     {
+      "Key": "Name",
+      "Value": "ClusterStack/VpcConstruct/vpc/publicSubnet2"
+     }
+    ],
+    "VpcId": {
+     "Ref": "VpcConstructvpc8E1947B4"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ClusterStack/VpcConstruct/vpc/publicSubnet2/RouteTable"
+   }
+  },
+  "VpcConstructvpcpublicSubnet2RouteTableAssociation8FAC50EE": {
+   "Type": "AWS::EC2::SubnetRouteTableAssociation",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "VpcConstructvpcpublicSubnet2RouteTableA2ED0A66"
+    },
+    "SubnetId": {
+     "Ref": "VpcConstructvpcpublicSubnet2SubnetE0AE71C6"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ClusterStack/VpcConstruct/vpc/publicSubnet2/RouteTableAssociation"
+   }
+  },
+  "VpcConstructvpcpublicSubnet2DefaultRouteE63C9500": {
+   "Type": "AWS::EC2::Route",
+   "Properties": {
+    "DestinationCidrBlock": "0.0.0.0/0",
+    "GatewayId": {
+     "Ref": "VpcConstructvpcIGWA4FC0B4A"
+    },
+    "RouteTableId": {
+     "Ref": "VpcConstructvpcpublicSubnet2RouteTableA2ED0A66"
+    }
+   },
+   "DependsOn": [
+    "VpcConstructvpcVPCGW6E4BADA6"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ClusterStack/VpcConstruct/vpc/publicSubnet2/DefaultRoute"
+   }
+  },
+  "VpcConstructvpcprivateSubnet1SubnetE36AFEE8": {
+   "Type": "AWS::EC2::Subnet",
+   "Properties": {
+    "AvailabilityZone": "us-east-1a",
+    "CidrBlock": "10.0.2.0/24",
+    "MapPublicIpOnLaunch": false,
+    "Tags": [
+     {
+      "Key": "aws-cdk:subnet-name",
+      "Value": "private"
+     },
+     {
+      "Key": "aws-cdk:subnet-type",
+      "Value": "Private"
+     },
+     {
+      "Key": "kubernetes.io/role/internal-elb",
+      "Value": "1"
+     },
+     {
+      "Key": "Name",
+      "Value": "ClusterStack/VpcConstruct/vpc/privateSubnet1"
+     }
+    ],
+    "VpcId": {
+     "Ref": "VpcConstructvpc8E1947B4"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ClusterStack/VpcConstruct/vpc/privateSubnet1/Subnet"
+   }
+  },
+  "VpcConstructvpcprivateSubnet1RouteTableBA84011A": {
+   "Type": "AWS::EC2::RouteTable",
+   "Properties": {
+    "Tags": [
+     {
+      "Key": "kubernetes.io/role/internal-elb",
+      "Value": "1"
+     },
+     {
+      "Key": "Name",
+      "Value": "ClusterStack/VpcConstruct/vpc/privateSubnet1"
+     }
+    ],
+    "VpcId": {
+     "Ref": "VpcConstructvpc8E1947B4"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ClusterStack/VpcConstruct/vpc/privateSubnet1/RouteTable"
+   }
+  },
+  "VpcConstructvpcprivateSubnet1RouteTableAssociationD2E4C86C": {
+   "Type": "AWS::EC2::SubnetRouteTableAssociation",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "VpcConstructvpcprivateSubnet1RouteTableBA84011A"
+    },
+    "SubnetId": {
+     "Ref": "VpcConstructvpcprivateSubnet1SubnetE36AFEE8"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ClusterStack/VpcConstruct/vpc/privateSubnet1/RouteTableAssociation"
+   }
+  },
+  "VpcConstructvpcprivateSubnet1DefaultRoute7E635D7C": {
+   "Type": "AWS::EC2::Route",
+   "Properties": {
+    "DestinationCidrBlock": "0.0.0.0/0",
+    "NatGatewayId": {
+     "Ref": "VpcConstructvpcpublicSubnet1NATGateway866D3EDF"
+    },
+    "RouteTableId": {
+     "Ref": "VpcConstructvpcprivateSubnet1RouteTableBA84011A"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ClusterStack/VpcConstruct/vpc/privateSubnet1/DefaultRoute"
+   }
+  },
+  "VpcConstructvpcprivateSubnet2Subnet949404D4": {
+   "Type": "AWS::EC2::Subnet",
+   "Properties": {
+    "AvailabilityZone": "us-east-1b",
+    "CidrBlock": "10.0.3.0/24",
+    "MapPublicIpOnLaunch": false,
+    "Tags": [
+     {
+      "Key": "aws-cdk:subnet-name",
+      "Value": "private"
+     },
+     {
+      "Key": "aws-cdk:subnet-type",
+      "Value": "Private"
+     },
+     {
+      "Key": "kubernetes.io/role/internal-elb",
+      "Value": "1"
+     },
+     {
+      "Key": "Name",
+      "Value": "ClusterStack/VpcConstruct/vpc/privateSubnet2"
+     }
+    ],
+    "VpcId": {
+     "Ref": "VpcConstructvpc8E1947B4"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ClusterStack/VpcConstruct/vpc/privateSubnet2/Subnet"
+   }
+  },
+  "VpcConstructvpcprivateSubnet2RouteTable92A772CE": {
+   "Type": "AWS::EC2::RouteTable",
+   "Properties": {
+    "Tags": [
+     {
+      "Key": "kubernetes.io/role/internal-elb",
+      "Value": "1"
+     },
+     {
+      "Key": "Name",
+      "Value": "ClusterStack/VpcConstruct/vpc/privateSubnet2"
+     }
+    ],
+    "VpcId": {
+     "Ref": "VpcConstructvpc8E1947B4"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ClusterStack/VpcConstruct/vpc/privateSubnet2/RouteTable"
+   }
+  },
+  "VpcConstructvpcprivateSubnet2RouteTableAssociationEA5C142A": {
+   "Type": "AWS::EC2::SubnetRouteTableAssociation",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "VpcConstructvpcprivateSubnet2RouteTable92A772CE"
+    },
+    "SubnetId": {
+     "Ref": "VpcConstructvpcprivateSubnet2Subnet949404D4"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ClusterStack/VpcConstruct/vpc/privateSubnet2/RouteTableAssociation"
+   }
+  },
+  "VpcConstructvpcprivateSubnet2DefaultRoute9A5B1719": {
+   "Type": "AWS::EC2::Route",
+   "Properties": {
+    "DestinationCidrBlock": "0.0.0.0/0",
+    "NatGatewayId": {
+     "Ref": "VpcConstructvpcpublicSubnet1NATGateway866D3EDF"
+    },
+    "RouteTableId": {
+     "Ref": "VpcConstructvpcprivateSubnet2RouteTable92A772CE"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ClusterStack/VpcConstruct/vpc/privateSubnet2/DefaultRoute"
+   }
+  },
+  "VpcConstructvpcIGWA4FC0B4A": {
+   "Type": "AWS::EC2::InternetGateway",
+   "Properties": {
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "ClusterStack/VpcConstruct/vpc"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "ClusterStack/VpcConstruct/vpc/IGW"
+   }
+  },
+  "VpcConstructvpcVPCGW6E4BADA6": {
+   "Type": "AWS::EC2::VPCGatewayAttachment",
+   "Properties": {
+    "InternetGatewayId": {
+     "Ref": "VpcConstructvpcIGWA4FC0B4A"
+    },
+    "VpcId": {
+     "Ref": "VpcConstructvpc8E1947B4"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ClusterStack/VpcConstruct/vpc/VPCGW"
+   }
+  },
+  "VpcConstructvpcRestrictDefaultSecurityGroupCustomResource7FB70503": {
+   "Type": "Custom::VpcRestrictDefaultSG",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "CustomVpcRestrictDefaultSGCustomResourceProviderHandlerDC833E5E",
+      "Arn"
+     ]
+    },
+    "DefaultSecurityGroupId": {
+     "Fn::GetAtt": [
+      "VpcConstructvpc8E1947B4",
+      "DefaultSecurityGroup"
+     ]
+    },
+    "Account": "648767092427"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "ClusterStack/VpcConstruct/vpc/RestrictDefaultSecurityGroupCustomResource/Default"
+   }
+  },
+  "VpcConstructmySecurityGroup3FADC0E9": {
+   "Type": "AWS::EC2::SecurityGroup",
+   "Properties": {
+    "GroupDescription": "ClusterStack/VpcConstruct/mySecurityGroup",
+    "GroupName": "eks-project-security-group",
+    "SecurityGroupEgress": [
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "Allow all outbound traffic by default",
+      "IpProtocol": "-1"
+     }
+    ],
+    "SecurityGroupIngress": [
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "from 0.0.0.0/0:80",
+      "FromPort": 80,
+      "IpProtocol": "tcp",
+      "ToPort": 80
+     },
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "from 0.0.0.0/0:443",
+      "FromPort": 443,
+      "IpProtocol": "tcp",
+      "ToPort": 443
+     }
+    ],
+    "VpcId": {
+     "Ref": "VpcConstructvpc8E1947B4"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ClusterStack/VpcConstruct/mySecurityGroup/Resource"
+   }
+  },
+  "CustomVpcRestrictDefaultSGCustomResourceProviderRole26592FE0": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Version": "2012-10-17",
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ]
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Sub": "arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+     }
+    ],
+    "Policies": [
+     {
+      "PolicyName": "Inline",
+      "PolicyDocument": {
+       "Version": "2012-10-17",
+       "Statement": [
+        {
+         "Effect": "Allow",
+         "Action": [
+          "ec2:AuthorizeSecurityGroupIngress",
+          "ec2:AuthorizeSecurityGroupEgress",
+          "ec2:RevokeSecurityGroupIngress",
+          "ec2:RevokeSecurityGroupEgress"
+         ],
+         "Resource": [
+          {
+           "Fn::Join": [
+            "",
+            [
+             "arn:aws:ec2:us-east-1:648767092427:security-group/",
+             {
+              "Fn::GetAtt": [
+               "VpcConstructvpc8E1947B4",
+               "DefaultSecurityGroup"
+              ]
+             }
+            ]
+           ]
+          }
+         ]
+        }
+       ]
+      }
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "ClusterStack/Custom::VpcRestrictDefaultSGCustomResourceProvider/Role"
+   }
+  },
+  "CustomVpcRestrictDefaultSGCustomResourceProviderHandlerDC833E5E": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-648767092427-us-east-1",
+     "S3Key": "7fa1e366ee8a9ded01fc355f704cff92bfd179574e6f9cfee800a3541df1b200.zip"
+    },
+    "Timeout": 900,
+    "MemorySize": 128,
+    "Handler": "__entrypoint__.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "CustomVpcRestrictDefaultSGCustomResourceProviderRole26592FE0",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs22.x",
+    "Description": "Lambda function for removing all inbound/outbound rules from the VPC default security group"
+   },
+   "DependsOn": [
+    "CustomVpcRestrictDefaultSGCustomResourceProviderRole26592FE0"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ClusterStack/Custom::VpcRestrictDefaultSGCustomResourceProvider/Handler",
+    "aws:asset:path": "asset.7fa1e366ee8a9ded01fc355f704cff92bfd179574e6f9cfee800a3541df1b200",
+    "aws:asset:property": "Code"
+   }
+  },
+  "IamConstructeksClusterNodeGroupRole0DDF4F52": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "ec2.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/AmazonEKSWorkerNodePolicy"
+       ]
+      ]
+     },
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+       ]
+      ]
+     },
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/AmazonEKS_CNI_Policy"
+       ]
+      ]
+     }
+    ],
+    "RoleName": "eksClusterNodeGroupRole"
+   },
+   "Metadata": {
+    "aws:cdk:path": "ClusterStack/IamConstruct/eksClusterNodeGroupRole/Resource"
+   }
+  },
+  "kubectl290BBFC9": {
+   "Type": "AWS::Lambda::LayerVersion",
+   "Properties": {
+    "Content": {
+     "S3Bucket": "cdk-hnb659fds-assets-648767092427-us-east-1",
+     "S3Key": "6094cb0ff874f89ab5ab24fb6b9417df0fdeb6966645f90c88ec1d7e28130112.zip"
+    },
+    "Description": "/opt/kubectl/kubectl 1.32.3; /opt/helm/helm 3.17.2",
+    "LicenseInfo": "Apache-2.0"
+   },
+   "Metadata": {
+    "aws:cdk:path": "ClusterStack/kubectl/Resource",
+    "aws:asset:path": "asset.6094cb0ff874f89ab5ab24fb6b9417df0fdeb6966645f90c88ec1d7e28130112.zip",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Content"
+   }
+  },
+  "ClusterConstructHelloEKSKubectlHandlerRole0D0A1444": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     },
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+       ]
+      ]
+     },
+     {
+      "Fn::If": [
+       "ClusterConstructHelloEKSHasEcrPublic55EA3ABF",
+       {
+        "Fn::Join": [
+         "",
+         [
+          "arn:",
+          {
+           "Ref": "AWS::Partition"
+          },
+          ":iam::aws:policy/AmazonElasticContainerRegistryPublicReadOnly"
+         ]
+        ]
+       },
+       {
+        "Ref": "AWS::NoValue"
+       }
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "ClusterStack/ClusterConstruct/HelloEKS/KubectlHandlerRole/Resource"
+   }
+  },
+  "ClusterConstructHelloEKSKubectlHandlerRoleDefaultPolicyBB035267": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "eks:DescribeCluster",
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "ClusterConstructHelloEKS1905E085",
+         "Arn"
+        ]
+       }
+      },
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "ClusterConstructHelloEKSCreationRole1EAD51DA",
+         "Arn"
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "ClusterConstructHelloEKSKubectlHandlerRoleDefaultPolicyBB035267",
+    "Roles": [
+     {
+      "Ref": "ClusterConstructHelloEKSKubectlHandlerRole0D0A1444"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "ClusterStack/ClusterConstruct/HelloEKS/KubectlHandlerRole/DefaultPolicy/Resource"
+   }
+  },
+  "ClusterConstructHelloEKSRole06A0FEF4": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "eks.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/AmazonEKSClusterPolicy"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "ClusterStack/ClusterConstruct/HelloEKS/Role/Resource"
+   }
+  },
+  "ClusterConstructHelloEKSControlPlaneSecurityGroup87561446": {
+   "Type": "AWS::EC2::SecurityGroup",
+   "Properties": {
+    "GroupDescription": "EKS Control Plane Security Group",
+    "SecurityGroupEgress": [
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "Allow all outbound traffic by default",
+      "IpProtocol": "-1"
+     }
+    ],
+    "VpcId": {
+     "Ref": "VpcConstructvpc8E1947B4"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ClusterStack/ClusterConstruct/HelloEKS/ControlPlaneSecurityGroup/Resource"
+   }
+  },
+  "ClusterConstructHelloEKSCreationRole1EAD51DA": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "AWS": [
+         {
+          "Fn::GetAtt": [
+           "ClusterConstructHelloEKSKubectlHandlerRole0D0A1444",
+           "Arn"
+          ]
+         },
+         {
+          "Fn::GetAtt": [
+           "awscdkawseksClusterResourceProviderNestedStackawscdkawseksClusterResourceProviderNestedStackResource9827C454",
+           "Outputs.ClusterStackawscdkawseksClusterResourceProviderIsCompleteHandlerServiceRoleC5FDB7CBArn"
+          ]
+         },
+         {
+          "Fn::GetAtt": [
+           "awscdkawseksClusterResourceProviderNestedStackawscdkawseksClusterResourceProviderNestedStackResource9827C454",
+           "Outputs.ClusterStackawscdkawseksClusterResourceProviderOnEventHandlerServiceRoleF1CFB156Arn"
+          ]
+         }
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ClusterStack/ClusterConstruct/HelloEKS/Resource/CreationRole/Resource"
+   }
+  },
+  "ClusterConstructHelloEKSCreationRoleDefaultPolicy08E8BA61": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "iam:PassRole",
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "ClusterConstructHelloEKSRole06A0FEF4",
+         "Arn"
+        ]
+       }
+      },
+      {
+       "Action": [
+        "eks:CreateCluster",
+        "eks:CreateFargateProfile",
+        "eks:DeleteCluster",
+        "eks:DescribeCluster",
+        "eks:DescribeUpdate",
+        "eks:TagResource",
+        "eks:UntagResource",
+        "eks:UpdateClusterConfig",
+        "eks:UpdateClusterVersion"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        "arn:aws:eks:us-east-1:648767092427:cluster/eks-project-cluster",
+        "arn:aws:eks:us-east-1:648767092427:cluster/eks-project-cluster/*"
+       ]
+      },
+      {
+       "Action": [
+        "eks:DeleteFargateProfile",
+        "eks:DescribeFargateProfile"
+       ],
+       "Effect": "Allow",
+       "Resource": "arn:aws:eks:us-east-1:648767092427:fargateprofile/eks-project-cluster/*"
+      },
+      {
+       "Action": [
+        "ec2:DescribeDhcpOptions",
+        "ec2:DescribeInstances",
+        "ec2:DescribeNetworkInterfaces",
+        "ec2:DescribeRouteTables",
+        "ec2:DescribeSecurityGroups",
+        "ec2:DescribeSubnets",
+        "ec2:DescribeVpcs",
+        "iam:CreateServiceLinkedRole",
+        "iam:GetRole",
+        "iam:listAttachedRolePolicies"
+       ],
+       "Effect": "Allow",
+       "Resource": "*"
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "ClusterConstructHelloEKSCreationRoleDefaultPolicy08E8BA61",
+    "Roles": [
+     {
+      "Ref": "ClusterConstructHelloEKSCreationRole1EAD51DA"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "ClusterStack/ClusterConstruct/HelloEKS/Resource/CreationRole/DefaultPolicy/Resource"
+   }
+  },
+  "ClusterConstructHelloEKS1905E085": {
+   "Type": "Custom::AWSCDK-EKS-Cluster",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "awscdkawseksClusterResourceProviderNestedStackawscdkawseksClusterResourceProviderNestedStackResource9827C454",
+      "Outputs.ClusterStackawscdkawseksClusterResourceProviderframeworkonEvent74B2E770Arn"
+     ]
+    },
+    "Config": {
+     "name": "eks-project-cluster",
+     "version": "1.32",
+     "roleArn": {
+      "Fn::GetAtt": [
+       "ClusterConstructHelloEKSRole06A0FEF4",
+       "Arn"
+      ]
+     },
+     "kubernetesNetworkConfig": {
+      "ipFamily": "ipv4"
+     },
+     "resourcesVpcConfig": {
+      "subnetIds": [
+       {
+        "Ref": "VpcConstructvpcprivateSubnet1SubnetE36AFEE8"
+       },
+       {
+        "Ref": "VpcConstructvpcprivateSubnet2Subnet949404D4"
+       }
+      ],
+      "securityGroupIds": [
+       {
+        "Fn::GetAtt": [
+         "ClusterConstructHelloEKSControlPlaneSecurityGroup87561446",
+         "GroupId"
+        ]
+       }
+      ],
+      "endpointPublicAccess": true,
+      "endpointPrivateAccess": false
+     },
+     "accessConfig": {
+      "authenticationMode": "API_AND_CONFIG_MAP"
+     }
+    },
+    "AssumeRoleArn": {
+     "Fn::GetAtt": [
+      "ClusterConstructHelloEKSCreationRole1EAD51DA",
+      "Arn"
+     ]
+    },
+    "AttributesRevision": 5
+   },
+   "DependsOn": [
+    "ClusterConstructHelloEKSCreationRoleDefaultPolicy08E8BA61",
+    "ClusterConstructHelloEKSCreationRole1EAD51DA"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "ClusterStack/ClusterConstruct/HelloEKS/Resource/Resource/Default"
+   }
+  },
+  "ClusterConstructHelloEKSKubectlReadyBarrier1E6CFA15": {
+   "Type": "AWS::SSM::Parameter",
+   "Properties": {
+    "Type": "String",
+    "Value": "aws:cdk:eks:kubectl-ready"
+   },
+   "DependsOn": [
+    "ClusterConstructHelloEKSCreationRoleDefaultPolicy08E8BA61",
+    "ClusterConstructHelloEKSCreationRole1EAD51DA",
+    "ClusterConstructHelloEKS1905E085"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ClusterStack/ClusterConstruct/HelloEKS/KubectlReadyBarrier"
+   }
+  },
+  "ClusterConstructHelloEKSNodegroupASG04BEB613": {
+   "Type": "AWS::EKS::Nodegroup",
+   "Properties": {
+    "ClusterName": {
+     "Ref": "ClusterConstructHelloEKS1905E085"
+    },
+    "ForceUpdateEnabled": true,
+    "NodeRole": {
+     "Fn::GetAtt": [
+      "IamConstructeksClusterNodeGroupRole0DDF4F52",
+      "Arn"
+     ]
+    },
+    "ScalingConfig": {
+     "DesiredSize": 2,
+     "MaxSize": 4,
+     "MinSize": 1
+    },
+    "Subnets": [
+     {
+      "Ref": "VpcConstructvpcprivateSubnet1SubnetE36AFEE8"
+     },
+     {
+      "Ref": "VpcConstructvpcprivateSubnet2Subnet949404D4"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "ClusterStack/ClusterConstruct/HelloEKS/NodegroupASG/Resource"
+   }
+  },
+  "ClusterConstructHelloEKSAwsAuthmanifest7D42F709": {
+   "Type": "Custom::AWSCDK-EKS-KubernetesResource",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "awscdkawseksKubectlProviderNestedStackawscdkawseksKubectlProviderNestedStackResourceA7AEBA6B",
+      "Outputs.ClusterStackawscdkawseksKubectlProviderframeworkonEvent8D73200DArn"
+     ]
+    },
+    "Manifest": {
+     "Fn::Join": [
+      "",
+      [
+       "[{\"apiVersion\":\"v1\",\"kind\":\"ConfigMap\",\"metadata\":{\"name\":\"aws-auth\",\"namespace\":\"kube-system\",\"labels\":{\"aws.cdk.eks/prune-c8dac259a85f2ff349bc3d9bb8ccf071386a25788d\":\"\"}},\"data\":{\"mapRoles\":\"[{\\\"rolearn\\\":\\\"",
+       {
+        "Fn::GetAtt": [
+         "IamConstructeksClusterNodeGroupRole0DDF4F52",
+         "Arn"
+        ]
+       },
+       "\\\",\\\"username\\\":\\\"system:node:{{EC2PrivateDNSName}}\\\",\\\"groups\\\":[\\\"system:bootstrappers\\\",\\\"system:nodes\\\"]}]\",\"mapUsers\":\"[]\",\"mapAccounts\":\"[]\"}}]"
+      ]
+     ]
+    },
+    "ClusterName": {
+     "Ref": "ClusterConstructHelloEKS1905E085"
+    },
+    "RoleArn": {
+     "Fn::GetAtt": [
+      "ClusterConstructHelloEKSCreationRole1EAD51DA",
+      "Arn"
+     ]
+    },
+    "PruneLabel": "aws.cdk.eks/prune-c8dac259a85f2ff349bc3d9bb8ccf071386a25788d",
+    "Overwrite": true
+   },
+   "DependsOn": [
+    "ClusterConstructHelloEKSKubectlReadyBarrier1E6CFA15"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "ClusterStack/ClusterConstruct/HelloEKS/AwsAuth/manifest/Resource/Default"
+   }
+  },
+  "ClusterConstructHelloEKSadminClusterAccess34A72689": {
+   "Type": "AWS::EKS::AccessEntry",
+   "Properties": {
+    "AccessPolicies": [
+     {
+      "AccessScope": {
+       "Type": "cluster"
+      },
+      "PolicyArn": {
+       "Fn::Join": [
+        "",
+        [
+         "arn:",
+         {
+          "Ref": "AWS::Partition"
+         },
+         ":eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
+        ]
+       ]
+      }
+     }
+    ],
+    "ClusterName": {
+     "Ref": "ClusterConstructHelloEKS1905E085"
+    },
+    "PrincipalArn": "arn:aws:iam::648767092427:user/project"
+   },
+   "Metadata": {
+    "aws:cdk:path": "ClusterStack/ClusterConstruct/HelloEKS/adminClusterAccess/Resource"
+   }
+  },
+  "ClusterConstructHelloEKSmanifestcertmanager9BF17B05": {
+   "Type": "Custom::AWSCDK-EKS-KubernetesResource",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "awscdkawseksKubectlProviderNestedStackawscdkawseksKubectlProviderNestedStackResourceA7AEBA6B",
+      "Outputs.ClusterStackawscdkawseksKubectlProviderframeworkonEvent8D73200DArn"
+     ]
+    },
+    "Manifest": "[{\"apiVersion\":\"v1\",\"kind\":\"Namespace\",\"metadata\":{\"name\":\"cert-manager\",\"labels\":{\"aws.cdk.eks/prune-c88118576f839ebfd2b805f87f2cd9e7f1dd882efa\":\"\"}}}]",
+    "ClusterName": {
+     "Ref": "ClusterConstructHelloEKS1905E085"
+    },
+    "RoleArn": {
+     "Fn::GetAtt": [
+      "ClusterConstructHelloEKSCreationRole1EAD51DA",
+      "Arn"
+     ]
+    },
+    "PruneLabel": "aws.cdk.eks/prune-c88118576f839ebfd2b805f87f2cd9e7f1dd882efa"
+   },
+   "DependsOn": [
+    "ClusterConstructHelloEKSKubectlReadyBarrier1E6CFA15"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "ClusterStack/ClusterConstruct/HelloEKS/manifest-cert-manager/Resource/Default"
+   }
+  },
+  "ClusterConstructHelloEKSmanifestexternaldns3EA7DD89": {
+   "Type": "Custom::AWSCDK-EKS-KubernetesResource",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "awscdkawseksKubectlProviderNestedStackawscdkawseksKubectlProviderNestedStackResourceA7AEBA6B",
+      "Outputs.ClusterStackawscdkawseksKubectlProviderframeworkonEvent8D73200DArn"
+     ]
+    },
+    "Manifest": "[{\"apiVersion\":\"v1\",\"kind\":\"Namespace\",\"metadata\":{\"name\":\"external-dns\",\"labels\":{\"aws.cdk.eks/prune-c8816367b0ddc0a4e3fe55e28c0fd7541372deb10e\":\"\"}}}]",
+    "ClusterName": {
+     "Ref": "ClusterConstructHelloEKS1905E085"
+    },
+    "RoleArn": {
+     "Fn::GetAtt": [
+      "ClusterConstructHelloEKSCreationRole1EAD51DA",
+      "Arn"
+     ]
+    },
+    "PruneLabel": "aws.cdk.eks/prune-c8816367b0ddc0a4e3fe55e28c0fd7541372deb10e"
+   },
+   "DependsOn": [
+    "ClusterConstructHelloEKSKubectlReadyBarrier1E6CFA15"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "ClusterStack/ClusterConstruct/HelloEKS/manifest-external-dns/Resource/Default"
+   }
+  },
+  "ClusterConstructHelloEKScertmanagerConditionJson86155E52": {
+   "Type": "Custom::AWSCDKCfnJson",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "AWSCDKCfnUtilsProviderCustomResourceProviderHandlerCF82AA57",
+      "Arn"
+     ]
+    },
+    "Value": {
+     "Fn::Join": [
+      "",
+      [
+       "{\"",
+       {
+        "Fn::Select": [
+         1,
+         {
+          "Fn::Split": [
+           ":oidc-provider/",
+           {
+            "Ref": "ClusterConstructHelloEKSOpenIdConnectProvider6B1941C0"
+           }
+          ]
+         }
+        ]
+       },
+       ":aud\":\"sts.amazonaws.com\",\"",
+       {
+        "Fn::Select": [
+         1,
+         {
+          "Fn::Split": [
+           ":oidc-provider/",
+           {
+            "Ref": "ClusterConstructHelloEKSOpenIdConnectProvider6B1941C0"
+           }
+          ]
+         }
+        ]
+       },
+       ":sub\":\"system:serviceaccount:cert-manager:clusterstackclusterconstructhelloekscertmanager30f5d81f\"}"
+      ]
+     ]
+    }
+   },
+   "DependsOn": [
+    "ClusterConstructHelloEKSmanifestcertmanager9BF17B05"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "ClusterStack/ClusterConstruct/HelloEKS/cert-manager/ConditionJson/Resource/Default"
+   }
+  },
+  "ClusterConstructHelloEKScertmanagerRole995FD16C": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRoleWithWebIdentity",
+       "Condition": {
+        "StringEquals": {
+         "Fn::GetAtt": [
+          "ClusterConstructHelloEKScertmanagerConditionJson86155E52",
+          "Value"
+         ]
+        }
+       },
+       "Effect": "Allow",
+       "Principal": {
+        "Federated": {
+         "Ref": "ClusterConstructHelloEKSOpenIdConnectProvider6B1941C0"
+        }
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "DependsOn": [
+    "ClusterConstructHelloEKSmanifestcertmanager9BF17B05"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ClusterStack/ClusterConstruct/HelloEKS/cert-manager/Role/Resource"
+   }
+  },
+  "ClusterConstructHelloEKScertmanagerRoleDefaultPolicy839EA6CB": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "route53:ChangeResourceRecordSets",
+        "route53:GetChange",
+        "route53:ListHostedZones",
+        "route53:ListHostedZonesByName",
+        "route53:ListResourceRecordSets"
+       ],
+       "Effect": "Allow",
+       "Resource": "*"
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "ClusterConstructHelloEKScertmanagerRoleDefaultPolicy839EA6CB",
+    "Roles": [
+     {
+      "Ref": "ClusterConstructHelloEKScertmanagerRole995FD16C"
+     }
+    ]
+   },
+   "DependsOn": [
+    "ClusterConstructHelloEKSmanifestcertmanager9BF17B05"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ClusterStack/ClusterConstruct/HelloEKS/cert-manager/Role/DefaultPolicy/Resource"
+   }
+  },
+  "ClusterConstructHelloEKScertmanagermanifestcertmanagerServiceAccountResourceEE7FDBBF": {
+   "Type": "Custom::AWSCDK-EKS-KubernetesResource",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "awscdkawseksKubectlProviderNestedStackawscdkawseksKubectlProviderNestedStackResourceA7AEBA6B",
+      "Outputs.ClusterStackawscdkawseksKubectlProviderframeworkonEvent8D73200DArn"
+     ]
+    },
+    "Manifest": {
+     "Fn::Join": [
+      "",
+      [
+       "[{\"apiVersion\":\"v1\",\"kind\":\"ServiceAccount\",\"metadata\":{\"name\":\"clusterstackclusterconstructhelloekscertmanager30f5d81f\",\"namespace\":\"cert-manager\",\"labels\":{\"aws.cdk.eks/prune-c852a041e42e5108dda0d1c7fa28ef7ee8b97df317\":\"\",\"app.kubernetes.io/name\":\"clusterstackclusterconstructhelloekscertmanager30f5d81f\",\"app.kubernetes.io/managed-by\":\"Helm\"},\"annotations\":{\"eks.amazonaws.com/role-arn\":\"",
+       {
+        "Fn::GetAtt": [
+         "ClusterConstructHelloEKScertmanagerRole995FD16C",
+         "Arn"
+        ]
+       },
+       "\",\"meta.helm.sh/release-name\":\"cert-manager\",\"meta.helm.sh/release-namespace\":\"cert-manager\"}}}]"
+      ]
+     ]
+    },
+    "ClusterName": {
+     "Ref": "ClusterConstructHelloEKS1905E085"
+    },
+    "RoleArn": {
+     "Fn::GetAtt": [
+      "ClusterConstructHelloEKSCreationRole1EAD51DA",
+      "Arn"
+     ]
+    },
+    "PruneLabel": "aws.cdk.eks/prune-c852a041e42e5108dda0d1c7fa28ef7ee8b97df317"
+   },
+   "DependsOn": [
+    "ClusterConstructHelloEKSKubectlReadyBarrier1E6CFA15",
+    "ClusterConstructHelloEKSmanifestcertmanager9BF17B05"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "ClusterStack/ClusterConstruct/HelloEKS/cert-manager/manifest-cert-managerServiceAccountResource/Resource/Default"
+   }
+  },
+  "ClusterConstructHelloEKSOpenIdConnectProvider6B1941C0": {
+   "Type": "Custom::AWSCDKOpenIdConnectProvider",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "CustomAWSCDKOpenIdConnectProviderCustomResourceProviderHandlerF2C543E0",
+      "Arn"
+     ]
+    },
+    "ClientIDList": [
+     "sts.amazonaws.com"
+    ],
+    "Url": {
+     "Fn::GetAtt": [
+      "ClusterConstructHelloEKS1905E085",
+      "OpenIdConnectIssuerUrl"
+     ]
+    },
+    "RejectUnauthorized": true,
+    "CodeHash": "62fa02efcaa700e1c247e1d3cc2aa0cd07a0808a9a3e3d2230e51f57a02233fb"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "ClusterStack/ClusterConstruct/HelloEKS/OpenIdConnectProvider/Resource/Default"
+   }
+  },
+  "ClusterConstructHelloEKSexternaldnsConditionJson4BD8AD11": {
+   "Type": "Custom::AWSCDKCfnJson",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "AWSCDKCfnUtilsProviderCustomResourceProviderHandlerCF82AA57",
+      "Arn"
+     ]
+    },
+    "Value": {
+     "Fn::Join": [
+      "",
+      [
+       "{\"",
+       {
+        "Fn::Select": [
+         1,
+         {
+          "Fn::Split": [
+           ":oidc-provider/",
+           {
+            "Ref": "ClusterConstructHelloEKSOpenIdConnectProvider6B1941C0"
+           }
+          ]
+         }
+        ]
+       },
+       ":aud\":\"sts.amazonaws.com\",\"",
+       {
+        "Fn::Select": [
+         1,
+         {
+          "Fn::Split": [
+           ":oidc-provider/",
+           {
+            "Ref": "ClusterConstructHelloEKSOpenIdConnectProvider6B1941C0"
+           }
+          ]
+         }
+        ]
+       },
+       ":sub\":\"system:serviceaccount:external-dns:clusterstackclusterconstructhelloeksexternaldnse7a69a20\"}"
+      ]
+     ]
+    }
+   },
+   "DependsOn": [
+    "ClusterConstructHelloEKSmanifestexternaldns3EA7DD89"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "ClusterStack/ClusterConstruct/HelloEKS/external-dns/ConditionJson/Resource/Default"
+   }
+  },
+  "ClusterConstructHelloEKSexternaldnsRoleAA552CC2": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRoleWithWebIdentity",
+       "Condition": {
+        "StringEquals": {
+         "Fn::GetAtt": [
+          "ClusterConstructHelloEKSexternaldnsConditionJson4BD8AD11",
+          "Value"
+         ]
+        }
+       },
+       "Effect": "Allow",
+       "Principal": {
+        "Federated": {
+         "Ref": "ClusterConstructHelloEKSOpenIdConnectProvider6B1941C0"
+        }
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "DependsOn": [
+    "ClusterConstructHelloEKSmanifestexternaldns3EA7DD89"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ClusterStack/ClusterConstruct/HelloEKS/external-dns/Role/Resource"
+   }
+  },
+  "ClusterConstructHelloEKSexternaldnsRoleDefaultPolicyC77051CE": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "route53:ChangeResourceRecordSets",
+        "route53:GetChange",
+        "route53:ListHostedZones",
+        "route53:ListHostedZonesByName",
+        "route53:ListResourceRecordSets"
+       ],
+       "Effect": "Allow",
+       "Resource": "*"
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "ClusterConstructHelloEKSexternaldnsRoleDefaultPolicyC77051CE",
+    "Roles": [
+     {
+      "Ref": "ClusterConstructHelloEKSexternaldnsRoleAA552CC2"
+     }
+    ]
+   },
+   "DependsOn": [
+    "ClusterConstructHelloEKSmanifestexternaldns3EA7DD89"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ClusterStack/ClusterConstruct/HelloEKS/external-dns/Role/DefaultPolicy/Resource"
+   }
+  },
+  "ClusterConstructHelloEKSexternaldnsmanifestexternaldnsServiceAccountResource5099E933": {
+   "Type": "Custom::AWSCDK-EKS-KubernetesResource",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "awscdkawseksKubectlProviderNestedStackawscdkawseksKubectlProviderNestedStackResourceA7AEBA6B",
+      "Outputs.ClusterStackawscdkawseksKubectlProviderframeworkonEvent8D73200DArn"
+     ]
+    },
+    "Manifest": {
+     "Fn::Join": [
+      "",
+      [
+       "[{\"apiVersion\":\"v1\",\"kind\":\"ServiceAccount\",\"metadata\":{\"name\":\"clusterstackclusterconstructhelloeksexternaldnse7a69a20\",\"namespace\":\"external-dns\",\"labels\":{\"aws.cdk.eks/prune-c8c8c25e1de349bfb6576bea52db6cb06aa02a9601\":\"\",\"app.kubernetes.io/name\":\"clusterstackclusterconstructhelloeksexternaldnse7a69a20\",\"app.kubernetes.io/managed-by\":\"Helm\"},\"annotations\":{\"eks.amazonaws.com/role-arn\":\"",
+       {
+        "Fn::GetAtt": [
+         "ClusterConstructHelloEKSexternaldnsRoleAA552CC2",
+         "Arn"
+        ]
+       },
+       "\",\"meta.helm.sh/release-name\":\"external-dns\",\"meta.helm.sh/release-namespace\":\"external-dns\"}}}]"
+      ]
+     ]
+    },
+    "ClusterName": {
+     "Ref": "ClusterConstructHelloEKS1905E085"
+    },
+    "RoleArn": {
+     "Fn::GetAtt": [
+      "ClusterConstructHelloEKSCreationRole1EAD51DA",
+      "Arn"
+     ]
+    },
+    "PruneLabel": "aws.cdk.eks/prune-c8c8c25e1de349bfb6576bea52db6cb06aa02a9601"
+   },
+   "DependsOn": [
+    "ClusterConstructHelloEKSKubectlReadyBarrier1E6CFA15",
+    "ClusterConstructHelloEKSmanifestexternaldns3EA7DD89"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "ClusterStack/ClusterConstruct/HelloEKS/external-dns/manifest-external-dnsServiceAccountResource/Resource/Default"
+   }
+  },
+  "awscdkawseksClusterResourceProviderNestedStackawscdkawseksClusterResourceProviderNestedStackResource9827C454": {
+   "Type": "AWS::CloudFormation::Stack",
+   "Properties": {
+    "TemplateURL": {
+     "Fn::Join": [
+      "",
+      [
+       "https://s3.us-east-1.",
+       {
+        "Ref": "AWS::URLSuffix"
+       },
+       "/cdk-hnb659fds-assets-648767092427-us-east-1/c56f70a7b67d7392b743a531bc07fbc0c4df903fd7c800d2458babc7b665991d.json"
+      ]
+     ]
+    }
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "ClusterStack/@aws-cdk--aws-eks.ClusterResourceProvider.NestedStack/@aws-cdk--aws-eks.ClusterResourceProvider.NestedStackResource",
+    "aws:asset:path": "ClusterStackawscdkawseksClusterResourceProviderFB371BF6.nested.template.json",
+    "aws:asset:property": "TemplateURL"
+   }
+  },
+  "awscdkawseksKubectlProviderNestedStackawscdkawseksKubectlProviderNestedStackResourceA7AEBA6B": {
+   "Type": "AWS::CloudFormation::Stack",
+   "Properties": {
+    "Parameters": {
+     "referencetoClusterStackkubectlFEA903F1Ref": {
+      "Ref": "kubectl290BBFC9"
+     },
+     "referencetoClusterStackClusterConstructHelloEKSKubectlHandlerRoleDF99ED16Arn": {
+      "Fn::GetAtt": [
+       "ClusterConstructHelloEKSKubectlHandlerRole0D0A1444",
+       "Arn"
+      ]
+     }
+    },
+    "TemplateURL": {
+     "Fn::Join": [
+      "",
+      [
+       "https://s3.us-east-1.",
+       {
+        "Ref": "AWS::URLSuffix"
+       },
+       "/cdk-hnb659fds-assets-648767092427-us-east-1/9bc9e3e9137384e18b68ef0b37cd50da19aee5b30e499416735d721a19aab7c1.json"
+      ]
+     ]
+    }
+   },
+   "DependsOn": [
+    "ClusterConstructHelloEKSKubectlHandlerRoleDefaultPolicyBB035267",
+    "ClusterConstructHelloEKSKubectlHandlerRole0D0A1444"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "ClusterStack/@aws-cdk--aws-eks.KubectlProvider.NestedStack/@aws-cdk--aws-eks.KubectlProvider.NestedStackResource",
+    "aws:asset:path": "ClusterStackawscdkawseksKubectlProviderA827E1EA.nested.template.json",
+    "aws:asset:property": "TemplateURL"
+   }
+  },
+  "CustomAWSCDKOpenIdConnectProviderCustomResourceProviderRole517FED65": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Version": "2012-10-17",
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ]
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Sub": "arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+     }
+    ],
+    "Policies": [
+     {
+      "PolicyName": "Inline",
+      "PolicyDocument": {
+       "Version": "2012-10-17",
+       "Statement": [
+        {
+         "Effect": "Allow",
+         "Resource": "*",
+         "Action": [
+          "iam:CreateOpenIDConnectProvider",
+          "iam:DeleteOpenIDConnectProvider",
+          "iam:UpdateOpenIDConnectProviderThumbprint",
+          "iam:AddClientIDToOpenIDConnectProvider",
+          "iam:RemoveClientIDFromOpenIDConnectProvider"
+         ]
+        }
+       ]
+      }
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "ClusterStack/Custom::AWSCDKOpenIdConnectProviderCustomResourceProvider/Role"
+   }
+  },
+  "CustomAWSCDKOpenIdConnectProviderCustomResourceProviderHandlerF2C543E0": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-648767092427-us-east-1",
+     "S3Key": "62fa02efcaa700e1c247e1d3cc2aa0cd07a0808a9a3e3d2230e51f57a02233fb.zip"
+    },
+    "Timeout": 900,
+    "MemorySize": 128,
+    "Handler": "__entrypoint__.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "CustomAWSCDKOpenIdConnectProviderCustomResourceProviderRole517FED65",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs22.x"
+   },
+   "DependsOn": [
+    "CustomAWSCDKOpenIdConnectProviderCustomResourceProviderRole517FED65"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ClusterStack/Custom::AWSCDKOpenIdConnectProviderCustomResourceProvider/Handler",
+    "aws:asset:path": "asset.62fa02efcaa700e1c247e1d3cc2aa0cd07a0808a9a3e3d2230e51f57a02233fb",
+    "aws:asset:property": "Code"
+   }
+  },
+  "AWSCDKCfnUtilsProviderCustomResourceProviderRoleFE0EE867": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Version": "2012-10-17",
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ]
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Sub": "arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "ClusterStack/AWSCDKCfnUtilsProviderCustomResourceProvider/Role"
+   }
+  },
+  "AWSCDKCfnUtilsProviderCustomResourceProviderHandlerCF82AA57": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-648767092427-us-east-1",
+     "S3Key": "c398d076c966a47ee4ef862fbaf5ea530bf035b867a0195292c99f77b323ed80.zip"
+    },
+    "Timeout": 900,
+    "MemorySize": 128,
+    "Handler": "__entrypoint__.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "AWSCDKCfnUtilsProviderCustomResourceProviderRoleFE0EE867",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs22.x"
+   },
+   "DependsOn": [
+    "AWSCDKCfnUtilsProviderCustomResourceProviderRoleFE0EE867"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ClusterStack/AWSCDKCfnUtilsProviderCustomResourceProvider/Handler",
+    "aws:asset:path": "asset.c398d076c966a47ee4ef862fbaf5ea530bf035b867a0195292c99f77b323ed80",
+    "aws:asset:property": "Code"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/91Y3W/bNhD/W8rHgFYXB+tDnqaoXeC1SYw4yMMEw6DJs8OaIjV+OPME/+8DRdKSHbRr06Qw9iCIOh6Pv/vkUcOsGZ6eZr+8IY9mQNlqIPg8ayaW0BUmj2bWAB1mzX1NywbxOmdMgzFg0Dk6QRhRDcTCSFrQEuwlsfBINujcagcYSZIoiZ2sCRdkzgW3mz+V3Ikxbi7BFkou+NJpYrmS6LxsEOVMXxGzimySVLC34m5Te8LYzQWnaIu/fYXma2IBbafbKS4W8n5c4CBl0rKVzROsUcy6piOWtOdMXwhF024VqYOQUX0jPxEn6UOyBa/X74oDdmIMX8pRvX4XzXojC2/PVnt00upzFChaIIxdk87DJTpB06MBeBwoQiiFAPKjW+Us3JG5gI7e0XJjFOWtgB2zH3wYjf2rMzaOwfrikbkgwhyBzX8MxvEgORIYIQoPSnKscfErt5bQhwqkxROgTnO7udTK1WXjwaZ62Z+57uooEUI95kLcODtXTrKQNLFEjOTSo7p1AkIBJ3IkBZcQKCG9qJISqMec6r+T/C8H0UqtDq8hr9ONgaGa153ZQub2Nd5iTqqsuVUCygZpJaBvA2NcBexig84bVGsuKa+JyClVTto9Hr8+pz3/oIpIsgQ2VoJT7k/AstmjbXLdhdR3TgSz/RRwyUN3apy2CBx+TZxtwyz4aze3Oze+OsnYVX/Xb8BxyN8T9TWIP9FWz96qU+MQ/euZ/7s3+x8tWWriPVK2LkkmeQHvvYKjjg/VNDQzAnCgt1ZMC+6Un3ki5ymZsYklFvwRZfbc9pT82vJfk/xi2F9KUOu94LgtNmczYgxYk+X+hc1ZduHoCuwFMVBOsSDVnJGsWMhPZAP6HrTxzSysTNYUwhkL2h/ZYdQ7PbtzWDlbu3jvK1RVkdROYLQO0iIjSFYrLm1OKRjTyQk9cai9X7jg+dN+QZywBakJ5XYTV6/cHKgVLfSUKs4+gLSctg3VlWJeUj4ezfLr97Pi5vr30eXsKh+jdB9SDJa+V+gkx2hnYLgGNuH/JJ0rLvtf5O/el1QMgm92h0VbgpKyqRDhskF1TLaAt2WYUOVVbpANqkeDx9uvqQmN9+ztduo9vIPdOadri54Pu720JNE4fzS5sw/4o5u3fSiYKyL5AozFQa0P0upN2ataqUPeQxQ03Dtif9ACAWgPA56AXnMKsWrimxrkiBWhpxxrteasjWOnxa772o2n2y2+BaOcprBz08EzxYUzVlX/xffcJ1TcKPxgr4TfZyxus3hiyZLLpV9TKMl4un/+YcK7/fOzxf6P0G/xl9DbkOgD4VNlEPNmsD4bZh/D+P5s2KZRLC0+MLLP5u16+Gs2zE7ffDacD7STlleQ3Yb3vzqJQBR3EgAA"
+   },
+   "Metadata": {
+    "aws:cdk:path": "ClusterStack/CDKMetadata/Default"
+   }
+  }
+ },
+ "Conditions": {
+  "ClusterConstructHelloEKSHasEcrPublic55EA3ABF": {
+   "Fn::Equals": [
+    {
+     "Ref": "AWS::Partition"
+    },
+    "aws"
+   ]
+  }
+ },
+ "Outputs": {
+  "ExportsOutputFnGetAttawscdkawseksKubectlProviderNestedStackawscdkawseksKubectlProviderNestedStackResourceA7AEBA6BOutputsClusterStackawscdkawseksKubectlProviderframeworkonEvent8D73200DArnCD481BEE": {
+   "Value": {
+    "Fn::GetAtt": [
+     "awscdkawseksKubectlProviderNestedStackawscdkawseksKubectlProviderNestedStackResourceA7AEBA6B",
+     "Outputs.ClusterStackawscdkawseksKubectlProviderframeworkonEvent8D73200DArn"
+    ]
+   },
+   "Export": {
+    "Name": "ClusterStack:ExportsOutputFnGetAttawscdkawseksKubectlProviderNestedStackawscdkawseksKubectlProviderNestedStackResourceA7AEBA6BOutputsClusterStackawscdkawseksKubectlProviderframeworkonEvent8D73200DArnCD481BEE"
+   }
+  },
+  "ExportsOutputRefClusterConstructHelloEKS1905E085400CEA05": {
+   "Value": {
+    "Ref": "ClusterConstructHelloEKS1905E085"
+   },
+   "Export": {
+    "Name": "ClusterStack:ExportsOutputRefClusterConstructHelloEKS1905E085400CEA05"
+   }
+  },
+  "ExportsOutputFnGetAttClusterConstructHelloEKSCreationRole1EAD51DAArn30BCAF76": {
+   "Value": {
+    "Fn::GetAtt": [
+     "ClusterConstructHelloEKSCreationRole1EAD51DA",
+     "Arn"
+    ]
+   },
+   "Export": {
+    "Name": "ClusterStack:ExportsOutputFnGetAttClusterConstructHelloEKSCreationRole1EAD51DAArn30BCAF76"
+   }
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}

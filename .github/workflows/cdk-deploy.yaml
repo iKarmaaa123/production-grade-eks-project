@@ -12,6 +12,9 @@ permissions:
 jobs:
   cdk_deploy:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./infra
 
     steps:
     - name: Checking out repository
@@ -34,5 +37,22 @@ jobs:
     - name: Installing CDK
       run: npm install -g aws-cdk
 
-    - name: Running CDK Deploy
-      run: npx cdk deploy --all --require-approval never
+    - name: Deploying EKS Cluster
+      run: npx cdk deploy ClusterStack --require-approval never
+
+    - name: Setup kubectl
+      uses: azure/setup-kubectl@v4
+
+    - name: Configure kube config
+      run: aws eks update-kubeconfig --name eks-project-cluster --region ${{ env.AWS_REGION }}
+
+    - name: Creating cluster issuer
+      run: kubectl apply -f k8s-manifest-file/cert-manager/issuer.yaml
+      working-directory: ./k8s-manifest
+
+    - name: Deploying ArgoCD config
+      run: kubectl apply -f k8s-manifest-file/argocd/argocd.yaml
+      working-directory: ./k8s-manifest
+
+    - name: Deploying Helm charts
+      run: npx cdk deploy HelmStack --require-approval never
