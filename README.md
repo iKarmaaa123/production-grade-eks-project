@@ -190,36 +190,7 @@ export AWS_DEFAULT_REGION="<INSERT AWS REGION HERE>"
 
 - After that workflow has successfully run, manually run the cdk-deploy workflow. This workflow will deploy the whole infrastructure to AWS.
 
-<h2> Step 5: Setting up a few things within the EKS cluster </h2>
-
-After your workflow has successfully run, you will need to access the cluster to set up a few things:
-
-- Run this command to access the EKS cluster:
-```hcl
-  aws eks update-kubeconfig --name <name of the cluster which you can get from the output of the deployment> --region <region you are accessing this cluster from>
-```
-
-- Run this command to ensure you can successfully run commands within the cluster:
-```hcl
-  kubectl get pods -A
-```
-
-- Run this command to set up your cluster issuer for cert-manager to get certificates from:
-```hcl
-  kubectl apply -f k8s-manifest-files/cert-manager/issuer.yaml
-```
-
-- Run this command to set up Argo-CD:
-```hcl
-  kubectl apply -f k8s-manifest-files/argo-cd/argocd.yaml
-```
-
-After setting up these two things, you will now have:
-- Argo-CD tracking changes made to the manifest files in /apps and applying those manifest files to have your container app running within the pods.
-
-- A cluster issuer for cert-manager to get SSL certificates from.
-
-<h2> Step 6: Accessing Argo-CD UI </h2>
+<h2> Step 5: Accessing Argo-CD UI </h2>
 
 In order to access the Argo-CD UI to see our app deployment, you will need to first get both the username and password. This will also be the same for the Grafana UI.
 
@@ -247,7 +218,7 @@ In order to access the Argo-CD UI to see our app deployment, you will need to fi
 
 ![argocd-login-page](images/argocd-login-page.png)
 
-<h2> Step 7: Viewing your deployment in Argo-CD </h2>
+<h2> Step 6: Viewing your deployment in Argo-CD </h2>
 
 Now it is time to access your app that is running within the EKS cluster, being managed by Argo-CD:
 
@@ -265,7 +236,7 @@ Now it is time to access your app that is running within the EKS cluster, being 
 
 ![argocd-2048 game](images/argocd-2048.png)
 
-<h2> Step 8: Accessing the Grafana UI </h2>
+<h2> Step 7: Accessing the Grafana UI </h2>
 
 You may have noticed that we deployed a Prometheus Helm Chart that comes with Grafana. This Helm chart sets up our whole Prometheus Stack for us in terms of setting up all the components needed to scrape and collect metric data from your pods and nodes within the EKS cluster. We can use Grafana to visualise our application metric data with regard to the CPU and memory usage of our deployment pods.
 
@@ -287,12 +258,12 @@ To view this data:
   echo <the password you copied> | base64 -d
   ```
 
-<h2> Step 9: View your app metrics using Grafana </h2>
+<h2> Step 8: View your app metrics using Grafana </h2>
 
 Once you have accessed the Grafana UI, head over to dashboards and choose which dashboard you would like to see your data in for your deployment pods running your 2048 game app. I went with the Kubernetes / Compute Resources / Pod dashboard, which provides me with this dashboard view:
 
 ![grafana-dashboard](images/grafana-dashboard.png)
 
-<h2> Step 10: Destroying everything </h2>
+<h2> Step 9: Destroying everything </h2>
 
 Now that you were able to successfully access the app running within AWS EKS, it is time to destroy the whole infrastructure. Go to the GitHub Actions part of the repo, and you will see a workflow called `CDK Destroy Workflow`. Run the workflow to destroy the whole infrastructure.
