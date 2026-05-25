@@ -13,6 +13,10 @@ permissions:
   contents: read
 
 jobs:
+  defaults:
+    runs:
+      working-directory: ./infra
+    
   cdk_diff:
     runs-on: ubuntu-latest
 
