@@ -49,8 +49,8 @@ jobs:
 
     - name: Creating cluster issuer
       run: kubectl apply -f cert-manager/issuer.yaml
-      working-directory: ../k8s-manifest
+      working-directory: ../k8s-manifest-files
 
     - name: Deploying ArgoCD config
       run: kubectl apply -f argocd/argocd.yaml
-      working-directory: ../k8s-manifest
+      working-directory: ../k8s-manifest-files
