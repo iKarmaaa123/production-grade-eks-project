@@ -1,6 +1,4 @@
 import { Construct } from "constructs";
-import * as cdk from "aws-cdk-lib";
-import { AppConstants } from "../config/app-constants";
 import { ManagedPolicy, ServicePrincipal, PolicyStatement, Role, IRole } from "aws-cdk-lib/aws-iam";
 
 export interface IamConstructProps {
@@ -10,13 +8,9 @@ export interface IamConstructProps {
 export class IamConstruct extends Construct {
   public readonly route53Policy: PolicyStatement;
   public readonly eksClusterNodeGroupRole: Role;
-  public readonly iamUserArn: string;
-  public readonly githubOIDCRole: IRole;
 
   constructor(scope: Construct, id: string, props: IamConstructProps) {
     super(scope, id)
-
-    this.iamUserArn = `arn:aws:iam::${cdk.Stack.of(this).account}:user/${AppConstants.IAM_PROJECT_USER}`
 
     this.eksClusterNodeGroupRole = new Role(this, "eksClusterNodeGroupRole", {
       roleName: props.nodeGroupRoleName,
@@ -38,5 +32,5 @@ export class IamConstruct extends Construct {
         ],
         resources: ["*"],
     });
-    }
+  }
 }

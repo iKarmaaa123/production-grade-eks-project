@@ -10,9 +10,9 @@ import { KubectlV32Layer } from '@aws-cdk/lambda-layer-kubectl-v32';
 import { AppConstants } from './config/app-constants';
 
 export class ClusterStack extends Stack {
-  public readonly cluster: eks.Cluster
-  public readonly certManagerServiceAccount: eks.ServiceAccount
-  public readonly externalDNSServiceAccount: eks.ServiceAccount
+  public readonly cluster: eks.Cluster;
+  public readonly certManagerServiceAccount: eks.ServiceAccount;
+  public readonly externalDNSServiceAccount: eks.ServiceAccount;
 
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
@@ -28,7 +28,7 @@ export class ClusterStack extends Stack {
       privateSubnetName: AppSettings.PRIVATE_SUBNET_NAME,
       privateSubnetType: SubnetType.PRIVATE_WITH_EGRESS,
       securityGroupName: AppSettings.SECURITY_GROUP_NAME,
-      allowAllOutbound: AppSettings.ALLOW_ALL_OUTBOUND,
+      allowAllOutbound: AppSettings.ALLOW_ALL_OUTBOUND
     });
 
      const iam = new IamConstruct(this, "IamConstruct", {
