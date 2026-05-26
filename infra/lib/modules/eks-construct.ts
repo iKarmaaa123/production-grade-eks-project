@@ -32,8 +32,6 @@ export class ClusterConstruct extends Construct {
   constructor(scope: Construct, id: string, props: EksStackProps) {
     super(scope, id);
 
-    const iamUserArn = `arn:aws:iam::${cdk.Stack.of(this).account}:user/${AppConstants.IAM_PROJECT_USER}`
-
     this.cluster = new eks.Cluster(this, "HelloEKS", {
       clusterName: props.clusterName,
       vpc: props.vpc,
@@ -55,7 +53,7 @@ export class ClusterConstruct extends Construct {
       nodeRole: props.nodeGroupRole
     })
 
-    this.cluster.grantAccess("adminClusterAccess", iamUserArn, [
+    this.cluster.grantAccess("adminClusterAccess", AppConstants.IAM_USER_PROJECT_ARN, [
       eks.AccessPolicy.fromAccessPolicyName("AmazonEKSClusterAdminPolicy", {
         accessScopeType: cdk.aws_eks.AccessScopeType.CLUSTER,
       })

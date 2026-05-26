@@ -25,7 +25,7 @@ jobs:
       working-directory: ./app
 
     - name: Run Trivy vulnerability scanner
-      uses: aquasecurity/trivy-action@314ff8b43182423b84c50b1670b0e10f858f2d98
+      uses: aquasecurity/trivy-action@v0.36.0
       with:
         image-ref: game-image:v1
         format: 'table'
