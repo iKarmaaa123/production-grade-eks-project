@@ -25,7 +25,7 @@ export class ClusterStack extends Stack {
       cidrMask: AppSettings.CIDR_MASK,
       publicSubnetName: AppSettings.PUBLIC_SUBNET_NAME,
       publicSubnetType: SubnetType.PUBLIC,
-      privateSubnetName: "private",
+      privateSubnetName: AppSettings.PRIVATE_SUBNET_NAME,
       privateSubnetType: SubnetType.PRIVATE_WITH_EGRESS,
       securityGroupName: AppSettings.SECURITY_GROUP_NAME,
       allowAllOutbound: AppSettings.ALLOW_ALL_OUTBOUND,

@@ -4,6 +4,7 @@ export class AppSettings {
   static readonly GRAFANA_SECRET_NAME = 'grafana-server-tls';
   static readonly PROMETHEUS_SECRET_NAME = 'prometheus-server-tls';
   static readonly PUBLIC_SUBNET_NAME = "public"
+  static readonly PRIVATE_SUBNET_NAME = "private"
   static readonly CIDR_MASK = 24
   static readonly DEFAULT_CAPACITY = 0
   static readonly DESIRED_SIZE = 2
