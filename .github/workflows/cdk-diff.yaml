@@ -50,7 +50,7 @@ jobs:
     - name: Running Checkov scan
       uses: bridgecrewio/checkov-action@v12
       with:
-        directory: ./cdk.out
+        directory: ./infra/cdk.out
         framework: cloudformation
         output_format: cli
         quiet: true
